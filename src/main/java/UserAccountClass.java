@@ -13,15 +13,13 @@ public class UserAccountClass {
 
     private int id;
     private final String login;
-    private final String passwordHash;
 
 
     // log in
-    public UserAccountClass(String login, String password, boolean register)
+    public UserAccountClass(String login, String password)
             throws LoginException{
         this.login = login;
-        this.passwordHash = hash(password);
-        id = DatabaseHandler.logIn(this.login, this.passwordHash);
+        id = DatabaseHandler.logIn(this.login, hash(password));
         if (id == -1) {
             throw new LoginException("Wrong login or password");
         }
@@ -31,11 +29,10 @@ public class UserAccountClass {
     public UserAccountClass(String login, String password, String email)
             throws LoginException{
         this.login = login;
-        this.passwordHash = hash(password);
         if (checkEmail(email)) {
-            id = DatabaseHandler.register(this.login, this.passwordHash, email);
+            id = DatabaseHandler.register(this.login, hash(password), email);
             if (id == -1) {
-                throw new LoginException("Such login already exists");
+                throw new LoginException("Such login/email is already registered");
             }
         }
         else {

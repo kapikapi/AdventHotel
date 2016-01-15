@@ -1,4 +1,5 @@
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,7 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
 
     public static final String LOGIN_JSP = "/jsp/login.jsp";
-    public static final String START_PAGE = "/start";
+    public static final String START_PAGE = "/index.jsp";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -21,6 +22,25 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        String login = req.getParameter("login");
+        String password = req.getParameter("password");
+        String act = req.getParameter("action");
+        if (act.equals("authentication")) {
+            try {
+                UserAccountClass user = new UserAccountClass(login, password);
+                req.getSession().setAttribute("user", user);
+                resp.getWriter().write("Success");
+                req.setAttribute("auth_success", true);
+            } catch (LoginException e) {
+                req.setAttribute("auth_success", false);
+                resp.getWriter().write("Authentication failed");
+            }
+        }
+        else {
+            resp.getWriter().write("Error occurred");
+            resp.getWriter().flush();
+        }
+
 
     }
 

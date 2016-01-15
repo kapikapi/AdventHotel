@@ -1534,6 +1534,7 @@
       <column name="email" sqlType="varchar" precision="355" scale="0" nullable="false" jdbcType="12"/>
       <column name="access_level" sqlType="access" precision="2147483647" scale="0" nullable="true" jdbcType="12"/>
       <primary-key name="users_pkey" columns="user_id"/>
+      <index name="unique_emqil" unique="true" columns="email"/>
       <index name="users_email_key" unique="true" columns="email"/>
       <index name="users_login_key" unique="true" columns="login"/>
     </table>
