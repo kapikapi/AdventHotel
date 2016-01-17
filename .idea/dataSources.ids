@@ -1530,7 +1530,7 @@
     <table name="users" schema="public" catalog="hotel" type="TABLE">
       <column name="user_id" sqlType="serial" precision="10" scale="0" nullable="false" jdbcType="4" def="bmV4dHZhbCgndXNlcnNfdXNlcl9pZF9zZXEnOjpyZWdjbGFzcyk=" autoIncrement="true"/>
       <column name="login" sqlType="varchar" precision="50" scale="0" nullable="false" jdbcType="12"/>
-      <column name="passhash" sqlType="varchar" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="passhash" sqlType="varchar" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="email" sqlType="varchar" precision="355" scale="0" nullable="false" jdbcType="12"/>
       <column name="access_level" sqlType="access" precision="2147483647" scale="0" nullable="true" jdbcType="12"/>
       <primary-key name="users_pkey" columns="user_id"/>

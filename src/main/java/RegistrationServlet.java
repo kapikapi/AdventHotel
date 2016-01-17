@@ -14,6 +14,7 @@ public class RegistrationServlet extends HttpServlet {
     public static final Logger LOG= Logger.getLogger(RegistrationServlet.class);
 
     public static final String REGISTRATION_JSP = "/jsp/registration.jsp";
+    public static final String LOGIN_JSP = "/jsp/login.jsp";
     public static final String START_PAGE = "/index.jsp";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
@@ -33,7 +34,8 @@ public class RegistrationServlet extends HttpServlet {
                 UserAccountClass user = new UserAccountClass(login, password, email);
                 LOG.debug("Reg must be completed");
                 request.getSession().setAttribute("user", user);
-                response.getWriter().write("Success");
+                //response.getWriter().write("Success");
+                response.sendRedirect(LOGIN_JSP);
 
             } catch (LoginException e) {
                 LOG.debug("Reg failed");

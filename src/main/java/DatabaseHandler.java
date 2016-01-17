@@ -1,5 +1,4 @@
 import connection_pool.Pool;
-import connection_pool.PoolConnection;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -13,7 +12,7 @@ public class DatabaseHandler {
     public static final Logger LOG= Logger.getLogger(UserAccountClass.class);
 
     private static final String LOGIN_ATTEMPT =
-            "SELECT user_id FROM users WHERE login=%s AND passhash=%s";
+            "SELECT user_id FROM users WHERE login='%s' AND passhash='%s'";
     private static final String REGISTER_ATTEMPT =
             "INSERT INTO users (login, passhash, email, access_level) VALUES ('%s', '%s', '%s', 'user')";
     private static final String SET_USER_AS_ADMIN =
@@ -31,9 +30,9 @@ public class DatabaseHandler {
     public static boolean logIn(String login, String password) {
 
         try {
-            ResultSet resultSet = connection.prepareStatement(String.format(LOGIN_ATTEMPT, login, password)).executeQuery();
-            boolean b = resultSet.first();
-            return b;
+            ResultSet resultSet = connection.prepareStatement(String.format(LOGIN_ATTEMPT, login, password),
+                    ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE).executeQuery();
+            return resultSet.first();
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -44,7 +43,6 @@ public class DatabaseHandler {
         try {
             connection.prepareStatement(String.format(REGISTER_ATTEMPT, login, password, email)).executeUpdate();
             return true;
-            //return resultSet.getInt(1);
         } catch (SQLException e) {
             LOG.debug(String.format(REGISTER_ATTEMPT, login, password, email));
             LOG.debug("SQL Failed");

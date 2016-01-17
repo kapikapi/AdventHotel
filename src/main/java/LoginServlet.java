@@ -1,4 +1,6 @@
 
+import org.apache.log4j.Logger;
+
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +12,7 @@ import java.io.IOException;
  * Created by Elizaveta Kapitonova on 13.01.16.
  */
 public class LoginServlet extends HttpServlet {
+    public static final Logger LOG= Logger.getLogger(LoginServlet.class);
 
     public static final String LOGIN_JSP = "/jsp/login.jsp";
     public static final String START_PAGE = "/index.jsp";
@@ -31,11 +34,14 @@ public class LoginServlet extends HttpServlet {
 
                 UserAccountClass user = new UserAccountClass(login, password);
                 req.getSession().setAttribute("user", user);
+                LOG.debug("Auth correct");
                 resp.getWriter().write("Success");
 
             } catch (LoginException e) {
+                LOG.debug("Auth failed");
                 req.setAttribute("auth_error", true);
-                resp.getWriter().write("Authentication failed");
+                //resp.getWriter().write("Authentication failed");
+                fwd(req,resp);
             }
         }
         else {
