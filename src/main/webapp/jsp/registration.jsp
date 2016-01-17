@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: kapikapi
@@ -11,7 +12,8 @@
     <title>Registration Page</title>
 </head>
 <body>
-<form action="registration">
+<form action="registration" method="post">
+  <input type="hidden" name="actionName" value="registration" />
   E-mail:
   <input type="text" name="email"/>
   <br>
@@ -20,7 +22,11 @@
   <br>
   Password:
   <input type="password" name="password"/>
-  <input type="submit" value="submit">
+  <br>
+  <input type="submit" value="Submit">
+  <c:if test="${reg_error}">
+    Registration failed!
+  </c:if>
 </form>
 </body>
 </html>

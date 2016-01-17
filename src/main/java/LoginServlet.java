@@ -24,15 +24,17 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        String act = req.getParameter("action");
+        String act = req.getParameter("actionName");
         if (act.equals("authentication")) {
+            req.setAttribute("auth_error", false);
             try {
+
                 UserAccountClass user = new UserAccountClass(login, password);
                 req.getSession().setAttribute("user", user);
                 resp.getWriter().write("Success");
-                req.setAttribute("auth_success", true);
+
             } catch (LoginException e) {
-                req.setAttribute("auth_success", false);
+                req.setAttribute("auth_error", true);
                 resp.getWriter().write("Authentication failed");
             }
         }

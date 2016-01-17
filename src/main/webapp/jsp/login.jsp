@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: kapikapi
@@ -11,19 +12,19 @@
     <title>Login Page</title>
   <h1>Login Page</h1>
 
-
 </head>
 <body>
-<form action="authentication">
+<form action="authentication" method="post">
+  <input type="hidden" name="actionName" value="authentication" />
   Login:
   <input type="text" name="login"/>
   <br>
   Password:
   <input type="password" name="password"/>
-  <input type="submit" value="submit">
-    Or register now
-    <h4><a href=<c:url value="/register"/>>Or register now</a></h4>
-    <c:if test="${not auth_success}">
+  <br>
+  <input type="submit" value="Submit">
+    <h4><a href=<c:url value="/registration"/>>Or register now</a></h4>
+    <c:if test="${auth_error}">
         Authentication failed. Wrong login or password.
     </c:if>
 
