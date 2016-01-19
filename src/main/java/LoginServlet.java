@@ -15,6 +15,7 @@ public class LoginServlet extends HttpServlet {
     public static final Logger LOG= Logger.getLogger(LoginServlet.class);
 
     public static final String LOGIN_JSP = "/jsp/login.jsp";
+    public static final String ORDER_JSP = "/jsp/order.jsp";
     public static final String START_PAGE = "/index.jsp";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
@@ -36,12 +37,16 @@ public class LoginServlet extends HttpServlet {
                 req.getSession().setAttribute("user", user);
                 LOG.debug("Auth correct");
                 resp.getWriter().write("Success");
+                resp.sendRedirect(ORDER_JSP);
 
             } catch (LoginException e) {
                 LOG.debug("Auth failed");
+                //fwd(req,resp);
                 req.setAttribute("auth_error", true);
+                LOG.debug(req.getAttribute("auth_error"));
+                resp.sendRedirect("/authentication");
                 //resp.getWriter().write("Authentication failed");
-                fwd(req,resp);
+
             }
         }
         else {

@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Elizaveta Kapitonova on 13.01.16.
@@ -49,6 +51,11 @@ public class DatabaseHandler {
             e.printStackTrace();
             return false;
         }
+    }
+
+    // TODO:
+    public static List<String> seachRoom(int people,String classOfComfort, Date dateIn, Date dateOut) {
+        return null;
     }
 
     private static Connection getConnection() {

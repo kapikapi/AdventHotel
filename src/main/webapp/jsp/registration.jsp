@@ -12,10 +12,16 @@
     <title>Registration Page</title>
 </head>
 <body>
+<h1>Registration Page</h1>
 <form action="registration" method="post">
   <input type="hidden" name="actionName" value="registration" />
   E-mail:
   <input type="text" name="email"/>
+ <!-- <c:if test="${noEmail}">
+    <small><span style="color: red; ">
+      Note: you must enter an email address
+    </span></small>
+  </c:if> -->
   <br>
   Login:
   <input type="text" name="login"/>
