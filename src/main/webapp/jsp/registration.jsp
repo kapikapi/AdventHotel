@@ -15,13 +15,11 @@
 <h1>Registration Page</h1>
 <form action="registration" method="post">
   <input type="hidden" name="actionName" value="registration" />
+    Name:
+    <input type="text" name="name"/>
+    <br>
   E-mail:
   <input type="text" name="email"/>
- <!-- <c:if test="${noEmail}">
-    <small><span style="color: red; ">
-      Note: you must enter an email address
-    </span></small>
-  </c:if> -->
   <br>
   Login:
   <input type="text" name="login"/>
@@ -30,8 +28,12 @@
   <input type="password" name="password"/>
   <br>
   <input type="submit" value="Submit">
-  <c:if test="${reg_error}">
-    Registration failed!
+    <br>
+
+  <c:if test="${not empty reg_error}">
+      <div style="color: red; font-weight: bold">
+    Registration failed: ${reg_error}
+      </div>
   </c:if>
 </form>
 </body>

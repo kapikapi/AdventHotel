@@ -25,11 +25,13 @@
   <input type="password" name="password"/>
   <br>
   <input type="submit" value="Submit">
-    <h4><a href=<c:url value="/registration"/>>Or register now</a></h4>
-  ${auth_error}
-  <c:if test="${auth_error}">
-        Authentication failed. Wrong login or password.
+
+  <c:if test="${not empty auth_error}">
+    <div style="color: red; font-weight: bold">
+      Authentication failed: ${auth_error}
+    </div>
   </c:if>
+  <h4><a href=<c:url value="/registration"/>>Or register now</a></h4>
 
 </form>
 </body>

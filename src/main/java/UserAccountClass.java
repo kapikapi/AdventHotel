@@ -29,11 +29,11 @@ public class UserAccountClass {
     }
 
     // 3 arguments mean that it is registration
-    public UserAccountClass(String login, String password, String email)
+    public UserAccountClass(String name, String login, String password, String email)
             throws LoginException{
         this.login = login;
         if (checkEmail(email)) {
-            boolean completed = DatabaseHandler.register(this.login, hash(password), email);
+            boolean completed = DatabaseHandler.register(name, this.login, hash(password), email);
             LOG.debug("email is valid");
             if (!completed) {
                 LOG.debug("email is already registered");

@@ -4,7 +4,9 @@ import org.apache.log4j.Logger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -16,9 +18,18 @@ public class DatabaseHandler {
     private static final String LOGIN_ATTEMPT =
             "SELECT user_id FROM users WHERE login='%s' AND passhash='%s'";
     private static final String REGISTER_ATTEMPT =
-            "INSERT INTO users (login, passhash, email, access_level) VALUES ('%s', '%s', '%s', 'user')";
+            "INSERT INTO users (login, passhash, email, access_level, name) VALUES ('%s', '%s', '%s', 'user', '%s')";
     private static final String SET_USER_AS_ADMIN =
             "UPDATE users SET access_level='admin' WHERE login=%s";
+    // in format: date_out, date_in, date_in, date_in, date_out, date_out, class, places
+    private static final String SEARCH_ROOMS = "SELECT ad.places, ad.class, ad.cost*('%s'-'%s')" +
+            "FROM apartment_description AS ad INNER JOIN apartments AS a ON (a.description=ad.d_id) " +
+            "INNER JOIN apartments_occupation AS ao ON (ao.apartment_id=a.apt_id)" +
+            "WHERE '%s'>=(SELECT ao.date_out FROM apartments_occupation AS ao WHERE ao.date_out>'%s'" +
+            "ORDER BY ao.date_out DESC LIMIT 1) AND '%s'<=(SELECT ao.date_in FROM apartments_occupation " +
+            "ORDER BY abs(ao.date_in-'%s') LIMIT 1) AND (ad.class=%s) " +
+            "AND (ad.places>=%s) ORDER BY ad.places";
+
     private static Connection connection;
 
     static {
@@ -41,12 +52,12 @@ public class DatabaseHandler {
         }
     }
 
-    public static boolean register(String login, String password, String email) {
+    public static boolean register(String name, String login, String password, String email) {
         try {
-            connection.prepareStatement(String.format(REGISTER_ATTEMPT, login, password, email)).executeUpdate();
+            connection.prepareStatement(String.format(REGISTER_ATTEMPT, login, password, email, name)).executeUpdate();
             return true;
         } catch (SQLException e) {
-            LOG.debug(String.format(REGISTER_ATTEMPT, login, password, email));
+            LOG.debug(String.format(REGISTER_ATTEMPT, login, password, email, name));
             LOG.debug("SQL Failed");
             e.printStackTrace();
             return false;
@@ -54,8 +65,14 @@ public class DatabaseHandler {
     }
 
     // TODO:
-    public static List<String> seachRoom(int people,String classOfComfort, Date dateIn, Date dateOut) {
-        return null;
+    public static ResultSet searchRoom(int people,String classOfComfort, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+        Date date_in = Date.valueOf(dateIn);
+        Date date_out = Date.valueOf(dateOut);
+        ResultSet resultSet = connection.prepareStatement(String
+                .format(SEARCH_ROOMS, date_out, date_in, date_in, date_in, date_out, date_out, classOfComfort, people))
+                .executeQuery();
+
+        return resultSet;
     }
 
     private static Connection getConnection() {

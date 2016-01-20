@@ -16,16 +16,15 @@
 <h1>Order Page</h1>
 <form action="order" method="post">
   <input type="hidden" name="actionName" value="order" />
-  Number of people:
-  <input type="text" name="number_people"/>
+  Number of places in room:
+  <input type="number" name="number_people"/>
   <br>
   Duration of stay:
-  From: <input type="text" name="date_in"
-               value="<fmt:formatDate pattern="MM/dd/yyyy" value="date_in" />" />
-  />
-  to:<input type="text" name="date_out"
-            value="<fmt:formatDate pattern="MM/dd/yyyy" value="date_out" />" />
-  />
+  <br>
+  From: <input type="date" name="date_in" />
+  <br>
+  to: <input type="date" name="date_out" />
+
   <br>
   Room class:
   <select name = "class">
@@ -35,6 +34,12 @@
 
   <br>
   <input type="submit" value="Submit">
+
+  <c:if test="${not empty search_error}">
+    <div style="color: red; font-weight: bold">
+      Search failed: ${search_error}
+    </div>
+  </c:if>
 
 </form>
 </body>
