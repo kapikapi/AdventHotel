@@ -1553,8 +1553,31 @@
       <column name="description" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <primary-key name="apartments_pkey" columns="apt_id"/>
       <foreign-key name="apartments_description_fkey" columns="description" ref-table="apartment_description" ref-schema="public" ref-catalog="" ref-columns="d_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="apartments_occupation_apartment_id_fkey" table="apartments_occupation" schema="public" catalog="hotel" columns="apartment_id"/>
     </table>
     <table name="apartments_apt_id_seq" schema="public" catalog="hotel" type="SEQUENCE">
+      <column name="sequence_name" sqlType="name" precision="2147483647" scale="0" nullable="false" jdbcType="12"/>
+      <column name="last_value" sqlType="int8" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="start_value" sqlType="int8" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="increment_by" sqlType="int8" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="max_value" sqlType="int8" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="min_value" sqlType="int8" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="cache_value" sqlType="int8" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="log_cnt" sqlType="int8" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="is_cycled" sqlType="bool" precision="1" scale="0" nullable="false" jdbcType="-7"/>
+      <column name="is_called" sqlType="bool" precision="1" scale="0" nullable="false" jdbcType="-7"/>
+    </table>
+    <table name="apartments_occupation" schema="public" catalog="hotel" type="TABLE">
+      <column name="occ_id" sqlType="serial" precision="10" scale="0" nullable="false" jdbcType="4" def="bmV4dHZhbCgnYXBhcnRtZW50c19vY2N1cGF0aW9uX29jY19pZF9zZXEnOjpyZWdjbGFzcyk=" autoIncrement="true"/>
+      <column name="apartment_id" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="user_id" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="date_in" sqlType="date" precision="13" scale="0" nullable="false" jdbcType="91"/>
+      <column name="date_out" sqlType="date" precision="13" scale="0" nullable="false" jdbcType="91"/>
+      <primary-key name="apartments_occupation_pkey" columns="occ_id"/>
+      <foreign-key name="apartments_occupation_apartment_id_fkey" columns="apartment_id" ref-table="apartments" ref-schema="public" ref-catalog="" ref-columns="apt_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="apartments_occupation_user_id_fkey" columns="user_id" ref-table="users" ref-schema="public" ref-catalog="" ref-columns="user_id" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+    <table name="apartments_occupation_occ_id_seq" schema="public" catalog="hotel" type="SEQUENCE">
       <column name="sequence_name" sqlType="name" precision="2147483647" scale="0" nullable="false" jdbcType="12"/>
       <column name="last_value" sqlType="int8" precision="19" scale="0" nullable="false" jdbcType="-5"/>
       <column name="start_value" sqlType="int8" precision="19" scale="0" nullable="false" jdbcType="-5"/>
@@ -1574,6 +1597,7 @@
       <column name="access_level" sqlType="access" precision="2147483647" scale="0" nullable="true" jdbcType="12"/>
       <column name="name" sqlType="varchar" precision="355" scale="0" nullable="true" jdbcType="12"/>
       <primary-key name="users_pkey" columns="user_id"/>
+      <exported-key name="apartments_occupation_user_id_fkey" table="apartments_occupation" schema="public" catalog="hotel" columns="user_id"/>
       <index name="unique_emqil" unique="true" columns="email"/>
       <index name="users_email_key" unique="true" columns="email"/>
       <index name="users_login_key" unique="true" columns="login"/>

@@ -14,7 +14,10 @@
 </head>
 <body>
 <h1>Order Page</h1>
-<form action="order" method="post">
+<c:choose>
+<c:when test="${not empty user}">
+<c:if test="${empty result_list}">
+<form action="order" method="get">
   <input type="hidden" name="actionName" value="order" />
   Number of places in room:
   <input type="number" name="number_people"/>
@@ -40,7 +43,21 @@
       Search failed: ${search_error}
     </div>
   </c:if>
+  <c:if test="${not empty no_result}">
+    <div style="font-weight: bold">
+        ${no_result}
+    </div>
 
-</form>
+  </c:if>
+  </c:if></form>
+  </c:when>
+  <c:otherwise>
+    Please log in or register to make an order:
+    <br>
+    <h4><a href=<c:url value="/authentication"/>>Log in</a></h4>
+    <h4><a href=<c:url value="/registration"/>>Register</a></h4>
+  </c:otherwise>
+  </c:choose>
+
 </body>
 </html>

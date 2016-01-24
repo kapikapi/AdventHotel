@@ -1,7 +1,8 @@
-/**
+package com.epam.advent_hotel; /**
  * Created by Elizaveta Kapitonova on 13.01.16.
  */
 
+import com.epam.advent_hotel.db.DatabaseHandler;
 import org.apache.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
@@ -11,14 +12,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserAccountClass {
-    public static final Logger LOG= Logger.getLogger(UserAccountClass.class);
+public class UserAccount {
+    public static final Logger LOG= Logger.getLogger(UserAccount.class);
 
     private final String login;
 
 
     // log in
-    public UserAccountClass(String login, String password)
+    public UserAccount(String login, String password)
             throws LoginException{
         this.login = login;
 
@@ -29,7 +30,7 @@ public class UserAccountClass {
     }
 
     // 3 arguments mean that it is registration
-    public UserAccountClass(String name, String login, String password, String email)
+    public UserAccount(String name, String login, String password, String email)
             throws LoginException{
         this.login = login;
         if (checkEmail(email)) {
@@ -48,7 +49,8 @@ public class UserAccountClass {
     }
 
     private boolean checkEmail(String email) {
-        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        String regex ="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();

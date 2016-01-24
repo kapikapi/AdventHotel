@@ -1,4 +1,4 @@
-package connection_pool;
+package com.epam.advent_hotel.db.connection_pool;
 
 import java.sql.*;
 import java.util.Map;

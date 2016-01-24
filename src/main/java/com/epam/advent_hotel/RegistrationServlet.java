@@ -1,3 +1,5 @@
+package com.epam.advent_hotel;
+
 import org.apache.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
@@ -31,7 +33,7 @@ public class RegistrationServlet extends HttpServlet {
         if (act.equals("registration")) {
             LOG.debug("Registrating");
             try {
-                UserAccountClass user = new UserAccountClass(name, login, password, email);
+                UserAccount user = new UserAccount(name, login, password, email);
                 LOG.debug("Reg must be completed");
                 request.getSession().setAttribute("user", user);
                 response.sendRedirect(LOGIN_JSP);
@@ -51,7 +53,7 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserAccountClass user = (UserAccountClass) request.getSession().getAttribute("user");
+        UserAccount user = (UserAccount) request.getSession().getAttribute("user");
         if (user != null) {
             response.sendRedirect(START_PAGE);
             return;

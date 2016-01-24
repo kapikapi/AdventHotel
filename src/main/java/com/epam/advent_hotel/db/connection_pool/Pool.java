@@ -1,4 +1,4 @@
-package connection_pool;
+package com.epam.advent_hotel.db.connection_pool;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,9 +31,9 @@ public class Pool {
 
     private Map<Connection, Boolean> connections;
 
-    final private String URL;
-    final private String USER;
-    final private String PASSWORD;
+    private final String URL;
+    private final String USER;
+    private final String PASSWORD;
 
     private Pool() {
         Properties properties = new Properties();
@@ -63,15 +63,18 @@ public class Pool {
     }
 
     public Connection getConnection() {
-        for (Map.Entry<Connection, Boolean> entry : connections.entrySet())
-            if (entry.getValue())
+        Connection result = null;
+        for (Map.Entry<Connection, Boolean> entry : connections.entrySet()) {
+            if (entry.getValue()) {
                 synchronized (this) {
                     if (entry.getValue()) {
                         Connection key = entry.getKey();
                         connections.put(key, false);
-                        return key;
+                        result = key;
                     }
                 }
+            }
+        }
 
         try {
             Thread.sleep(GET_CONNECTION_MILLIS);
@@ -79,7 +82,7 @@ public class Pool {
             throw new RuntimeException(e);
         }
 
-        return getConnection();
+        return result == null ? getConnection() : result;
     }
 
 

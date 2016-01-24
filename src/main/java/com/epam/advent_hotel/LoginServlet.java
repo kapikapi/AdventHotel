@@ -1,3 +1,4 @@
+package com.epam.advent_hotel;
 
 import org.apache.log4j.Logger;
 
@@ -32,7 +33,7 @@ public class LoginServlet extends HttpServlet {
         if (act.equals("authentication")) {
             try {
 
-                UserAccountClass user = new UserAccountClass(login, password);
+                UserAccount user = new UserAccount(login, password);
                 req.getSession().setAttribute("user", user);
                 LOG.debug("Auth correct");
                 //resp.getWriter().write("Success");
@@ -60,7 +61,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        UserAccountClass user = (UserAccountClass) req.getSession().getAttribute("user");
+        UserAccount user = (UserAccount) req.getSession().getAttribute("user");
         if (user != null) {
             resp.sendRedirect(START_PAGE);
             return;
