@@ -9,6 +9,7 @@ import javax.security.auth.login.LoginException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,6 +47,16 @@ public class UserAccount {
             LOG.debug("email is not valid");
             throw new LoginException("Wrong email");
         }
+    }
+
+    public int getUserId() {
+        int res = 0;
+        try {
+            res = DatabaseHandler.getUserId(this.login);
+        } catch (SQLException e) {
+            LOG.debug("can not get user_id");
+        }
+        return res;
     }
 
     private boolean checkEmail(String email) {

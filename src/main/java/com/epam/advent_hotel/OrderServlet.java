@@ -18,9 +18,9 @@ import java.util.List;
  */
 @WebServlet(name = "OrderServlet")
 public class OrderServlet extends HttpServlet {
-    public static final Logger LOG= Logger.getLogger(OrderServlet.class);
+    public static final Logger LOG= Logger.getLogger(OrderServlet   .class);
     public static final String ORDER_JSP = "/jsp/order.jsp";
-    public static final String BILL_PAGE = "/bill";
+    public static final String SEARCH_PAGE = "/search";
 
     public static final String FORMATTER_PATTERN = "yyyy-MM-dd";
 
@@ -42,37 +42,43 @@ public class OrderServlet extends HttpServlet {
         String act = request.getParameter("actionName");
         if (act.equals("order")) {
             LOG.debug("Ordering");
-            Administrator administrator;
+            //Administrator administrator;
             try {
-                administrator = new Administrator();
+                Administrator administrator = new Administrator();
                 LOG.debug("Searching must be completed");
                 List<RoomOrder> res = administrator.getRes(number, classOfComfort, dateIn, dateOut);
+                for (RoomOrder r : res) {
+                    LOG.debug(r.getNumber());
+                }
                 request.setAttribute("result_list", res);
                 if (res.isEmpty()) {
                     request.setAttribute("no_result", "No results for your search parameters. Please, try again.");
                     LOG.debug("No result");
+                    fwd(request, response);
+                } else {
+                    response.sendRedirect(SEARCH_PAGE);
                 }
             } catch (SQLException e) {
                 LOG.debug("Search failed");
                 request.setAttribute("search_error", e.getMessage());
-
+                fwd(request, response);
             }
-            fwd(request, response);
+
         }
-        else if(act.equals("chooseRoom")) {
-            LOG.debug("Choosing");
-//            Order order = new Order();
-//            order.setDateIn(dateIn);
-//            order.setDateOut(dateOut);
-//            // in setRoom return administrator.getRoomById
-//            try {
-//                order.setRoomById(Integer.parseInt(request.getParameter("room_id")));
-//            } catch (SQLException e) {
-//                LOG.debug(e.getMessage());
-//            }
-//            request.setAttribute("order", order);
-            response.sendRedirect(BILL_PAGE);
-        }
+//        else if(act.equals("chooseRoom")) {
+//            LOG.debug("Choosing");
+////            Order order = new Order();
+////            order.setDateIn(dateIn);
+////            order.setDateOut(dateOut);
+////            // in setRoom return administrator.getRoomById
+////            try {
+////                order.setRoomById(Integer.parseInt(request.getParameter("room_id")));
+////            } catch (SQLException e) {
+////                LOG.debug(e.getMessage());
+////            }
+////            request.setAttribute("order", order);
+//            response.sendRedirect(BILL_PAGE);
+//        }
         else {
             LOG.debug("Reg totally failed");
             response.getWriter().write("Error occurred");

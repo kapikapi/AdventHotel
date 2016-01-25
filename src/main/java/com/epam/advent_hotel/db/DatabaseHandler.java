@@ -38,6 +38,11 @@ public class DatabaseHandler {
                     "apartment_description AS ad INNER JOIN " +
                     "apartments AS a ON (a.description=ad.d_id)" +
                     "WHERE (a.apt_id=?)";
+    private static final String SET_ORDER =
+            "INSERT INTO apaertments_occupation (apartment_id, user_id, date_in, date_out)" +
+                    "VALUES (?, ?, ?, ?)";
+    private static final String GET_USER_ID =
+            "SELECT user_id FROM users WHERE login=?";
 
     private static Connection connection;
 
@@ -79,6 +84,25 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
         return res;
+    }
+
+    public static int getUserId(String login) throws SQLException{
+        PreparedStatement pstmt = connection.prepareStatement(GET_USER_ID);
+        pstmt.setString(1, login);
+        ResultSet resultSet = pstmt.executeQuery();
+        return resultSet.getInt(1);
+    }
+
+    public static int setOrder(int apartment_id, int user_id, LocalDate dateIn, LocalDate dateOut) throws SQLException
+    {
+        Date date_in = Date.valueOf(dateIn);
+        Date date_out = Date.valueOf(dateOut);
+        PreparedStatement pstmt = connection.prepareStatement(SET_ORDER);
+        pstmt.setInt(1, apartment_id);
+        pstmt.setInt(2, user_id);
+        pstmt.setDate(3, date_in);
+        pstmt.setDate(4, date_out);
+        return pstmt.executeUpdate();
     }
 
 

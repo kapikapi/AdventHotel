@@ -48,7 +48,9 @@ public class LoginServlet extends HttpServlet {
                 fwd(req, resp);
 
             }
-
+        } else if (act.equals("logout")) {
+            req.getSession().invalidate();
+            fwd(req, resp);
         }
         else {
             resp.getWriter().write("Error occurred");

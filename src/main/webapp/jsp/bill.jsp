@@ -14,18 +14,21 @@
 <body>
 <h1>Final Cost</h1>
 <c:choose>
-  <c:when test="${not empty user}">
-    <form action="bill" method="post">
-    Final cost for room №${room.number} ${room.classOfComfort} class from ${room.dateIn} to ${room.dateOut} for
-    ${room.places} people is ${room.cost}$
-    </form>
-  </c:when>
-  <c:otherwise>
-  Please log in or register to make an order:
-  <br>
-  <h4><a href=<c:url value="/authentication"/>>Log in</a></h4>
-  <h4><a href=<c:url value="/registration"/>>Register</a></h4>
-  </c:otherwise>
+    <c:when test="${not empty user}">
+        <form action="bill" method="post">
+                ${res_str}
+        </form>
+        <form action="<c:url value="authentication"/>" method="POST">
+            <input type="submit" value="Log out">
+            <input type="hidden" name="actionName" value="logout">
+        </form>
+    </c:when>
+    <c:otherwise>
+        Please log in or register to make an order:
+        <br>
+        <h4><a href=<c:url value="/authentication"/>>Log in</a></h4>
+        <h4><a href=<c:url value="/registration"/>>Register</a></h4>
+    </c:otherwise>
 </c:choose>
 </body>
 </html>

@@ -27,4 +27,9 @@ public class Administrator {
     public RoomOrder getRoomById(int id) throws SQLException{
         return  DatabaseHandler.getRoomById(id);
     }
+
+    public void setOrder(int apartment_id, UserAccount user, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+        int userId = user.getUserId();
+        DatabaseHandler.setOrder(apartment_id, userId, dateIn, dateOut);
+    }
 }
