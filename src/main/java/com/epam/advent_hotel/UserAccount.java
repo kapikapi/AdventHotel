@@ -16,8 +16,11 @@ import java.util.regex.Pattern;
 public class UserAccount {
     public static final Logger LOG= Logger.getLogger(UserAccount.class);
 
-    private final String login;
+    public String getLogin() {
+        return login;
+    }
 
+    private final String login;
 
     // log in
     public UserAccount(String login, String password)
@@ -49,15 +52,13 @@ public class UserAccount {
         }
     }
 
-    public int getUserId() {
-        int res = 0;
-        try {
-            res = DatabaseHandler.getUserId(this.login);
-        } catch (SQLException e) {
-            LOG.debug("can not get user_id");
-        }
-        return res;
+    public int getUserId() throws SQLException{
+        return DatabaseHandler.getUserId(this.login);
     }
+
+//    public String getUserLogin() throws SQLException{
+//        return DatabaseHandler.getUserLogin(getUserId());
+//    }
 
     private boolean checkEmail(String email) {
         String regex ="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"

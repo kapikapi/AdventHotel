@@ -2,28 +2,24 @@
 <%--
   Created by IntelliJ IDEA.
   User: kapikapi
-  Date: 22.01.16
-  Time: 19:40
+  Date: 26.01.16
+  Time: 14:16
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Final Cost Page</title>
+    <title>Warning before remove</title>
 </head>
 <body>
-<h1>Final Cost</h1>
 <c:choose>
     <c:when test="${not empty user}">
-        <form action="bill" method="post">
-                ${res_str}
-        </form>
-        You can view all your orders on your user page:
-        <br>
-        <a href=<c:url value="user"/>>My page</a>
-        <form action="<c:url value="authentication"/>" method="POST">
-            <input type="submit" value="Log out">
-            <input type="hidden" name="actionName" value="logout">
+        <form action="remove_warning" method="post">
+        Please, confirm deleting this order:
+            <input type="submit" value="I confirm">
+            <input type="hidden" name="actionName" value="confirmed">
+            <input type="hidden" name="order_id" value="${order_id}">
+        <h4><a href=<c:url value="/user"/>>Back</a></h4>
         </form>
     </c:when>
     <c:otherwise>

@@ -7,6 +7,7 @@ import java.time.LocalDate;
  */
 public class RoomOrder {
 
+    private int orderId;
     private int id;
     private int number;
     private int places;
@@ -15,6 +16,13 @@ public class RoomOrder {
     private LocalDate dateIn;
     private LocalDate dateOut;
 
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
 
     public LocalDate getDateIn() {
         return dateIn;

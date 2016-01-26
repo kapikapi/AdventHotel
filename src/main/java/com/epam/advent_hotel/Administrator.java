@@ -32,4 +32,18 @@ public class Administrator {
         int userId = user.getUserId();
         DatabaseHandler.setOrder(apartment_id, userId, dateIn, dateOut);
     }
+
+    public boolean removeOrder(int orderId) throws SQLException {
+        boolean res = false;
+        int affectedRows = DatabaseHandler.removeOrder(orderId);
+        if (affectedRows == 1) {
+            res=true;
+        }
+        LOG.debug(res);
+        return res;
+    }
+
+//    public int getOrderId(int apt_number, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+//        return DatabaseHandler.getOrderId(apt_number, dateIn, dateOut);
+//    }
 }

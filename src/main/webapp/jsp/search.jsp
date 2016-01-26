@@ -25,7 +25,6 @@
                 </tr>
                 <c:forEach items="${result_list}" var="room">
                     <tr>
-
                         <td><a href=<c:url value="room/${room.id}"/>>${room.number}</a>
                             <input type="hidden" name="id" value="${room.id}">
                         </td>

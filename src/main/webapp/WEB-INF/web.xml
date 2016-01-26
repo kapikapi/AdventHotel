@@ -32,6 +32,18 @@
         <servlet-name>RoomServlet</servlet-name>
         <servlet-class>com.epam.advent_hotel.RoomServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.UserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RemovingServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.RemovingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditOrderServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.EditOrderServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>RegistrationServlet</servlet-name>
@@ -56,6 +68,18 @@
     <servlet-mapping>
         <servlet-name>RoomServlet</servlet-name>
         <url-pattern>/room/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemovingServlet</servlet-name>
+        <url-pattern>/remove_warning</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditOrderServlet</servlet-name>
+        <url-pattern>/edit_order</url-pattern>
     </servlet-mapping>
 
 </web-app>
