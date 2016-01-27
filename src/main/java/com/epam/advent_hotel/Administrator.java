@@ -3,6 +3,7 @@ package com.epam.advent_hotel;
 import com.epam.advent_hotel.db.DatabaseHandler;
 import org.apache.log4j.Logger;
 
+import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -13,11 +14,6 @@ import java.util.List;
 public class Administrator {
     public static final Logger LOG= Logger.getLogger(Administrator.class);
 
-//    private String classOfComfort;
-//    private int people;
-//    private Date dateIn;
-//    private Date dateOut;
-
 
     public List<RoomOrder> getRes(int people, int classOfComfort, LocalDate dateIn, LocalDate dateOut)
             throws SQLException {
@@ -26,6 +22,10 @@ public class Administrator {
 
     public RoomOrder getRoomById(int id) throws SQLException{
         return  DatabaseHandler.getRoomById(id);
+    }
+
+    public RoomOrder getRoomOrder(int id, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+        return DatabaseHandler.getRoomOrder(id, dateIn, dateOut);
     }
 
     public void setOrder(int apartment_id, UserAccount user, LocalDate dateIn, LocalDate dateOut) throws SQLException {

@@ -17,12 +17,12 @@
         <h2>${user_login}</h2>
         <form action="user" method="post">
             <br>
-            Сделать новый заказ:
+            New order:
             <input type="hidden" name="actionName" value="newOrder">
             <input type="submit" value="Order room">
             <br>
         </form>
-        Мои заказы:
+        My orders:
         <c:choose>
             <c:when test="${empty no_result}">
                 <br>
@@ -36,7 +36,7 @@
                         <th>Date of checking out</th>
                         <th></th>
                     </tr>
-                    <c:forEach items="${orders_list}" var="room">
+                    <c:forEach items="${new_orders_list}" var="room">
                         <tr>
                             <td>${room.number}</td>
                             <td>${room.places}</td>
@@ -54,6 +54,37 @@
                         </tr>
                     </c:forEach>
                 </table>
+                <br>
+                Old orders:
+                <table>
+                    <tr>
+                        <th>Room number</th>
+                        <th>Places</th>
+                        <th>Class</th>
+                        <th>Cost</th>
+                        <th>Date of checking in</th>
+                        <th>Date of checking out</th>
+                        <th></th>
+                    </tr>
+                    <c:forEach items="${old_orders_list}" var="room">
+                        <tr>
+                            <td>${room.number}</td>
+                            <td>${room.places}</td>
+                            <td>${room.classOfComfort}</td>
+                            <td>${room.cost}</td>
+                            <td>${room.dateIn}</td>
+                            <td>${room.dateOut}</td>
+                            <td><form action="remove_warning" method="post">
+                                <input type="hidden" name="order_id" value="${room.orderId}">
+                                <input type="submit" value="Remove order">
+                                <input type="hidden" name="actionName" value="removeOrder">
+
+                            </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+
             </c:when>
             <c:otherwise>
                 ${no_result}

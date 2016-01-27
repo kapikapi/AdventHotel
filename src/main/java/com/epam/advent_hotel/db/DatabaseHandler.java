@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,9 +48,16 @@ public class DatabaseHandler {
                     "apartment_description AS ad INNER JOIN " +
                     "apartments AS a ON (a.description=ad.d_id)" +
                     "WHERE (a.apt_id=?)";
+    private static final String ROOM_ORDER_BY_ID =
+            "SELECT a.apt_id, a.number, ad.places, ad.class, ad.cost*? AS cost FROM " +
+                    "apartment_description AS ad INNER JOIN " +
+                    "apartments AS a ON (a.description=ad.d_id)" +
+                    "WHERE (a.apt_id=?)";
     private static final String SET_ORDER =
-            "INSERT INTO apaertments_occupation (apartment_id, user_id, date_in, date_out)" +
-                    "VALUES (?, ?, ?, ?)";
+                    "INSERT INTO apartments_occupation (apartment_id, user_id, date_in, date_out) " +
+                    "SELECT ?, ?, ?, ? WHERE NOT EXISTS " +
+                    "(SELECT * FROM apartments_occupation AS ao WHERE (ao.apartment_id=?) " +
+                    "AND ((ao.date_in,ao.date_out) OVERLAPS (?, ?)))";
     private static final String GET_USER_ID =
             "SELECT user_id FROM users WHERE login=?";
     private static final String GET_USERS_ORDERS =
@@ -162,6 +170,9 @@ public class DatabaseHandler {
         pstmt.setInt(2, user_id);
         pstmt.setDate(3, date_in);
         pstmt.setDate(4, date_out);
+        pstmt.setInt(5, apartment_id);
+        pstmt.setDate(6, date_in);
+        pstmt.setDate(7, date_out);
         return pstmt.executeUpdate();
     }
 
@@ -174,10 +185,42 @@ public class DatabaseHandler {
 
 
     public static RoomOrder getRoomById(int id) throws SQLException {
-        RoomOrder room = new RoomOrder();
         PreparedStatement pstmt = connection.prepareStatement(ROOM_BY_ID);
         pstmt.setInt(1, id);
         ResultSet resultSet = pstmt.executeQuery();
+        return resultSetToRoom(resultSet);
+    }
+
+    public static RoomOrder getRoomOrder(int id, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+        //Period period = Period.between(dateIn, dateOut);
+        int duration = daysBetweenDates(dateIn, dateOut);
+        PreparedStatement pstmt = connection.prepareStatement(ROOM_ORDER_BY_ID);
+        pstmt.setInt(1, duration);
+        pstmt.setInt(2, id);
+        ResultSet resultSet = pstmt.executeQuery();
+        RoomOrder room = resultSetToRoom(resultSet);
+        room.setDateIn(dateIn);
+        room.setDateOut(dateOut);
+        return room;
+    }
+
+    public static List<RoomOrder> getRoomsByParams(int people, int classOfComfort, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+        Date date_in = Date.valueOf(dateIn);
+        Date date_out = Date.valueOf(dateOut);
+        //Period period = Period.between(dateIn, dateOut);
+        int duration = daysBetweenDates(dateIn, dateOut);
+        PreparedStatement pstmt = connection.prepareStatement(SEARCH_ROOMS);
+        pstmt.setInt(1, duration);
+        pstmt.setInt(2, classOfComfort);
+        pstmt.setInt(3, people);
+        pstmt.setDate(4, date_in);
+        pstmt.setDate(5, date_out);
+        ResultSet resultSet = pstmt.executeQuery();
+        return resultSetToList(resultSet);
+    }
+
+    private static RoomOrder resultSetToRoom(ResultSet resultSet) throws SQLException {
+        RoomOrder room = new RoomOrder();
         while(resultSet.next()) {
             room.setId(resultSet.getInt("apt_id"));
             room.setPlaces(resultSet.getInt("places"));
@@ -190,21 +233,6 @@ public class DatabaseHandler {
             room.setCost(resultSet.getInt("cost"));
         }
         return room;
-    }
-
-    public static List<RoomOrder> getRoomsByParams(int people, int classOfComfort, LocalDate dateIn, LocalDate dateOut) throws SQLException {
-        Date date_in = Date.valueOf(dateIn);
-        Date date_out = Date.valueOf(dateOut);
-        Period period = Period.between(dateIn, dateOut);
-        int duration = period.getDays();
-        PreparedStatement pstmt = connection.prepareStatement(SEARCH_ROOMS);
-        pstmt.setInt(1, duration);
-        pstmt.setInt(2, classOfComfort);
-        pstmt.setInt(3, people);
-        pstmt.setDate(4, date_in);
-        pstmt.setDate(5, date_out);
-        ResultSet resultSet = pstmt.executeQuery();
-        return resultSetToList(resultSet);
     }
 
     private static List<RoomOrder> resultSetToList(ResultSet resultSet) throws SQLException {
@@ -228,6 +256,11 @@ public class DatabaseHandler {
             res.add(room);
         }
         return res;
+    }
+
+    private static int daysBetweenDates(LocalDate startDate, LocalDate endDate) {
+        long days = ChronoUnit.DAYS.between(startDate, endDate);
+        return (int) days;
     }
 
     private static Connection getConnection() {

@@ -12,15 +12,24 @@
     <title>Final Cost Page</title>
 </head>
 <body>
-<h1>Final Cost</h1>
 <c:choose>
     <c:when test="${not empty user}">
+        <h1>Final Cost</h1>
+        ${res_str}
         <form action="bill" method="post">
-                ${res_str}
-        </form>
+            <input type="hidden" name="room_id" value="${room_id}">
+            <input type="hidden" name="actionName" value="bill">
+
+            <input type="submit" value="Submit room order">
+
+            <br>
+            <c:if test="${not empty setError}">
+                ${setError}
+            </c:if>
         You can view all your orders on your user page:
         <br>
         <a href=<c:url value="user"/>>My page</a>
+        </form>
         <form action="<c:url value="authentication"/>" method="POST">
             <input type="submit" value="Log out">
             <input type="hidden" name="actionName" value="logout">

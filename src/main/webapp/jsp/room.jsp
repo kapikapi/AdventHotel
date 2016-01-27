@@ -16,15 +16,17 @@
 <c:when test="${not empty user}">
 <h1>Room №${room.number}</h1>
 
-<form method="post">
+<form action="bill" method="post">
     Living places: ${room.places}
     <br>
     Class of comfort: ${room.classOfComfort}
     <br>
     Cost for one day: ${room.cost}
-    <input type="submit" value="Confirm">
+    <br>
+    <input type="submit" value="Order this room">
     <input type="hidden" name="room_id" value="${room.id}">
-
+    <input type="hidden" name="actionName" value="search">
+</form>
     <form action="<c:url value="authentication"/>" method="POST">
         <input type="submit" value="Log out">
         <input type="hidden" name="actionName" value="logout">
@@ -37,6 +39,6 @@
         <h4><a href=<c:url value="/registration"/>>Register</a></h4>
     </c:otherwise>
     </c:choose>
-</form>
+
 </body>
 </html>

@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +48,18 @@ public class UserServlet extends HttpServlet {
                 UserAccount currentUser = (UserAccount) request.getSession().getAttribute("user");
                 request.setAttribute("user_login", currentUser.getLogin());
                 List<RoomOrder> resList = DatabaseHandler.getUsersOrders(currentUser.getUserId());
-                request.setAttribute("orders_list", resList);
+                List<RoomOrder> newList = new ArrayList<>();
+                List<RoomOrder> oldList = new ArrayList<>();
+                for (RoomOrder r : resList) {
+                    long p = ChronoUnit.DAYS.between(LocalDate.now(), r.getDateIn());
+                    if (p>=0) {
+                        newList.add(r);
+                    } else {
+                        oldList.add(r);
+                    }
+                }
+                request.setAttribute("new_orders_list", newList);
+                request.setAttribute("old_orders_list", oldList);
                 for (RoomOrder r : resList) {
                     LOG.debug(r.getOrderId());
                 }

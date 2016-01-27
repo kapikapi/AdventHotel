@@ -18,7 +18,7 @@ import java.util.List;
  */
 @WebServlet(name = "OrderServlet")
 public class OrderServlet extends HttpServlet {
-    public static final Logger LOG= Logger.getLogger(OrderServlet   .class);
+    public static final Logger LOG= Logger.getLogger(OrderServlet.class);
     public static final String ORDER_JSP = "/jsp/order.jsp";
     public static final String SEARCH_PAGE = "/search";
 
@@ -42,7 +42,6 @@ public class OrderServlet extends HttpServlet {
         String act = request.getParameter("actionName");
         if (act.equals("order")) {
             LOG.debug("Ordering");
-            //Administrator administrator;
             try {
                 Administrator administrator = new Administrator();
                 LOG.debug("Searching must be completed");
@@ -56,7 +55,10 @@ public class OrderServlet extends HttpServlet {
                     LOG.debug("No result");
                     fwd(request, response);
                 } else {
-                    response.sendRedirect(SEARCH_PAGE);
+                    request.getSession().setAttribute("date_in", dateIn);
+                    request.getSession().setAttribute("date_out", dateOut);
+                    request.getRequestDispatcher(SEARCH_PAGE).forward(request, response);
+                    //response.sendRedirect(SEARCH_PAGE);
                 }
             } catch (SQLException e) {
                 LOG.debug("Search failed");

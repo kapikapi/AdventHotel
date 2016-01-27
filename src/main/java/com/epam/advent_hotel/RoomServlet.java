@@ -25,7 +25,7 @@ public class RoomServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        LOG.debug("in doPost");
         response.sendRedirect(BILL_PAGE);
     }
 
