@@ -1,13 +1,11 @@
 package com.epam.advent_hotel.db;
 
 import com.epam.advent_hotel.RoomOrder;
-import com.epam.advent_hotel.UserAccount;
 import com.epam.advent_hotel.db.connection_pool.Pool;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +16,6 @@ import java.util.List;
 public class DatabaseHandler {
     public static final Logger LOG= Logger.getLogger(DatabaseHandler.class);
 
-    /*
-    private static final String GET_USER_LOGIN =
-            "SELECT login FROM users WHERE user_id=?";
-    private static final String GET_ORDER_ID =
-            "SELECT occ_id FROM apartments_occupation AS ao " +
-                    "INNER JOIN apartments AS a ON (ao.apartment_id=a.apt_id) " +
-                    "WHERE (a.apt_id=?) AND (ao.date_in=?) AND (ao.date_out=?)"; */
-
     private static final String SET_USER_AS_ADMIN =
             "UPDATE users SET access_level='admin' WHERE login=?";
 
@@ -35,27 +25,35 @@ public class DatabaseHandler {
             "INSERT INTO users (login, passhash, email, access_level, name) VALUES (?, ?, ?, 'user', ?)";
     //in format: date_out, date_in, classOfComfort, places, date_in, date_out
     private static final String SEARCH_ROOMS =
-            "SELECT DISTINCT ao.occ_id, a.apt_id, a.number, ad.places, ad.class, " +
-                    "ad.cost*? AS cost, ao.date_in, ao.date_out " +
+            "SELECT DISTINCT ON (a.apt_id) a.apt_id, ao.occ_id, a.number, ad.places, ad.class, " +
+                    "ad.cost*? AS cost, ?::DATE AS date_in, ?::DATE AS date_out " +
                     "FROM apartment_description AS ad " +
                     "INNER JOIN apartments AS a ON (a.description=ad.d_id) " +
                     "INNER JOIN apartments_occupation AS ao " +
                     "ON (ao.occ_id=ao.occ_id) WHERE (ad.class=?) " +
-                    "AND (ad.places>=?) AND NOT ((ao.date_in,ao.date_out) " +
-                    "OVERLAPS (?, ?)) ORDER BY ad.places";
-    private static final String ROOM_BY_ID =
+                    "AND (ad.places=?) AND NOT ((ao.date_in,ao.date_out) " +
+                    "OVERLAPS (?, ?)) ORDER BY a.apt_id, ad.places";
+    private static final String ROOM_BY_APT_ID =
             "SELECT a.apt_id, a.number, ad.places, ad.class, ad.cost FROM " +
                     "apartment_description AS ad INNER JOIN " +
                     "apartments AS a ON (a.description=ad.d_id)" +
                     "WHERE (a.apt_id=?)";
-    private static final String ROOM_ORDER_BY_ID =
-            "SELECT a.apt_id, a.number, ad.places, ad.class, ad.cost*? AS cost FROM " +
-                    "apartment_description AS ad INNER JOIN " +
-                    "apartments AS a ON (a.description=ad.d_id)" +
-                    "WHERE (a.apt_id=?)";
+    private static final String ORDER_BY_ID =
+            "SELECT a.apt_id, a.number, ad.places, ad.class, ao.date_in, ao.date_out, " +
+                    "ad.cost*(ao.date_out-ao.date_in) AS cost " +
+                    "FROM apartments_occupation AS ao INNER JOIN apartments AS a ON (ao.apartment_id=a.apt_id) " +
+                    "INNER JOIN apartment_description AS ad ON (a.description=ad.d_id) " +
+                    "WHERE (ao.occ_id=?)";
     private static final String SET_ORDER =
                     "INSERT INTO apartments_occupation (apartment_id, user_id, date_in, date_out) " +
-                    "SELECT ?, ?, ?, ? WHERE NOT EXISTS " +
+                    "SELECT ?, ?, ?::DATE, ?::DATE WHERE NOT EXISTS " +
+                    "(SELECT * FROM apartments_occupation AS ao WHERE (ao.apartment_id=?) " +
+                    "AND ((ao.date_in,ao.date_out) OVERLAPS (?, ?)))";
+    private static final String EDIT_ORDER_DELETE =
+            "DELETE FROM apartments_occupation WHERE (occ_id=?)";
+    private static final String EDIT_ORDER_INSERT =
+                    "INSERT INTO apartments_occupation (occ_id, apartment_id, user_id, date_in, date_out) " +
+                    "SELECT ?, ?, ?, ?::DATE, ?::DATE WHERE NOT EXISTS " +
                     "(SELECT * FROM apartments_occupation AS ao WHERE (ao.apartment_id=?) " +
                     "AND ((ao.date_in,ao.date_out) OVERLAPS (?, ?)))";
     private static final String GET_USER_ID =
@@ -131,36 +129,6 @@ public class DatabaseHandler {
         return res;
     }
 
-    /*
-    public static String getUserLogin(int id) throws SQLException{
-        PreparedStatement pstmt = connection.prepareStatement(GET_USER_LOGIN,
-                ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        pstmt.setInt(1, id);
-        ResultSet resultSet = pstmt.executeQuery();
-        String res = "";
-        if (resultSet.first()) {
-            res = resultSet.getString("login");
-        }
-        return res;
-    }*/
-
-    /*
-    public static int getOrderId(int aptId, LocalDate dateIn, LocalDate dateOut) throws SQLException {
-        Date date_in = Date.valueOf(dateIn);
-        Date date_out = Date.valueOf(dateOut);
-        PreparedStatement pstmt = connection.prepareStatement(GET_ORDER_ID,
-                ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        pstmt.setInt(1, aptId);
-        pstmt.setDate(2, date_in);
-        pstmt.setDate(3, date_out);
-        ResultSet resultSet = pstmt.executeQuery();
-        int res = 0;
-        if (resultSet.first()) {
-            res = resultSet.getInt("occ_id");
-        }
-        return res;
-    } */
-
     public static int setOrder(int apartment_id, int user_id, LocalDate dateIn, LocalDate dateOut) throws SQLException
     {
         Date date_in = Date.valueOf(dateIn);
@@ -176,6 +144,28 @@ public class DatabaseHandler {
         return pstmt.executeUpdate();
     }
 
+    public static int editOrder(int occId, int aptId, int userId, LocalDate dateIn, LocalDate dateOut)
+            throws SQLException {
+        Date date_in = Date.valueOf(dateIn);
+        Date date_out = Date.valueOf(dateOut);
+        connection.setAutoCommit(false);
+        PreparedStatement pstmtDel = connection.prepareStatement(EDIT_ORDER_DELETE);
+        pstmtDel.setInt(1, occId);
+        PreparedStatement pstmt = connection.prepareStatement(EDIT_ORDER_INSERT);
+        pstmt.setInt(1, occId);
+        pstmt.setInt(2, aptId);
+        pstmt.setInt(3, userId);
+        pstmt.setDate(4, date_in);
+        pstmt.setDate(5, date_out);
+        pstmt.setInt(6, aptId);
+        pstmt.setDate(7, date_in);
+        pstmt.setDate(8, date_out);
+        int resDel = pstmtDel.executeUpdate();
+        int resIns = pstmt.executeUpdate();
+        connection.commit();
+        return resDel + resIns;
+    }
+
     public static List<RoomOrder> getUsersOrders(int userId) throws SQLException {
         PreparedStatement pstmt = connection.prepareStatement(GET_USERS_ORDERS);
         pstmt.setInt(1, userId);
@@ -183,25 +173,24 @@ public class DatabaseHandler {
         return resultSetToList(resultSet);
     }
 
-
     public static RoomOrder getRoomById(int id) throws SQLException {
-        PreparedStatement pstmt = connection.prepareStatement(ROOM_BY_ID);
+        PreparedStatement pstmt = connection.prepareStatement(ROOM_BY_APT_ID);
         pstmt.setInt(1, id);
         ResultSet resultSet = pstmt.executeQuery();
         return resultSetToRoom(resultSet);
     }
 
-    public static RoomOrder getRoomOrder(int id, LocalDate dateIn, LocalDate dateOut) throws SQLException {
-        //Period period = Period.between(dateIn, dateOut);
-        int duration = daysBetweenDates(dateIn, dateOut);
-        PreparedStatement pstmt = connection.prepareStatement(ROOM_ORDER_BY_ID);
-        pstmt.setInt(1, duration);
-        pstmt.setInt(2, id);
+    public static RoomOrder getOrderById(int orderId) throws SQLException {
+        PreparedStatement pstmt = connection.prepareStatement(ORDER_BY_ID,
+                ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        pstmt.setInt(1, orderId);
         ResultSet resultSet = pstmt.executeQuery();
-        RoomOrder room = resultSetToRoom(resultSet);
-        room.setDateIn(dateIn);
-        room.setDateOut(dateOut);
-        return room;
+        RoomOrder roomOrder = resultSetToRoom(resultSet);
+        if (resultSet.first()) {
+            roomOrder.setDateIn(resultSet.getDate("date_in").toLocalDate());
+            roomOrder.setDateOut(resultSet.getDate("date_out").toLocalDate());
+        }
+        return roomOrder;
     }
 
     public static List<RoomOrder> getRoomsByParams(int people, int classOfComfort, LocalDate dateIn, LocalDate dateOut) throws SQLException {
@@ -211,17 +200,19 @@ public class DatabaseHandler {
         int duration = daysBetweenDates(dateIn, dateOut);
         PreparedStatement pstmt = connection.prepareStatement(SEARCH_ROOMS);
         pstmt.setInt(1, duration);
-        pstmt.setInt(2, classOfComfort);
-        pstmt.setInt(3, people);
-        pstmt.setDate(4, date_in);
-        pstmt.setDate(5, date_out);
+        pstmt.setDate(2, date_in);
+        pstmt.setDate(3, date_out);
+        pstmt.setInt(4, classOfComfort);
+        pstmt.setInt(5, people);
+        pstmt.setDate(6, date_in);
+        pstmt.setDate(7, date_out);
         ResultSet resultSet = pstmt.executeQuery();
         return resultSetToList(resultSet);
     }
 
     private static RoomOrder resultSetToRoom(ResultSet resultSet) throws SQLException {
         RoomOrder room = new RoomOrder();
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             room.setId(resultSet.getInt("apt_id"));
             room.setPlaces(resultSet.getInt("places"));
             room.setNumber(resultSet.getInt("number"));
@@ -235,7 +226,8 @@ public class DatabaseHandler {
         return room;
     }
 
-    private static List<RoomOrder> resultSetToList(ResultSet resultSet) throws SQLException {
+    private static List<RoomOrder> resultSetToList(ResultSet resultSet)
+            throws SQLException {
         List<RoomOrder> res = new ArrayList<>();
         while(resultSet.next()) {
             RoomOrder room = new RoomOrder();
@@ -250,7 +242,6 @@ public class DatabaseHandler {
             }
 
             room.setCost(resultSet.getInt("cost"));
-
             room.setDateIn(resultSet.getDate("date_in").toLocalDate());
             room.setDateOut(resultSet.getDate("date_out").toLocalDate());
             res.add(room);

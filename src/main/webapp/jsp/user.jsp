@@ -44,6 +44,13 @@
                             <td>${room.cost}</td>
                             <td>${room.dateIn}</td>
                             <td>${room.dateOut}</td>
+                            <td>
+                                <form action="edit_order" method="post">
+                                    <input type="hidden" name="order_id" value="${room.orderId}">
+                                    <input type="submit" value="Edit order">
+                                    <input type="hidden" name="actionName" value="editOrder">
+                                </form>
+                            </td>
                             <td><form action="remove_warning" method="post">
                                 <input type="hidden" name="order_id" value="${room.orderId}">
                                 <input type="submit" value="Remove order">
@@ -74,7 +81,15 @@
                             <td>${room.cost}</td>
                             <td>${room.dateIn}</td>
                             <td>${room.dateOut}</td>
-                            <td><form action="remove_warning" method="post">
+                            <td>
+                                <form action="edit_order" method="post">
+                                <input type="hidden" name="order_id" value="${room.orderId}">
+                                <input type="submit" value="Edit order">
+                                <input type="hidden" name="actionName" value="editOrder">
+                                </form>
+                            </td>
+                            <td>
+                                <form action="remove_warning" method="post">
                                 <input type="hidden" name="order_id" value="${room.orderId}">
                                 <input type="submit" value="Remove order">
                                 <input type="hidden" name="actionName" value="removeOrder">

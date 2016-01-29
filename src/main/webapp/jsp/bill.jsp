@@ -15,17 +15,22 @@
 <c:choose>
     <c:when test="${not empty user}">
         <h1>Final Cost</h1>
-        ${res_str}
-        <form action="bill" method="post">
-            <input type="hidden" name="room_id" value="${room_id}">
-            <input type="hidden" name="actionName" value="bill">
+        <c:choose>
+            <c:when test="${empty setError}">
+                ${res_str}
+                <form action="bill" method="post">
+                <input type="hidden" name="room_id" value="${room_id}">
+                <input type="hidden" name="actionName" value="bill">
 
-            <input type="submit" value="Submit room order">
+                <input type="submit" value="Submit room order">
 
-            <br>
-            <c:if test="${not empty setError}">
+                <br>
+            </c:when>
+            <c:otherwise>
                 ${setError}
-            </c:if>
+            </c:otherwise>
+        </c:choose>
+        <br>
         You can view all your orders on your user page:
         <br>
         <a href=<c:url value="user"/>>My page</a>

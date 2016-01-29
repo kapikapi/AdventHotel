@@ -3,7 +3,6 @@ package com.epam.advent_hotel;
 import com.epam.advent_hotel.db.DatabaseHandler;
 import org.apache.log4j.Logger;
 
-import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,13 +23,21 @@ public class Administrator {
         return  DatabaseHandler.getRoomById(id);
     }
 
-    public RoomOrder getRoomOrder(int id, LocalDate dateIn, LocalDate dateOut) throws SQLException {
-        return DatabaseHandler.getRoomOrder(id, dateIn, dateOut);
+    /*
+    public RoomOrder getRoomOrder(int id) throws SQLException {
+        return DatabaseHandler.getRoomOrder(id);
+    } */
+
+    public RoomOrder getOrderById(int orderId) throws SQLException {
+        return DatabaseHandler.getOrderById(orderId);
     }
 
-    public void setOrder(int apartment_id, UserAccount user, LocalDate dateIn, LocalDate dateOut) throws SQLException {
-        int userId = user.getUserId();
-        DatabaseHandler.setOrder(apartment_id, userId, dateIn, dateOut);
+    public int setOrder(int apartment_id, UserAccount user, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+        return DatabaseHandler.setOrder(apartment_id, user.getUserId(), dateIn, dateOut);
+    }
+
+    public int editOrder(int orderId, int apartment_id, UserAccount user, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+        return DatabaseHandler.editOrder(orderId, apartment_id, user.getUserId(), dateIn, dateOut);
     }
 
     public boolean removeOrder(int orderId) throws SQLException {

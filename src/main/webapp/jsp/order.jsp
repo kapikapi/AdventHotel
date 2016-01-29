@@ -21,13 +21,13 @@
             <form action="order" method="post">
             <input type="hidden" name="actionName" value="order"/>
             Number of places in room:
-            <input type="number" name="number_people"/>
+            <input type="number" name="number_people" required/>
             <br>
             Duration of stay:
             <br>
-            From: <input type="date" name="date_in"/>
+            From: <input type="date" name="date_in" required/>
             <br>
-            to: <input type="date" name="date_out"/>
+            to: <input type="date" name="date_out" required/>
 
             <br>
             Room class:

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Created by Elizaveta Kapitonova on 22.01.16.
@@ -31,54 +31,73 @@ public class BillServlet extends HttpServlet {
         String act = request.getParameter("actionName");
         int roomId = Integer.parseInt(request.getParameter("room_id"));
         LOG.debug(roomId);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(OrderServlet.FORMATTER_PATTERN);
+        LOG.debug(act);
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(OrderServlet.FORMATTER_PATTERN);
 //        String date_in = request.getParameter("date_in");
 //        String date_out = request.getParameter("date_out");
         LocalDate dateIn = (LocalDate) request.getSession().getAttribute("date_in");
         LocalDate dateOut = (LocalDate) request.getSession().getAttribute("date_out");
+        int days = (int) ChronoUnit.DAYS.between(dateIn, dateOut);
+        Integer orderId = (Integer) request.getSession().getAttribute("order_id");
         Administrator administrator = new Administrator();
         RoomOrder room = null;
         try {
-            room = administrator.getRoomOrder(roomId, dateIn, dateOut);
+            room = administrator.getRoomById(roomId);
+            room.setDateIn(dateIn);
+            room.setDateOut(dateOut);
+            room.setCost(room.getCost()*days);
         } catch (SQLException e) {
             LOG.debug("Can not get such RoomOrder");
             response.getWriter().write("Error occured. Try again.");
             response.getWriter().flush();
         }
-        if (null!=request.getSession().getAttribute("user")) {
+        if (null != request.getSession().getAttribute("user")) {
             if (act.equals("search")) {
                 LOG.debug("after search");
                 request.setAttribute("room_id", roomId);
                 LOG.debug(roomId);
-//                request.setAttribute("date_in", date_in);
-//                request.setAttribute("date_out", date_out);
-                String res = "Final cost for room №%s %s class from %s to %s for %s people is %s$.";
+                String res;
+                if (null != request.getSession().getAttribute("order_id")) {
+                    res = "Your new orders cost for room №%s %s class from %s to %s for %s people is %s$.";
+                } else {
+                    res = "Final cost for room №%s %s class from %s to %s for %s people is %s$.";
+                }
+
                 request.setAttribute("res_str", String.format(res, room.getNumber(), room.getClassOfComfort(),
                         room.getDateIn(), room.getDateOut(), room.getPlaces(), room.getCost()));
                 fwd(request, response);
             } else if (act.equals("bill")) {
                 LOG.debug("bill making");
-
+                String errorMsg = "Error while registering your order. Try again.";
                 try {
                     LOG.debug(roomId);
-                    //request.setAttribute("room", room);
-
                     UserAccount currentUser = (UserAccount) request.getSession().getAttribute("user");
-
                     LOG.debug(currentUser.getLogin());
-
-                    administrator.setOrder(room.getId(), currentUser, room.getDateIn(), room.getDateOut());
-                    LOG.debug("order registered");
-                    request.getSession().removeAttribute("date_in");
-                    request.getSession().removeAttribute("date_out");
-                    response.sendRedirect(USER_PAGE);
+                    int completed;
+                    if (null != orderId) {
+                        completed = administrator.editOrder(orderId, roomId, currentUser, dateIn, dateOut);
+                    } else {
+                        completed = administrator.setOrder(roomId, currentUser, dateIn, dateOut);
+                    }
+                    LOG.debug(completed);
+                    if (completed == 2) {
+                        LOG.debug("order registered");
+                        if (null != orderId)  {
+                            request.getSession().removeAttribute("order_id");
+                        }
+                        request.getSession().removeAttribute("date_in");
+                        request.getSession().removeAttribute("date_out");
+                        response.sendRedirect(USER_PAGE);
+                    } else {
+                        request.setAttribute("setError", errorMsg);
+                        fwd(request, response);
+                    }
 
                 } catch (SQLException e) {
                     LOG.debug(e.getMessage());
-                    request.setAttribute("setError", "Error while registering your order. Try again.");
+                    request.setAttribute("setError", errorMsg);
                     fwd(request, response);
                 }
-                //fwd(request, response);
             } else {
                 LOG.debug("Showing final bill failed");
                 response.getWriter().write("Error occured. Try again.");
@@ -87,10 +106,11 @@ public class BillServlet extends HttpServlet {
         } else {
             fwd(request, response);
         }
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LOG.debug("in doGet");
         fwd(request, response);
     }
+
 }

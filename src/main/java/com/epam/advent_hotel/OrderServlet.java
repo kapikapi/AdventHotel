@@ -67,22 +67,8 @@ public class OrderServlet extends HttpServlet {
             }
 
         }
-//        else if(act.equals("chooseRoom")) {
-//            LOG.debug("Choosing");
-////            Order order = new Order();
-////            order.setDateIn(dateIn);
-////            order.setDateOut(dateOut);
-////            // in setRoom return administrator.getRoomById
-////            try {
-////                order.setRoomById(Integer.parseInt(request.getParameter("room_id")));
-////            } catch (SQLException e) {
-////                LOG.debug(e.getMessage());
-////            }
-////            request.setAttribute("order", order);
-//            response.sendRedirect(BILL_PAGE);
-//        }
         else {
-            LOG.debug("Reg totally failed");
+            LOG.debug("Ordering totally failed");
             response.getWriter().write("Error occurred");
             response.getWriter().flush();
         }
