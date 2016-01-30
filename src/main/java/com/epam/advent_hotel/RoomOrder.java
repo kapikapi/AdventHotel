@@ -11,7 +11,7 @@ public class RoomOrder {
     private int id;
     private int number;
     private int places;
-    private String classOfComfort;
+    private int classOfComfort;
     private int cost;
     private LocalDate dateIn;
     private LocalDate dateOut;
@@ -64,11 +64,21 @@ public class RoomOrder {
         this.places = places;
     }
 
-    public String  getClassOfComfort() {
+    public String getStrClassOfComfort() {
+        String res;
+        if (classOfComfort == 2) {
+            res = "Economy";
+        } else {
+            res = "Lux";
+        }
+        return res;
+    }
+
+    public int getClassOfComfort() {
         return classOfComfort;
     }
 
-    public void setClassOfComfort(String classOfComfort) {
+    public void setClassOfComfort(int classOfComfort) {
         this.classOfComfort = classOfComfort;
     }
 

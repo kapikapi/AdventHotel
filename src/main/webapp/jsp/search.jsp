@@ -14,7 +14,7 @@
 <body>
 <c:choose>
     <c:when test="${not empty user}">
-        <c:if test="${not empty result_list}">
+        <c:if test="${not empty result_list or not empty curr_room}">
 
             <table>
                 <tr>
@@ -23,6 +23,29 @@
                     <th>Class</th>
                     <th>Cost</th>
                 </tr>
+
+                <c:if test="${not empty curr_room}">
+                    <tr>
+                        <td>
+                            <a href=<c:url value="room/${curr_room.id}"/>>${curr_room.number}</a>
+                        </td>
+                        <td>${curr_room.places}</td>
+                        <td>${curr_room.classOfComfort}</td>
+                        <td>${curr_room.cost}$</td>
+
+                        <td>
+                            <form action="bill" method="post">
+                                <input type="hidden" name="actionName" value="search"/>
+                                <input type="hidden" name="room_id" value="${curr_room.id}">
+                                <input type="submit" value="Order">
+                            </form>
+
+                        </td>
+                        <td>
+                            ${prev_room}
+                        </td>
+                    </tr>
+                </c:if>
                 <c:forEach items="${result_list}" var="room">
                     <tr>
                         <td>
@@ -30,7 +53,7 @@
                         </td>
                         <td>${room.places}</td>
                         <td>${room.classOfComfort}</td>
-                        <td>${room.cost}</td>
+                        <td>${room.cost}$</td>
 
                         <td>
                             <form action="bill" method="post">
@@ -38,6 +61,7 @@
                                 <input type="hidden" name="room_id" value="${room.id}">
                                 <input type="submit" value="Order">
                             </form>
+
                         </td>
 
                     </tr>

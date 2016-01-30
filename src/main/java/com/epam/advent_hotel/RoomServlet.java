@@ -30,13 +30,14 @@ public class RoomServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int roomId = Integer.parseInt(request.getPathInfo().substring(1));
+
         try {
+            int roomId = Integer.parseInt(request.getPathInfo().substring(1));
             Administrator administrator = new Administrator();
             RoomOrder room = administrator.getRoomById(roomId);
             LOG.debug(room.getId());
             request.setAttribute("room", room);
-        } catch (SQLException e) {
+        } catch (SQLException | NumberFormatException e) {
             LOG.debug(e.getMessage());
         }
 

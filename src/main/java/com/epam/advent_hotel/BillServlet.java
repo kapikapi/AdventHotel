@@ -63,7 +63,7 @@ public class BillServlet extends HttpServlet {
                     res = "Final cost for room №%s %s class from %s to %s for %s people is %s$.";
                 }
 
-                request.setAttribute("res_str", String.format(res, room.getNumber(), room.getClassOfComfort(),
+                request.setAttribute("res_str", String.format(res, room.getNumber(), room.getStrClassOfComfort(),
                         room.getDateIn(), room.getDateOut(), room.getPlaces(), room.getCost()));
                 fwd(request, response);
             } else if (act.equals("bill")) {
@@ -74,17 +74,22 @@ public class BillServlet extends HttpServlet {
                     UserAccount currentUser = (UserAccount) request.getSession().getAttribute("user");
                     LOG.debug(currentUser.getLogin());
                     int completed;
-                    if (null != orderId) {
+                    boolean noError = false;
+                    if (null != orderId) { // editing
                         completed = administrator.editOrder(orderId, roomId, currentUser, dateIn, dateOut);
-                    } else {
-                        completed = administrator.setOrder(roomId, currentUser, dateIn, dateOut);
-                    }
-                    LOG.debug(completed);
-                    if (completed == 2) {
-                        LOG.debug("order registered");
-                        if (null != orderId)  {
+                        if (completed == 2) {
+                            LOG.debug("order edited");
+                            noError = true;
                             request.getSession().removeAttribute("order_id");
                         }
+                    } else { // making new order
+                        completed = administrator.setOrder(roomId, currentUser, dateIn, dateOut);
+                        if (completed == 1) {
+                            LOG.debug("order registered");
+                            noError = true;
+                        }
+                    }
+                    if (noError) {
                         request.getSession().removeAttribute("date_in");
                         request.getSession().removeAttribute("date_out");
                         response.sendRedirect(USER_PAGE);

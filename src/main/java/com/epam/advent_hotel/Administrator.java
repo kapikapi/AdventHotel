@@ -23,13 +23,17 @@ public class Administrator {
         return  DatabaseHandler.getRoomById(id);
     }
 
-    /*
-    public RoomOrder getRoomOrder(int id) throws SQLException {
-        return DatabaseHandler.getRoomOrder(id);
-    } */
+    public List<RoomOrder> getUsersOrders(UserAccount user) throws SQLException {
+        return DatabaseHandler.getUsersOrders(user.getUserId());
+    }
+
 
     public RoomOrder getOrderById(int orderId) throws SQLException {
         return DatabaseHandler.getOrderById(orderId);
+    }
+
+    public RoomOrder getRoomByOrderId(int orderId) throws SQLException {
+        return DatabaseHandler.getRoomByOrderId(orderId);
     }
 
     public int setOrder(int apartment_id, UserAccount user, LocalDate dateIn, LocalDate dateOut) throws SQLException {
@@ -48,6 +52,14 @@ public class Administrator {
         }
         LOG.debug(res);
         return res;
+    }
+
+    public boolean isRoomAvailible(int orderId, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+        return DatabaseHandler.isRoomAvailable(orderId, dateIn, dateOut);
+    }
+
+    public int editOrderDates(int orderId, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+        return DatabaseHandler.editOrderDates(orderId, dateIn, dateOut);
     }
 
 //    public int getOrderId(int apt_number, LocalDate dateIn, LocalDate dateOut) throws SQLException {
