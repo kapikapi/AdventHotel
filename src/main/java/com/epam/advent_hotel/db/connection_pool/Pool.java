@@ -15,8 +15,7 @@ import java.util.Properties;
 public class Pool {
 
     public static final int GET_CONNECTION_MILLIS = 1000;
-    public static final String PROPERTIES_PATH =
-            "/media/kapikapi/Lisusha/Java/AdventHotel/src/main/webapp/WEB-INF/pool-config.properties";
+    public static final String PROPERTIES_PATH = "/pool-config.properties";
     private static Pool INSTANCE;
 
     public static Pool getInstance() {
@@ -38,8 +37,8 @@ public class Pool {
     private Pool() {
         Properties properties = new Properties();
         try {
-            //properties.load(getClass().getResourceAsStream(PROPERTIES_PATH));
-            properties.load(new FileInputStream(PROPERTIES_PATH));
+            properties.load(getClass().getResourceAsStream(PROPERTIES_PATH));
+           // properties.load(new FileInputStream(PROPERTIES_PATH));
             Class.forName(properties.getProperty("db.driver"));
 
             URL = properties.getProperty("db.url");
