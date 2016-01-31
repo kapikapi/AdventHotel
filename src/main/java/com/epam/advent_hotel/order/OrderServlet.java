@@ -1,5 +1,7 @@
-package com.epam.advent_hotel;
+package com.epam.advent_hotel.order;
 
+import com.epam.advent_hotel.RoomOrder;
+import com.epam.advent_hotel.db.DatabaseHandler;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -29,8 +31,6 @@ public class OrderServlet extends HttpServlet {
         req.getRequestDispatcher(ORDER_JSP).forward(req, resp);
     }
 
-    // get params, give them to Administrator
-    //
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int number = Integer.parseInt(request.getParameter("number_people"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FORMATTER_PATTERN);
@@ -43,9 +43,9 @@ public class OrderServlet extends HttpServlet {
         if (act.equals("order")) {
             LOG.debug("Ordering");
             try {
-                Administrator administrator = new Administrator();
+                //Administrator administrator = new Administrator();
                 LOG.debug("Searching must be completed");
-                List<RoomOrder> res = administrator.getRes(number, classOfComfort, dateIn, dateOut);
+                List<RoomOrder> res = DatabaseHandler.getRoomsByParams(number, classOfComfort, dateIn, dateOut);
                 for (RoomOrder r : res) {
                     LOG.debug(r.getNumber());
                 }

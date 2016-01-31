@@ -1,5 +1,6 @@
-package com.epam.advent_hotel;
+package com.epam.advent_hotel.authentication;
 
+import com.epam.advent_hotel.UserAccount;
 import org.apache.log4j.Logger;
 
 import javax.security.auth.login.LoginException;

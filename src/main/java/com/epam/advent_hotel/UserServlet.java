@@ -47,8 +47,8 @@ public class UserServlet extends HttpServlet {
             try {
                 UserAccount currentUser = (UserAccount) request.getSession().getAttribute("user");
                 request.setAttribute("user_login", currentUser.getLogin());
-                Administrator administrator = new Administrator();
-                List<RoomOrder> resList = administrator.getUsersOrders(currentUser);
+                //Administrator administrator = new Administrator();
+                List<RoomOrder> resList = DatabaseHandler.getUsersOrders(currentUser.getUserId());
                 List<RoomOrder> newList = new ArrayList<>();
                 List<RoomOrder> oldList = new ArrayList<>();
                 for (RoomOrder r : resList) {

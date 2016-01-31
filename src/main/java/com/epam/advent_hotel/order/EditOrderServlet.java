@@ -1,5 +1,6 @@
-package com.epam.advent_hotel;
+package com.epam.advent_hotel.order;
 
+import com.epam.advent_hotel.RoomOrder;
 import com.epam.advent_hotel.db.DatabaseHandler;
 import org.apache.log4j.Logger;
 
@@ -31,14 +32,14 @@ public class EditOrderServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Administrator administrator = new Administrator();
+        //Administrator administrator = new Administrator();
         String act = request.getParameter("actionName");
         int orderId = Integer.parseInt(request.getParameter("order_id"));
 
         if (act.equals("editOrder")) {
             request.setAttribute("order_id", orderId);
             try {
-                RoomOrder room = administrator.getOrderById(orderId);
+                RoomOrder room = DatabaseHandler.getOrderById(orderId);
                 //RoomOrder roomOrder = DatabaseHandler.getRoomOrder()
                 LOG.debug("edit order");
                 LOG.debug(orderId);
@@ -48,6 +49,7 @@ public class EditOrderServlet extends HttpServlet {
                 String dateInFormatted = formatter.format(room.getDateIn());
                 String dateOutFormatted = formatter.format(room.getDateOut());
                 request.setAttribute("room_places", room.getPlaces());
+                request.setAttribute("classOfComfort", room.getClassOfComfort());
                 request.setAttribute("dateIn", dateInFormatted);
                 request.setAttribute("dateOut", dateOutFormatted);
 
@@ -71,21 +73,18 @@ public class EditOrderServlet extends HttpServlet {
             int classOfComfort = Integer.parseInt(request.getParameter("class"));
             try {
                 LOG.debug("Searching must be completed");
-                List<RoomOrder> res = administrator.getRes(numberPeople, classOfComfort, dateIn, dateOut);
-                RoomOrder currRoom = administrator.getRoomByOrderId(orderId);
+                List<RoomOrder> res = DatabaseHandler.getRoomsByParams(numberPeople, classOfComfort, dateIn, dateOut);
+                RoomOrder currRoom = DatabaseHandler.getRoomByOrderId(orderId);
                 LOG.debug(currRoom.getNumber());
-                LOG.debug(administrator.isRoomAvailible(orderId, dateIn, dateOut));
-                boolean currRoomAvailable = administrator.isRoomAvailible(orderId, dateIn, dateOut);
+                boolean currRoomAvailable = DatabaseHandler.isRoomAvailable(orderId, dateIn, dateOut);
                 if ((numberPeople == currRoom.getPlaces()) && (classOfComfort == currRoom.getClassOfComfort())
                         && currRoomAvailable) {
                     LOG.debug("Can have same room");
-
                     int p = (int) ChronoUnit.DAYS.between(dateIn, dateOut);
                     currRoom.setCost(p*currRoom.getCost());
-                    //res.add(0, currRoom);
                     request.setAttribute("curr_room", currRoom);
-                    String msg = "This is the room from your order under edit. You can also order it now.";
-                    request.setAttribute("prev_room", msg);
+//                    String msg = "This is the room from your order under edit. You can also order it now.";
+//                    request.setAttribute("prev_room", msg);
                 }
 
                 request.setAttribute("result_list", res);

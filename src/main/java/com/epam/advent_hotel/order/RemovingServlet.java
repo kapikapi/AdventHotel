@@ -1,5 +1,6 @@
-package com.epam.advent_hotel;
+package com.epam.advent_hotel.order;
 
+import com.epam.advent_hotel.db.DatabaseHandler;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -26,7 +27,7 @@ public class RemovingServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("in removing");
-        Administrator administrator = new Administrator();
+        //Administrator administrator = new Administrator();
         String act = request.getParameter("actionName");
         int orderId = Integer.parseInt(request.getParameter("order_id"));
         if (act.equals("removeOrder")) {
@@ -35,7 +36,7 @@ public class RemovingServlet extends HttpServlet {
             fwd(request, response);
         } else if (act.equals("confirmed")) {
                 try {
-                    administrator.removeOrder(orderId);
+                    DatabaseHandler.removeOrder(orderId);
                     response.sendRedirect(USER_JSP);
                 } catch (SQLException e) {
                     LOG.debug(e.getMessage());

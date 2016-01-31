@@ -1,5 +1,8 @@
-package com.epam.advent_hotel;
+package com.epam.advent_hotel.order;
 
+import com.epam.advent_hotel.RoomOrder;
+import com.epam.advent_hotel.UserAccount;
+import com.epam.advent_hotel.db.DatabaseHandler;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -39,10 +42,10 @@ public class BillServlet extends HttpServlet {
         LocalDate dateOut = (LocalDate) request.getSession().getAttribute("date_out");
         int days = (int) ChronoUnit.DAYS.between(dateIn, dateOut);
         Integer orderId = (Integer) request.getSession().getAttribute("order_id");
-        Administrator administrator = new Administrator();
+        //Administrator administrator = new Administrator();
         RoomOrder room = null;
         try {
-            room = administrator.getRoomById(roomId);
+            room = DatabaseHandler.getRoomById(roomId);
             room.setDateIn(dateIn);
             room.setDateOut(dateOut);
             room.setCost(room.getCost()*days);
@@ -76,14 +79,14 @@ public class BillServlet extends HttpServlet {
                     int completed;
                     boolean noError = false;
                     if (null != orderId) { // editing
-                        completed = administrator.editOrder(orderId, roomId, currentUser, dateIn, dateOut);
+                        completed = DatabaseHandler.editOrder(orderId, roomId, currentUser.getUserId(), dateIn, dateOut);
                         if (completed == 2) {
                             LOG.debug("order edited");
                             noError = true;
                             request.getSession().removeAttribute("order_id");
                         }
                     } else { // making new order
-                        completed = administrator.setOrder(roomId, currentUser, dateIn, dateOut);
+                        completed = DatabaseHandler.setOrder(roomId, currentUser.getUserId(), dateIn, dateOut);
                         if (completed == 1) {
                             LOG.debug("order registered");
                             noError = true;

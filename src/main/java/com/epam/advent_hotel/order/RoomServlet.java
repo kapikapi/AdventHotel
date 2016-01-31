@@ -1,5 +1,7 @@
-package com.epam.advent_hotel;
+package com.epam.advent_hotel.order;
 
+import com.epam.advent_hotel.RoomOrder;
+import com.epam.advent_hotel.db.DatabaseHandler;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -9,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 /**
  * Created by Elizaveta Kapitonova on 23.01.16.
@@ -33,8 +34,8 @@ public class RoomServlet extends HttpServlet {
 
         try {
             int roomId = Integer.parseInt(request.getPathInfo().substring(1));
-            Administrator administrator = new Administrator();
-            RoomOrder room = administrator.getRoomById(roomId);
+            //Administrator administrator = new Administrator();
+            RoomOrder room = DatabaseHandler.getRoomById(roomId);
             LOG.debug(room.getId());
             request.setAttribute("room", room);
         } catch (SQLException | NumberFormatException e) {

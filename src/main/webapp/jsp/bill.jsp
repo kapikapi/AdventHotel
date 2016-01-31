@@ -12,40 +12,30 @@
     <title>Final Cost Page</title>
 </head>
 <body>
+<h1>Final Cost</h1>
 <c:choose>
-    <c:when test="${not empty user}">
-        <h1>Final Cost</h1>
-        <c:choose>
-            <c:when test="${empty setError}">
-                ${res_str}
-                <form action="bill" method="post">
-                <input type="hidden" name="room_id" value="${room_id}">
-                <input type="hidden" name="actionName" value="bill">
+<c:when test="${empty setError}">
+    ${res_str}
+<form action="bill" method="post">
+    <input type="hidden" name="room_id" value="${room_id}">
+    <input type="hidden" name="actionName" value="bill">
 
-                <input type="submit" value="Submit room order">
+    <input type="submit" value="Submit room order">
 
-                <br>
-            </c:when>
-            <c:otherwise>
-                ${setError}
-            </c:otherwise>
-        </c:choose>
-        <br>
-        You can view all your orders on your user page:
-        <br>
-        <a href=<c:url value="user"/>>My page</a>
-        </form>
-        <form action="<c:url value="authentication"/>" method="POST">
-            <input type="submit" value="Log out">
-            <input type="hidden" name="actionName" value="logout">
-        </form>
+    <br>
     </c:when>
     <c:otherwise>
-        Please log in or register to make an order:
-        <br>
-        <h4><a href=<c:url value="/authentication"/>>Log in</a></h4>
-        <h4><a href=<c:url value="/registration"/>>Register</a></h4>
+        ${setError}
     </c:otherwise>
-</c:choose>
+    </c:choose>
+    <br>
+    You can view all your orders on your user page:
+    <br>
+    <a href=<c:url value="user"/>>My page</a>
+</form>
+<form action="<c:url value="authentication"/>" method="POST">
+    <input type="submit" value="Log out">
+    <input type="hidden" name="actionName" value="logout">
+</form>
 </body>
 </html>

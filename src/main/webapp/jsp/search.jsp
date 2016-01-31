@@ -12,75 +12,65 @@
     <title>Search Result</title>
 </head>
 <body>
-<c:choose>
-    <c:when test="${not empty user}">
-        <c:if test="${not empty result_list or not empty curr_room}">
 
-            <table>
-                <tr>
-                    <th>Room number</th>
-                    <th>Places</th>
-                    <th>Class</th>
-                    <th>Cost</th>
-                </tr>
+<c:if test="${not empty result_list or not empty curr_room}">
 
-                <c:if test="${not empty curr_room}">
-                    <tr>
-                        <td>
-                            <a href=<c:url value="room/${curr_room.id}"/>>${curr_room.number}</a>
-                        </td>
-                        <td>${curr_room.places}</td>
-                        <td>${curr_room.classOfComfort}</td>
-                        <td>${curr_room.cost}$</td>
+    <table>
+        <tr>
+            <th>Room number</th>
+            <th>Places</th>
+            <th>Class</th>
+            <th>Cost</th>
+        </tr>
 
-                        <td>
-                            <form action="bill" method="post">
-                                <input type="hidden" name="actionName" value="search"/>
-                                <input type="hidden" name="room_id" value="${curr_room.id}">
-                                <input type="submit" value="Order">
-                            </form>
+        <c:if test="${not empty curr_room}">
+            <tr>
+                <td>
+                    <a href=<c:url value="room/${curr_room.id}"/>>${curr_room.number}</a>
+                </td>
+                <td>${curr_room.places}</td>
+                <td>${curr_room.classOfComfort}</td>
+                <td>${curr_room.cost}$</td>
 
-                        </td>
-                        <td>
-                            ${prev_room}
-                        </td>
-                    </tr>
-                </c:if>
-                <c:forEach items="${result_list}" var="room">
-                    <tr>
-                        <td>
-                            <a href=<c:url value="room/${room.id}"/>>${room.number}</a>
-                        </td>
-                        <td>${room.places}</td>
-                        <td>${room.classOfComfort}</td>
-                        <td>${room.cost}$</td>
+                <td>
+                    <form action="bill" method="post">
+                        <input type="hidden" name="actionName" value="search"/>
+                        <input type="hidden" name="room_id" value="${curr_room.id}">
+                        <input type="submit" value="Order">
+                    </form>
 
-                        <td>
-                            <form action="bill" method="post">
-                                <input type="hidden" name="actionName" value="search"/>
-                                <input type="hidden" name="room_id" value="${room.id}">
-                                <input type="submit" value="Order">
-                            </form>
-
-                        </td>
-
-                    </tr>
-
-                </c:forEach>
-            </table>
+                </td>
+                <td>
+                    This is the room from your order under edit. You can also order it now.
+                </td>
+            </tr>
         </c:if>
-        <form action="<c:url value="authentication"/>" method="POST">
-            <input type="submit" value="Log out">
-            <input type="hidden" name="actionName" value="logout">
-        </form>
-    </c:when>
-    <c:otherwise>
-        Please log in or register to make an order:
-        <br>
-        <h4><a href=<c:url value="/authentication"/>>Log in</a></h4>
-        <h4><a href=<c:url value="/registration"/>>Register</a></h4>
-    </c:otherwise>
-</c:choose>
+        <c:forEach items="${result_list}" var="room">
+            <tr>
+                <td>
+                    <a href=<c:url value="room/${room.id}"/>>${room.number}</a>
+                </td>
+                <td>${room.places}</td>
+                <td>${room.classOfComfort}</td>
+                <td>${room.cost}$</td>
 
+                <td>
+                    <form action="bill" method="post">
+                        <input type="hidden" name="actionName" value="search"/>
+                        <input type="hidden" name="room_id" value="${room.id}">
+                        <input type="submit" value="Order">
+                    </form>
+
+                </td>
+
+            </tr>
+
+        </c:forEach>
+    </table>
+</c:if>
+<form action="<c:url value="authentication"/>" method="POST">
+    <input type="submit" value="Log out">
+    <input type="hidden" name="actionName" value="logout">
+</form>
 </body>
 </html>

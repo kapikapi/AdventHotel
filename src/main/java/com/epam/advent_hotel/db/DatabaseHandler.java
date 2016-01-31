@@ -353,19 +353,6 @@ public class DatabaseHandler {
         return roomOrder;
     }
 
-//    "SELECT a.apt_id, ao.occ_id, a.number, ad.places, ad.class, " +
-//            "ad.cost*? AS cost, ?::DATE AS date_in, ?::DATE AS date_out " +
-//            "FROM apartment_description AS ad " +
-//            "INNER JOIN apartments AS a ON (a.description=ad.d_id) " +
-//            "LEFT JOIN apartments_occupation AS ao " +
-//            "ON (ao.apartment_id=a.apt_id) FULL OUTER JOIN " +
-//            "(SELECT ao.apartment_id FROM apartments_occupation AS ao " +
-//            "WHERE ((DATE ?,DATE ?) OVERLAPS (ao.date_in,ao.date_out))) " +
-//            "AS v ON (v.apartment_id=ao.apartment_id) " +
-//            "WHERE (ad.class=?) AND (ad.places=?) " +
-//            "AND ((v.apartment_id IS NULL) OR (ao.apartment_id IS NULL)) " +
-//            "ORDER BY ad.places";
-
     public static List<RoomOrder> getRoomsByParams(int people, int classOfComfort, LocalDate dateIn, LocalDate dateOut) throws SQLException {
         Date date_in = Date.valueOf(dateIn);
         Date date_out = Date.valueOf(dateOut);

@@ -12,57 +12,49 @@
     <title>Editing Order</title>
 </head>
 <body>
-<c:choose>
-    <c:when test="${not empty user}">
-        <h1>Edit Order</h1>
 
-        <form action="edit_order" method="post">
-            <input type="hidden" name="actionName" value="submit_edit"/>
-            <input type="hidden" name="order_id" value="${order_id}">
-            Number of places in room:
-            <input type="number" name="number_people" value="${room_places}" required/>
-            <br>
-            Duration of stay:
-            <br>
-            From: <input type="date" name="date_in" value="${dateIn}" required/>
-            <br>
-            to: <input type="date" name="date_out" value="${dateOut}" required/>
+<h1>Edit Order</h1>
 
-            <br>
-            Room class:
-            <select name="class">
-                <option value="1">1: Lux</option>
-                <option value="2">2: Economy</option>
-            </select>
+<form action="edit_order" method="post">
+    <input type="hidden" name="actionName" value="submit_edit"/>
+    <input type="hidden" name="order_id" value="${order_id}">
+    Number of places in room:
+    <input type="number" name="number_people" value="${room_places}" required/>
+    <br>
+    Duration of stay:
+    <br>
+    From: <input type="date" name="date_in" value="${dateIn}" required/>
+    <br>
+    to: <input type="date" name="date_out" value="${dateOut}" required/>
 
-            <br>
-            <input type="submit" value="Edit">
+    <br>
+    Room class:
+    <select name="class">
+        <option value="1" <c:if test="${classOfComfort == 1}">selected</c:if>>1: Lux</option>
+        <option value="2" <c:if test="${classOfComfort == 2}">selected</c:if>>2: Economy</option>
+    </select>
 
-            <c:if test="${not empty search_error}">
-                <div style="color: red; font-weight: bold">
-                    Search failed: ${search_error}
-                </div>
-            </c:if>
-            <c:if test="${not empty no_result}">
-                <div style="font-weight: bold">
-                        ${no_result}
-                </div>
+    <br>
+    <input type="submit" value="Edit">
 
-            </c:if>
-        </form>
-        Back to <h4><a href=<c:url value="/user"/>>My page</a></h4>
-        <form action="<c:url value="authentication"/>" method="POST">
-            <input type="submit" value="Log out">
-            <input type="hidden" name="actionName" value="logout">
-        </form>
-    </c:when>
-    <c:otherwise>
-        Please log in or register to make an order:
-        <br>
-        <h4><a href=<c:url value="/authentication"/>>Log in</a></h4>
-        <h4><a href=<c:url value="/registration"/>>Register</a></h4>
-    </c:otherwise>
-</c:choose>
+    <c:if test="${not empty search_error}">
+        <div style="color: red; font-weight: bold">
+            Search failed: ${search_error}
+        </div>
+    </c:if>
+    <c:if test="${not empty no_result}">
+        <div style="font-weight: bold">
+                ${no_result}
+        </div>
+
+    </c:if>
+</form>
+Back to <h4><a href=<c:url value="/user"/>>My page</a></h4>
+
+<form action="<c:url value="authentication"/>" method="POST">
+    <input type="submit" value="Log out">
+    <input type="hidden" name="actionName" value="logout">
+</form>
 
 </body>
 </html>
