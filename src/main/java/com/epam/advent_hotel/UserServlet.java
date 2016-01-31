@@ -25,6 +25,7 @@ public class UserServlet extends HttpServlet {
     public static final String USER_JSP = "/jsp/user.jsp";
     public static final String ORDER_JSP = "/order";
     //public static final String REMOVE_JSP = "/remove_warning";
+    private static final int PER_PAGE = 10;
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -48,7 +49,15 @@ public class UserServlet extends HttpServlet {
                 UserAccount currentUser = (UserAccount) request.getSession().getAttribute("user");
                 request.setAttribute("user_login", currentUser.getLogin());
                 //Administrator administrator = new Administrator();
-                List<RoomOrder> resList = DatabaseHandler.getUsersOrders(currentUser.getUserId());
+                int page = 1;
+                if (null != request.getParameter("page")) {
+                    page = Integer.parseInt(request.getParameter("page"));
+                }
+                int offset = (page - 1) * PER_PAGE;
+
+                List<RoomOrder> resList = DatabaseHandler.getUsersOrders(currentUser.getUserId(), offset, PER_PAGE);
+                int numberOfOrders = DatabaseHandler.getNumberOfOrders(currentUser.getUserId());
+                int noOfPages = (int) Math.ceil(numberOfOrders*1.0/PER_PAGE);
                 List<RoomOrder> newList = new ArrayList<>();
                 List<RoomOrder> oldList = new ArrayList<>();
                 for (RoomOrder r : resList) {
@@ -61,6 +70,8 @@ public class UserServlet extends HttpServlet {
                 }
                 request.setAttribute("new_orders_list", newList);
                 request.setAttribute("old_orders_list", oldList);
+                request.setAttribute("noOfPages", noOfPages);
+                request.setAttribute("currentPage", page);
                 for (RoomOrder r : resList) {
                     LOG.debug(r.getOrderId());
                 }

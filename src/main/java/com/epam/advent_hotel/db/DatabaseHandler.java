@@ -124,7 +124,13 @@ public class DatabaseHandler {
                     "FROM apartment_description AS ad " +
                     "INNER JOIN apartments AS a ON (a.description=ad.d_id) " +
                     "INNER JOIN apartments_occupation AS ao ON (ao.apartment_id=a.apt_id) " +
-                    "WHERE (ao.user_id=?) ORDER BY ao.date_in DESC ";
+                    "WHERE (ao.user_id=?) ORDER BY ao.date_in DESC LIMIT ? OFFSET ?";
+    private static final String NUMBER_USERS_ORDERS =
+            "SELECT COUNT(*) AS orders_number " +
+                    "FROM apartment_description AS ad " +
+                    "INNER JOIN apartments AS a ON (a.description=ad.d_id) " +
+                    "INNER JOIN apartments_occupation AS ao ON (ao.apartment_id=a.apt_id) " +
+                    "WHERE (ao.user_id=?)";
     private static final String DELETE_ORDER =
             "DELETE FROM apartments_occupation WHERE (occ_id=?)";
 
@@ -136,15 +142,15 @@ public class DatabaseHandler {
 
     public static void init() {
         connection = getConnection();
-        try (Statement stmt = connection.createStatement()) {
-            ResultSet exists = stmt.executeQuery(DB_EXISTS);
-            int hotelDBCount = 0;
-            if (exists.first()) {
-                hotelDBCount = exists.getInt("ex");
-            }
-            if (hotelDBCount == 0) {
-                stmt.executeUpdate(CREATE_DB);
-            }
+        try {
+//            ResultSet exists = stmt.executeQuery(DB_EXISTS);
+//            int hotelDBCount = 0;
+//            if (exists.first()) {
+//                hotelDBCount = exists.getInt("ex");
+//            }
+//            if (hotelDBCount == 0) {
+//                stmt.executeUpdate(CREATE_DB);
+//            }
             connection.prepareStatement(CREATE_ACCESS_TYPE).execute();
             connection.prepareStatement(CREATE_USERS).executeUpdate();
             connection.prepareStatement(CREATE_APARTMENT_DESCRIPTION).executeUpdate();
@@ -281,36 +287,54 @@ public class DatabaseHandler {
         return res;
     }
 
-    public static int editOrderDates(int occId, LocalDate dateIn, LocalDate dateOut) throws SQLException {
-        Date date_in = Date.valueOf(dateIn);
-        Date date_out = Date.valueOf(dateOut);
-        //RoomOrder room = getOrderById(occId);
-        int res;
-        connection.setAutoCommit(false);
-        try (Statement statement = connection.createStatement();
-             PreparedStatement pstmt = connection.prepareStatement(EDIT_ORDER_DATES)) {
-            statement.execute(LOCK_TABLE_OCCUPATION);
+//    public static int editOrderDates(int occId, LocalDate dateIn, LocalDate dateOut) throws SQLException {
+//        Date date_in = Date.valueOf(dateIn);
+//        Date date_out = Date.valueOf(dateOut);
+//        //RoomOrder room = getOrderById(occId);
+//        int res;
+//        connection.setAutoCommit(false);
+//        try (Statement statement = connection.createStatement();
+//             PreparedStatement pstmt = connection.prepareStatement(EDIT_ORDER_DATES)) {
+//            statement.execute(LOCK_TABLE_OCCUPATION);
+//
+//            int overlaped = isRoomAvailable(occId, date_in, date_out);
+//
+//            pstmt.setInt(1, overlaped);
+//            pstmt.setDate(2, date_in);
+//            pstmt.setInt(3, overlaped);
+//            pstmt.setDate(4, date_out);
+//            pstmt.setInt(5, occId);
+//            res = pstmt.executeUpdate();
+//        }
+//        connection.commit();
+//        return res;
+//    }
 
-            int overlaped = isRoomAvailable(occId, date_in, date_out);
-
-            pstmt.setInt(1, overlaped);
-            pstmt.setDate(2, date_in);
-            pstmt.setInt(3, overlaped);
-            pstmt.setDate(4, date_out);
-            pstmt.setInt(5, occId);
-            res = pstmt.executeUpdate();
-        }
-        connection.commit();
-        return res;
-    }
-
-    public static List<RoomOrder> getUsersOrders(int userId) throws SQLException {
+    public static List<RoomOrder> getUsersOrders(int userId, int offset, int limit) throws SQLException {
         List<RoomOrder> res;
         try (PreparedStatement pstmt = connection.prepareStatement(GET_USERS_ORDERS)) {
             pstmt.setInt(1, userId);
+            pstmt.setInt(2, limit);
+            pstmt.setInt(3, offset);
             try (ResultSet resultSet = pstmt.executeQuery()) {
                 res = resultSetToList(resultSet);
             }
+        }
+        return res;
+    }
+
+    public static int getNumberOfOrders(int userId) throws SQLException{
+        int res = 0;
+        try (PreparedStatement pstmt = connection.prepareStatement(NUMBER_USERS_ORDERS,
+                ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet resultSet = pstmt.executeQuery()){
+                if (resultSet.first()) {
+                    res = resultSet.getInt("orders_number");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return res;
     }
