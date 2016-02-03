@@ -13,14 +13,15 @@ import java.io.IOException;
 public class EncodingFilter implements Filter {
     public static final Logger LOG= Logger.getLogger(EncodingFilter.class);
 
-    private String encoding = "utf-8";
+    private String encoding = "UTF-8";
 
     @Override
     public void destroy() {
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+            throws ServletException, IOException {
         LOG.debug("Encoding Filter");
         req.setCharacterEncoding(encoding);
         chain.doFilter(req, resp);

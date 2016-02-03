@@ -1,6 +1,8 @@
 package com.epam.advent_hotel.authentication;
 
 import com.epam.advent_hotel.UserAccount;
+import com.epam.advent_hotel.users.AccessLevel;
+import com.epam.advent_hotel.users.User;
 import org.apache.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
@@ -14,10 +16,11 @@ import java.io.IOException;
  * Created by Elizaveta Kapitonova on 13.01.16.
  */
 public class LoginServlet extends HttpServlet {
-    public static final Logger LOG= Logger.getLogger(LoginServlet.class);
+    public static final Logger LOG = Logger.getLogger(LoginServlet.class);
 
     public static final String LOGIN_JSP = "/jsp/login.jsp";
     public static final String USER_JSP = "/user";
+    public static final String ADMIN_JSP = "/admin";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -30,31 +33,41 @@ public class LoginServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String act = req.getParameter("actionName");
-        if (act.equals("authentication")) {
-            try {
+        switch (act) {
+            case "authentication":
+                try {
+                    User user = new User(login);
+                    user = user.logIn(login, password);
+                    req.getSession().setAttribute("user", user);
+                    if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
+                        req.getSession().setAttribute("isAdmin", true);
+                    }
+                    LOG.debug("Auth correct");
+                    if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
+                        resp.sendRedirect(ADMIN_JSP);
+                    } else {
+                        resp.sendRedirect(USER_JSP);
+                    }
 
-                UserAccount user = new UserAccount(login, password);
-                req.getSession().setAttribute("user", user);
-                LOG.debug("Auth correct");
-                //resp.getWriter().write("Success");
-                resp.sendRedirect(USER_JSP);
 
-            } catch (LoginException e) {
-                LOG.debug("Auth failed");
-                req.setAttribute("auth_error", e.getMessage());
-                LOG.debug(req.getAttribute("auth_error"));
-                //resp.sendRedirect("/authentication");
+                } catch (LoginException e) {
+                    LOG.debug("Auth failed");
+                    req.setAttribute("auth_error", e.getMessage());
+                    LOG.debug(req.getAttribute("auth_error"));
+                    //resp.sendRedirect("/authentication");
 
+                    fwd(req, resp);
+
+                }
+                break;
+            case "logout":
+                req.getSession().invalidate();
                 fwd(req, resp);
-
-            }
-        } else if (act.equals("logout")) {
-            req.getSession().invalidate();
-            fwd(req, resp);
-        }
-        else {
-            resp.getWriter().write("Error occurred");
-            resp.getWriter().flush();
+                break;
+            default:
+                resp.getWriter().write("Error occurred");
+                resp.getWriter().flush();
+                break;
         }
 
 
@@ -63,12 +76,17 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        UserAccount user = (UserAccount) req.getSession().getAttribute("user");
+        User user = (User) req.getSession().getAttribute("user");
         if (user != null) {
-            resp.sendRedirect(USER_JSP);
-            return;
+            if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
+                resp.sendRedirect(ADMIN_JSP);
+            } else {
+                resp.sendRedirect(USER_JSP);
+            }
+        } else {
+            fwd(req, resp);
         }
-        fwd(req, resp);
+
     }
 
 }

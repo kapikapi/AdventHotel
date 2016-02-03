@@ -35,6 +35,8 @@
     Registration failed: ${reg_error}
       </div>
   </c:if>
+
+  <h4><a href=<c:url value="/authentication"/>>Log in</a></h4> if you are already registered.
 </form>
 </body>
 </html>

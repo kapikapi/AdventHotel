@@ -22,9 +22,9 @@
   <input type="text" name="login"/>
   <br>
   Password:
-  <input type="password" name="password"/>
+  <input type="password" name="password" required/>
   <br>
-  <input type="submit" value="Submit">
+  <input type="submit" value="Submit" required/>
 
   <c:if test="${not empty auth_error}">
     <div style="color: red; font-weight: bold">
