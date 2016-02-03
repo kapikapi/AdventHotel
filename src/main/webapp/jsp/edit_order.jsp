@@ -17,37 +17,34 @@
 
 <form action="edit_order" method="post">
     <input type="hidden" name="actionName" value="submit_edit"/>
-    <input type="hidden" name="order_id" value="${order_id}">
     Number of places in room:
-    <input type="number" name="number_people" value="${room_places}" required/>
+    <input type="number" name="places" value="${order.places}" min="1" max="4" required/>
     <br>
     Duration of stay:
     <br>
-    From: <input type="date" name="date_in" value="${dateIn}" required/>
+    From: <input type="date" name="date_in" value="${order.dateIn}" required/>
     <br>
-    to: <input type="date" name="date_out" value="${dateOut}" required/>
+    to: <input type="date" name="date_out" value="${order.dateOut}" required/>
 
     <br>
     Room class:
     <select name="class">
-        <option value="1" <c:if test="${classOfComfort == 1}">selected</c:if>>1: Lux</option>
-        <option value="2" <c:if test="${classOfComfort == 2}">selected</c:if>>2: Economy</option>
+        <option value="1" <c:if test="${order.classOfComfort == 1}">selected</c:if>>1: Lux</option>
+        <option value="2" <c:if test="${order.classOfComfort == 2}">selected</c:if>>2: Economy</option>
     </select>
-
+    <br>
+    Comment:
+    <input type="text" name="comment" style="width:100px; height:40px;"/>
     <br>
     <input type="submit" value="Edit">
 
-    <c:if test="${not empty search_error}">
-        <div style="color: red; font-weight: bold">
-            Search failed: ${search_error}
-        </div>
-    </c:if>
-    <c:if test="${not empty no_result}">
-        <div style="font-weight: bold">
-                ${no_result}
-        </div>
 
+    <c:if test="${not empty order_error}">
+        <div style="color: red; font-weight: bold">
+            Making order failed: ${order_error}
+        </div>
     </c:if>
+
 </form>
 Back to <h4><a href=<c:url value="/user"/>>My page</a></h4>
 

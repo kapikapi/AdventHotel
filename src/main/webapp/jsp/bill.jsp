@@ -14,25 +14,39 @@
 <body>
 <h1>Final Cost</h1>
 <c:choose>
-<c:when test="${empty setError}">
-    ${res_str}
-<form action="bill" method="post">
-    <input type="hidden" name="room_id" value="${room_id}">
-    <input type="hidden" name="actionName" value="bill">
+    <c:when test="${empty error}">
+        Final cost for room
+        №${room.number},
+        <c:choose>
+            <c:when test="${order.classOfComfort == 1}">
+                Lux
+            </c:when>
+            <c:otherwise>
+                Economy
+            </c:otherwise>
+        </c:choose> class
+        from ${order.dateIn} to ${order.dateOut}
+        for ${order.places} people
+        is ${order.cost}$.
+        <br>
+        Please, submit payment:
+        <br>
 
-    <input type="submit" value="Submit room order">
-
-    <br>
+        <form action="bill" method="post">
+            <input type="hidden" name="actionName" value="bill">
+            <input type="submit" value="Submit payment for room">
+        </form>
+        <br>
     </c:when>
     <c:otherwise>
-        ${setError}
+        ${error}
     </c:otherwise>
-    </c:choose>
-    <br>
-    You can view all your orders on your user page:
-    <br>
-    <a href=<c:url value="user"/>>My page</a>
-</form>
+</c:choose>
+<br>
+You can view all your orders on your user page:
+<br>
+<a href=<c:url value="user"/>>My page</a>
+
 <form action="<c:url value="authentication"/>" method="POST">
     <input type="submit" value="Log out">
     <input type="hidden" name="actionName" value="logout">

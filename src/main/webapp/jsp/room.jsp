@@ -14,18 +14,22 @@
 <body>
 <h1>Room №${room.number}</h1>
 
-<form action="bill" method="post">
+<form action="/admin_order" method="get">
     Living places: ${room.places}
     <br>
     Class of comfort: ${room.classOfComfort}
     <br>
     Cost for one day: ${room.cost}
     <br>
-    <input type="submit" value="Order this room">
-    <input type="hidden" name="room_id" value="${room.id}">
-    <input type="hidden" name="actionName" value="search">
+    Description: ${description}
+    <c:if test="${not empty isAdmin}">
+        <br>
+        <input type="submit" value="Offer this room">
+        <input type="hidden" name="room_id" value="${room.aptId}">
+        <input type="hidden" name="order_id" value="${order.orderId}">
+    </c:if>
 </form>
-<form action="<c:url value="authentication"/>" method="POST">
+<form action="<c:url value="/authentication"/>" method="POST">
     <input type="submit" value="Log out">
     <input type="hidden" name="actionName" value="logout">
 </form>

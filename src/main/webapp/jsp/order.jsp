@@ -17,7 +17,7 @@
 <form action="order" method="post">
     <input type="hidden" name="actionName" value="order"/>
     Number of places in room:
-    <input type="number" name="number_people" required/>
+    <input type="number" name="places" min="1" max="4" required/>
     <br>
     Duration of stay:
     <br>
@@ -31,20 +31,16 @@
         <option value="1">1: Lux</option>
         <option value="2">2: Economy</option>
     </select>
-
+    <br>
+    Comment:
+    <textarea name="comment"></textarea>
     <br>
     <input type="submit" value="Submit">
 
-    <c:if test="${not empty search_error}">
+    <c:if test="${not empty order_error}">
         <div style="color: red; font-weight: bold">
-            Search failed: ${search_error}
+            Making order failed: ${order_error}
         </div>
-    </c:if>
-    <c:if test="${not empty no_result}">
-        <div style="font-weight: bold">
-                ${no_result}
-        </div>
-
     </c:if>
 </form>
 <form action="<c:url value="authentication"/>" method="POST">

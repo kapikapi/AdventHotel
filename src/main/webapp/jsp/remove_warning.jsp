@@ -16,9 +16,11 @@
     Please, confirm deleting this order:
     <input type="submit" value="I confirm">
     <input type="hidden" name="actionName" value="confirmed">
-    <input type="hidden" name="order_id" value="${order_id}">
+    <%--<input type="hidden" name="order_id" value="${order_id}">--%>
     <h4><a href=<c:url value="/user"/>>Back</a></h4>
 </form>
-
+<c:if test="${not empty error}">
+    ${error}
+</c:if>
 </body>
 </html>

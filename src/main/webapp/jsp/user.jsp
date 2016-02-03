@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<h2>${user_login}</h2>
+<h2>${user_name} (${user_login})</h2>
 
 <form action="user" method="post">
     <br>
@@ -28,22 +28,23 @@ My orders:
 <c:choose>
     <c:when test="${empty no_result}">
         <br>
-        <table>
+        <table cellspacing="10">
             <tr>
-                <th>Room number</th>
                 <th>Places</th>
                 <th>Class</th>
-                <th>Cost</th>
                 <th>Date of checking in</th>
                 <th>Date of checking out</th>
+                <th>Status</th>
+                <th>Cost</th>
                 <th></th>
+                <th></th>
+
             </tr>
-            <c:forEach items="${new_orders_list}" var="room">
+            <c:forEach items="${new_orders_list}" var="order">
                 <tr>
-                    <td>${room.number}</td>
-                    <td>${room.places}</td>
+                    <td>${order.places}</td>
                     <td><c:choose>
-                        <c:when test="${room.classOfComfort == 1}">
+                        <c:when test="${order.classOfComfort == 1}">
                             Lux
                         </c:when>
                         <c:otherwise>
@@ -51,22 +52,15 @@ My orders:
                         </c:otherwise>
                     </c:choose>
                     </td>
-                    <td>${room.cost}</td>
-                    <td>${room.dateIn}</td>
-                    <td>${room.dateOut}</td>
-                    <td>
-                        <form action="edit_order" method="post">
-                            <input type="hidden" name="order_id" value="${room.orderId}">
-                            <input type="submit" value="Edit order">
-                            <input type="hidden" name="actionName" value="editOrder">
-                        </form>
-                    </td>
-                    <td>
-                        <form action="remove_warning" method="post">
-                            <input type="hidden" name="order_id" value="${room.orderId}">
-                            <input type="submit" value="Remove order">
-                            <input type="hidden" name="actionName" value="removeOrder">
+                    <td>${order.dateIn}</td>
+                    <td>${order.dateOut}</td>
 
+                    <td>${order.status}</td>
+                    <td>${order.cost}</td>
+                    <td>
+                        <form action="user_order" method="get">
+                            <input type="hidden" name="order_id" value="${order.orderId}">
+                            <input type="submit" value="Order Page">
                         </form>
                     </td>
                 </tr>
@@ -76,13 +70,12 @@ My orders:
                     <td>Old orders</td>
                 </tr>
             </c:if>
-            <c:forEach items="${old_orders_list}" var="room">
+            <c:forEach items="${old_orders_list}" var="order">
                 <tr>
-                    <td>${room.number}</td>
-                    <td>${room.places}</td>
+                    <td>${order.places}</td>
                     <td>
                         <c:choose>
-                            <c:when test="${room.classOfComfort == 1}">
+                            <c:when test="${order.classOfComfort == 1}">
                                 Lux
                             </c:when>
                             <c:otherwise>
@@ -90,17 +83,25 @@ My orders:
                             </c:otherwise>
                         </c:choose>
                     </td>
-                    <td>${room.cost}$</td>
-                    <td>${room.dateIn}</td>
-                    <td>${room.dateOut}</td>
-                    <td>
-                        <form action="remove_warning" method="post">
-                            <input type="hidden" name="order_id" value="${room.orderId}">
-                            <input type="submit" value="Remove order">
-                            <input type="hidden" name="actionName" value="removeOrder">
 
+                    <td>${order.dateIn}</td>
+                    <td>${order.dateOut}</td>
+
+                    <td>${order.status}</td>
+                    <td>${order.cost}</td>
+                    <td>
+                        <form action="user_order" method="get">
+                            <input type="hidden" name="order_id" value="${order.orderId}">
+                            <input type="submit" value="Order Page">
                         </form>
                     </td>
+                        <td>
+                        <form action="remove_warning" method="post">
+                                <%--<input type="hidden" name="order_id" value="${order.orderId}">--%>
+                            <input type="submit" value="Remove order">
+                            <input type="hidden" name="actionName" value="removeOrder">
+                        </form>
+                        </td>
                 </tr>
             </c:forEach>
         </table>
@@ -112,7 +113,7 @@ My orders:
 
         <%--For displaying Page numbers.
         The when condition does not display a link for the current page--%>
-        <table border="1" cellpadding="5" cellspacing="5">
+        <table border="1" cellpadding="3" cellspacing="5">
             <tr>
                 <c:forEach begin="1" end="${noOfPages}" var="i">
                     <c:choose>
@@ -132,39 +133,15 @@ My orders:
             <td><a href="user?page=${currentPage + 1}">Next</a></td>
         </c:if>
 
-        <%--<c:set var="totalCount" scope="session" value="${new_list_size+old_list_size}"/>--%>
-        <%--<c:set var="perPage" scope="session" value="${perPage}"/>--%>
-        <%--<c:set var="totalPages" scope="session" value="${totalCount/perPage}"/>--%>
-        <%--<c:set var="pageIndex" scope="session" value="${param.start/perPage+1}"/>--%>
-
-        <%--<c:if test="${!empty param.start && param.start >(perPage-1) && param.start !=0 }">--%>
-            <%--<a href="user?start=<c:out value="${param.start - perPage}"/>">Previous</a>--%>
-        <%--</c:if>--%>
-
-        <%--<c:forEach var="boundaryStart" varStatus="status" begin="0" end="${totalCount - 1}" step="${perPage}">--%>
-            <%--<c:choose>--%>
-                <%--<c:when test="${status.count>0 && status.count != pageIndex}">--%>
-                    <%--<a href="?start=<c:out value='${boundaryStart}'/>">--%>
-                        <%--<c:out value="${status.count}"/> |--%>
-                    <%--</a>--%>
-                <%--</c:when>--%>
-                <%--<c:otherwise>--%>
-                    <%--<c:out value="${status.count}"/> |--%>
-                <%--</c:otherwise>--%>
-
-            <%--</c:choose>--%>
-        <%--</c:forEach>--%>
-
-        <%--<c:if test="${empty param.start || param.start<(totalCount-perPage)}">--%>
-            <%--<a href="user?start=<c:out value="${param.start + perPage}"/>">Next </a>--%>
-        <%--</c:if>--%>
     </c:when>
     <c:otherwise>
         ${no_result}
     </c:otherwise>
 </c:choose>
 
-
+<c:if test="${not empty isAdmin}">
+    <h4><a href=<c:url value="/admin"/>>My page as admin</a></h4>
+</c:if>
 <form action="<c:url value="authentication"/>" method="POST">
     <br>
     <input type="submit" value="Log out">
