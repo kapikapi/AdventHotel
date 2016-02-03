@@ -2,12 +2,13 @@
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-         version="2.5">
+<web-app
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+        version="3.0">
   <display-name>Archetype Created Web Application</display-name>
-    
+
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.epam.advent_hotel.authentication.LoginServlet</servlet-class>
@@ -17,32 +18,49 @@
         <servlet-class>com.epam.advent_hotel.authentication.RegistrationServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>OrderServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order.OrderServlet</servlet-class>
+        <servlet-name>OrderFormServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.OrderFormServlet</servlet-class>
     </servlet>
+
     <servlet>
-        <servlet-name>SearchServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order.SearchServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>BillServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order.BillServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>RoomServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order.RoomServlet</servlet-class>
+        <servlet-name>RoomDetailsServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.RoomDetailsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UserServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.UserServlet</servlet-class>
+        <servlet-class>com.epam.advent_hotel.users.UserServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>RemovingServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order.RemovingServlet</servlet-class>
+        <servlet-name>RemoveOrderServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.RemoveOrderServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>EditOrderServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order.EditOrderServlet</servlet-class>
+        <servlet-name>EditingServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.EditingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.admin.AdminServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderAdminServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.OrderAdminServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderUserServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.OrderUserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RejectingServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.RejectingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchRoomServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.SearchRoomServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PaymentServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.PaymentServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -54,19 +72,11 @@
         <url-pattern>/authentication</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>OrderServlet</servlet-name>
+        <servlet-name>OrderFormServlet</servlet-name>
         <url-pattern>/order</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>SearchServlet</servlet-name>
-        <url-pattern>/search/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>BillServlet</servlet-name>
-        <url-pattern>/bill</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>RoomServlet</servlet-name>
+        <servlet-name>RoomDetailsServlet</servlet-name>
         <url-pattern>/room/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
@@ -74,12 +84,36 @@
         <url-pattern>/user</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>RemovingServlet</servlet-name>
+        <servlet-name>RemoveOrderServlet</servlet-name>
         <url-pattern>/remove_warning</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>EditOrderServlet</servlet-name>
+        <servlet-name>EditingServlet</servlet-name>
         <url-pattern>/edit_order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderAdminServlet</servlet-name>
+        <url-pattern>/admin_order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderUserServlet</servlet-name>
+        <url-pattern>/user_order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RejectingServlet</servlet-name>
+        <url-pattern>/reject_warning</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchRoomServlet</servlet-name>
+        <url-pattern>/search_room</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PaymentServlet</servlet-name>
+        <url-pattern>/bill</url-pattern>
     </servlet-mapping>
 
 
@@ -104,5 +138,7 @@
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+
 
 </web-app>

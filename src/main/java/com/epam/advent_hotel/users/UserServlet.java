@@ -1,6 +1,7 @@
-package com.epam.advent_hotel;
+package com.epam.advent_hotel.users;
 
-import com.epam.advent_hotel.db.DatabaseHandler;
+import com.epam.advent_hotel.db.DBHandler;
+import com.epam.advent_hotel.order_room.Order;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,6 @@ public class UserServlet extends HttpServlet {
     public static final Logger LOG = Logger.getLogger(UserServlet.class);
     public static final String USER_JSP = "/jsp/user.jsp";
     public static final String ORDER_JSP = "/order";
-    //public static final String REMOVE_JSP = "/remove_warning";
     private static final int PER_PAGE = 10;
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
@@ -41,27 +40,28 @@ public class UserServlet extends HttpServlet {
                 LOG.debug("new order");
                 response.sendRedirect(ORDER_JSP);
             }
-//            else if (act.equals("removeOrder")) {
-//                response.sendRedirect(REMOVE_JSP);
-//            }
         } else {
             try {
-                UserAccount currentUser = (UserAccount) request.getSession().getAttribute("user");
+                User currentUser = (User) request.getSession().getAttribute("user");
+                LOG.debug(currentUser.getName());
+                request.setAttribute("user_name", currentUser.getName());
                 request.setAttribute("user_login", currentUser.getLogin());
-                //Administrator administrator = new Administrator();
                 int page = 1;
                 if (null != request.getParameter("page")) {
                     page = Integer.parseInt(request.getParameter("page"));
                 }
                 int offset = (page - 1) * PER_PAGE;
 
-                List<RoomOrder> resList = DatabaseHandler.getUsersOrders(currentUser.getUserId(), offset, PER_PAGE);
-                int numberOfOrders = DatabaseHandler.getNumberOfOrders(currentUser.getUserId());
+                List<Order> resList = DBHandler.getInstance().getUsersOrders(currentUser.getUserId(), offset, PER_PAGE);
+                int numberOfOrders = DBHandler.getInstance().getUsersNumberOfOrders(currentUser.getUserId());
+                LOG.debug(numberOfOrders);
                 int noOfPages = (int) Math.ceil(numberOfOrders*1.0/PER_PAGE);
-                List<RoomOrder> newList = new ArrayList<>();
-                List<RoomOrder> oldList = new ArrayList<>();
-                for (RoomOrder r : resList) {
-                    long p = ChronoUnit.DAYS.between(LocalDate.now(), r.getDateIn());
+                LOG.debug(noOfPages);
+                LOG.debug(currentUser.getUserId());
+                List<Order> newList = new ArrayList<>();
+                List<Order> oldList = new ArrayList<>();
+                for (Order r : resList) {
+                    long p = ChronoUnit.DAYS.between(LocalDate.now(), r.getDateOut());
                     if (p>=0) {
                         newList.add(r);
                     } else {
@@ -72,8 +72,8 @@ public class UserServlet extends HttpServlet {
                 request.setAttribute("old_orders_list", oldList);
                 request.setAttribute("noOfPages", noOfPages);
                 request.setAttribute("currentPage", page);
-                for (RoomOrder r : resList) {
-                    LOG.debug(r.getOrderId());
+                for (Order r : resList) {
+                    LOG.debug(r.getCost());
                 }
                 LOG.debug("Got orders list");
                 if (resList.isEmpty()) {
@@ -90,16 +90,14 @@ public class UserServlet extends HttpServlet {
             }
         }
 
-//        }  else {
-//            response.getWriter().write("Error occurred");
-//            response.getWriter().flush();
-//        }
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("in doGet");
+        if (null != request.getSession().getAttribute("order")) {
+            request.getSession().removeAttribute("order");
+        }
         doPost(request, response);
-        // fwd(request, response);
+        //fwd(request, response);
     }
 }
