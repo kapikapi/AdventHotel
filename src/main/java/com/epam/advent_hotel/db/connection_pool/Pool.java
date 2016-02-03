@@ -15,7 +15,8 @@ import java.util.Properties;
 public class Pool {
 
     public static final int GET_CONNECTION_MILLIS = 1000;
-    public static final String PROPERTIES_PATH = "/pool-config.properties";
+    //public static final String PROPERTIES_PATH = "/pool-config.properties";
+    public static final String PROPERTIES_PATH = "/pool-conf.properties";
     private static Pool INSTANCE;
 
     public static Pool getInstance() {
