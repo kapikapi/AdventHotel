@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: kapikapi
@@ -29,10 +30,7 @@
         <input type="hidden" name="order_id" value="${order.orderId}">
     </c:if>
 </form>
-<form action="<c:url value="/authentication"/>" method="POST">
-    <input type="submit" value="Log out">
-    <input type="hidden" name="actionName" value="logout">
-</form>
 
+<tags:logout userLogin="${user.login}"/>
 </body>
 </html>

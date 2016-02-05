@@ -245,12 +245,12 @@ public class DBHandler implements DBHandlerInterface {
                     user.setName(resultSet.getString("name"));
                     LOG.debug(resultSet.getString("name"));
                 } else {
-                    throw new LoginException("Wrong login or password");
+                    throw new LoginException();
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new LoginException("Wrong login or password");
+            throw new LoginException();
         }
         return user;
     }

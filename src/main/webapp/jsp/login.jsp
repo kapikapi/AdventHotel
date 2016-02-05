@@ -1,5 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ page isELIgnored="false" %>
+<c:choose>
+  <c:when test="${locale == 'ru'}">
+    <fmt:setLocale value="ru"/>
+  </c:when>
+  <c:otherwise>
+    <fmt:setLocale value="en"/>
+  </c:otherwise>
+</c:choose>
+
+<fmt:setBundle basename="local"/>
 <%--
   Created by IntelliJ IDEA.
   User: kapikapi
@@ -10,29 +22,36 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Login Page</title>
-
-
+  <fmt:message key="login.header" var="log_header"/>
+    <title>${log_header}</title>
 </head>
 <body>
-<h1>Login Page</h1>
+<h1>${log_header}</h1>
 <form action="authentication" method="post">
   <input type="hidden" name="actionName" value="authentication" />
-  Login:
-  <input type="text" name="login"/>
+  <fmt:message key="login.login_form.login" var="login"/>
+  ${login}:
+  <input type="text" name="login" required/>
   <br>
-  Password:
+  <fmt:message key="login.login_form.password" var="password"/>
+  ${password}:
   <input type="password" name="password" required/>
   <br>
-  <input type="submit" value="Submit" required/>
+  <fmt:message key="login.login_form.submit" var="submit"/>
+  <input type="submit" value="${submit}"/>
 
   <c:if test="${not empty auth_error}">
-    <div style="color: red; font-weight: bold">
-      Authentication failed: ${auth_error}
+    <fmt:message key="login.login_form.fail" var="fail"/>
+    <div class="error">
+      ${fail}: ${auth_error}
     </div>
   </c:if>
-  <h4><a href=<c:url value="/registration"/>>Or register now</a></h4>
+  <fmt:message key="login.login_form.reg_ref" var="reg_ref"/>
+  <h4><a href=<c:url value="/registration"/>>${reg_ref}</a></h4>
 
 </form>
+<fmt:message key="registration.registration_form.main_page" var="main"/>
+<h4><a href=<c:url value="/"/>>${main}</a></h4>
+<tags:language curr_lang="${locale}" curr_uri="${pageContext.request.requestURI}"/>
 </body>
 </html>

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: kapikapi
@@ -13,7 +14,11 @@
     <title>Order Form</title>
 </head>
 <body>
-<h1>Order Page</h1>
+<div class="main-content">
+    <div class="head-content">
+        Orders Page
+        <tags:logout userLogin="${user.login}" userName="${user.name}"/>
+        </div>
 <form action="order" method="post">
     <input type="hidden" name="actionName" value="order"/>
     Number of places in room:
@@ -43,9 +48,6 @@
         </div>
     </c:if>
 </form>
-<form action="<c:url value="authentication"/>" method="POST">
-    <input type="submit" value="Log out">
-    <input type="hidden" name="actionName" value="logout">
-</form>
+</div>
 </body>
 </html>

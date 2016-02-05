@@ -7,6 +7,7 @@ import javax.security.auth.login.LoginException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,12 +38,13 @@ public class User {
             LOG.debug("email is valid");
             if (!completed) {
                 LOG.debug("email is already registered");
-                throw new LoginException("Such login/email is already registered");
+                // TODO: resBundle
+                throw new LoginException(String.valueOf(1));
             }
         }
         else {
             LOG.debug("email is not valid");
-            throw new LoginException("Wrong email");
+            throw new LoginException(String.valueOf(0));
         }
     }
 

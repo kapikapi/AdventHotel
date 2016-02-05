@@ -47,7 +47,8 @@ public class OrderAdminServlet extends HttpServlet {
                 } catch (SQLException e) {
                     e.printStackTrace();
                     LOG.debug(e.getMessage());
-                    request.setAttribute("error", e.getMessage());
+                    request.setAttribute("error", true);
+                    LOG.debug(e.getMessage());
                 }
                 //fwd(request, response);
                 response.sendRedirect(ORDER_ADMIN_PAGE);

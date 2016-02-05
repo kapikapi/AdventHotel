@@ -1,6 +1,5 @@
 package com.epam.advent_hotel.authentication;
 
-import com.epam.advent_hotel.UserAccount;
 import com.epam.advent_hotel.users.User;
 import org.apache.log4j.Logger;
 
@@ -10,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Created by Elizaveta Kapitonova on 14.01.16.
@@ -21,19 +22,22 @@ public class RegistrationServlet extends HttpServlet {
     public static final String LOGIN_JSP = "/authentication";
     public static final String START_PAGE = "/index.jsp";
 
+    private static final String PROPERTY = "locale";
+
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.getRequestDispatcher(REGISTRATION_JSP).forward(req, resp);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ResourceBundle resourceBundle = getLocMsgs(request, PROPERTY);
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         String name = request.getParameter("name");
         String act = request.getParameter("actionName");
         if (act.equals("registration")) {
-            LOG.debug("Registrating");
+            LOG.debug("Registration");
             try {
                 LOG.debug(name);
                 User user = new User(name, login, password, email);
@@ -42,26 +46,40 @@ public class RegistrationServlet extends HttpServlet {
                 response.sendRedirect(LOGIN_JSP);
 
             } catch (LoginException e) {
+                String errorMsg;
                 LOG.debug("Reg failed");
-                request.setAttribute("reg_error", e.getMessage());
+                if (e.getMessage().equals("1")) {
+                    errorMsg = resourceBundle.getString("registration.registration_error.already_exists");
+                } else {
+                    errorMsg = resourceBundle.getString("registration.registration_error.wrong_email");
+                }
+                request.setAttribute("reg_error", errorMsg);
                 fwd(request, response);
             }
 
         }
         else {
-            LOG.debug("Reg totally failed");
-            response.getWriter().write("Error occurred");
-            response.getWriter().flush();
+            fwd(request, response);
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Locale locale = (Locale) request.getSession().getAttribute("locale");
+//        if (locale == null) {
+//            request.getSession().setAttribute("locale", new Locale("en"));
+//        }
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {
             response.sendRedirect(START_PAGE);
             return;
         }
+
         fwd(request, response);
+    }
+
+    private ResourceBundle getLocMsgs(HttpServletRequest request, String propertyName) {
+        Locale locale = (Locale) request.getSession().getAttribute("locale");
+        return ResourceBundle.getBundle(propertyName, locale);
     }
 
 }

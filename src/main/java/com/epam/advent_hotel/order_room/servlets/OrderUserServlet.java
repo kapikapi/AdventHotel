@@ -58,6 +58,15 @@ public class OrderUserServlet extends HttpServlet {
                     request.setAttribute("error", e.getMessage());
                 }
                 response.sendRedirect(ORDER_USER_PAGE);
+            } else if (act.equals("change_lang")){
+
+                LOG.debug("CHANGING LANG");
+                //fwd(request, response);
+                response.sendRedirect(ORDER_USER_PAGE);
+            }
+            else {
+                fwd(request, response);
+                LOG.debug("Error. Some wrong action.");
             }
         } else {
             fwd(request, response);
@@ -97,8 +106,9 @@ public class OrderUserServlet extends HttpServlet {
             }
 
         } catch (SQLException e) {
-            request.setAttribute("error", e.getMessage());
+            request.setAttribute("error", true);
             e.printStackTrace();
+            LOG.debug(e.getMessage());
         }
         fwd(request, response);
     }

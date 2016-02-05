@@ -21,6 +21,7 @@ public class AuthenticationFilter implements Filter {
     private static final String LOGIN_PAGE = "/authentication";
     private static final String REG_PAGE = "/registration";
     private static final String START_PAGE = "/";
+    private static final String INDEX_PAGE = "/index";
     List<String> noRegNeeded;
 
 
@@ -43,11 +44,12 @@ public class AuthenticationFilter implements Filter {
     }
 
     public void init(FilterConfig config) throws ServletException {
-        noRegNeeded = new ArrayList<>(4);
+        noRegNeeded = new ArrayList<>(5);
         noRegNeeded.add(START_PAGE);
         noRegNeeded.add(REG_PAGE);
         noRegNeeded.add(LOGIN_PAGE);
         noRegNeeded.add(AUTH_PAGE);
+        noRegNeeded.add(INDEX_PAGE);
     }
 
 }

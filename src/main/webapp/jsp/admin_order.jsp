@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: kapikapi
@@ -105,6 +106,7 @@
                 </c:if>
             </c:otherwise>
         </c:choose>
+        <tags:logout userLogin="${user.login}"/>
     </c:when>
     <c:otherwise>
         Sorry, you can not visit this page.

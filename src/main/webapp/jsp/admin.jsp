@@ -1,4 +1,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<c:choose>
+    <c:when test="${locale == 'ru'}">
+        <fmt:setLocale value="ru"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="en"/>
+    </c:otherwise>
+</c:choose>
+
+<fmt:setBundle basename="local"/>
 <%--
   Created by IntelliJ IDEA.
   User: kapikapi
@@ -9,67 +21,108 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Administrators Page</title>
+    <fmt:message key="admin.heading_admin" var="admin_header"/>
+    <title>${admin_header}</title>
+    <link type="text/css" rel="stylesheet" href="css/main.css">
 </head>
 <body>
 <c:choose>
     <c:when test="${not empty isAdmin}">
-        <h2>Welcome home, lovely admin!</h2>
-        <table>
-            <tr>
-                <td>
-                    <form action="admin" method="post">
-                        <input type="hidden" name="actionName" value="all">
-                        <input type="submit" value="All orders">
-                    </form>
-                </td>
-                <td>
-                    <form action="admin" method="post">
-                        <input type="hidden" name="actionName" value="requested">
-                        <input type="submit" value="Requested orders">
-                    </form>
-                </td>
-                <td>
-                    <form action="admin" method="post">
-                        <input type="hidden" name="actionName" value="in_discussion">
-                        <input type="submit" value="Orders in discussion">
-                    </form>
-                </td>
-                <td>
-                    <form action="admin" method="post">
-                        <input type="hidden" name="actionName" value="approved">
-                        <input type="submit" value="Approved orders">
-                    </form>
-                </td>
-                <td>
-                    <form action="admin" method="post">
-                        <input type="hidden" name="actionName" value="paid">
-                        <input type="submit" value="Paid orders">
-                    </form>
-                </td>
-                <td>
-                    <form action="admin" method="post">
-                        <input type="hidden" name="actionName" value="rejected">
-                        <input type="submit" value="Rejected orders">
-                    </form>
-                </td>
-            </tr>
-        </table>
-        <h4>${heading}</h4>
-        <c:choose>
-            <c:when test="${empty no_result}">
-                <br>
-                <table cellspacing="10">
+        <div class="main-content">
+            <div class="head-content">
+                <tags:language curr_lang="${locale}" curr_uri="${pageContext.request.requestURI}"/>
+                ${admin_header}
+                <tags:logout userLogin="${user.login}" userName="${user.name}"/>
+                <table>
                     <tr>
-                        <th>User Id</th>
-                        <th>Places</th>
-                        <th>Class</th>
-                        <th>Date of checking in</th>
-                        <th>Date of checking out</th>
-                        <th>Apartment id to order</th>
-                        <th>Additional information</th>
-                        <th>Status</th>
-                        <th>Cost</th>
+                        <td>
+                            <form action="admin" method="post">
+                                <input type="hidden" name="actionName" value="all">
+                                <fmt:message key="admin.orders.heading.all" var="all_orders"/>
+                                <input type="submit" value="${all_orders}">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="admin" method="post">
+                                <input type="hidden" name="actionName" value="requested">
+                                <fmt:message key="admin.orders.heading.requested" var="requested_orders"/>
+                                <input type="submit" value="${requested_orders}">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="admin" method="post">
+                                <input type="hidden" name="actionName" value="in_discussion">
+                                <fmt:message key="admin.orders.heading.in_discussion" var="in_discussion_orders"/>
+                                <input type="submit" value="${in_discussion_orders}">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="admin" method="post">
+                                <input type="hidden" name="actionName" value="approved">
+                                <fmt:message key="admin.orders.heading.approved" var="approved_orders"/>
+                                <input type="submit" value="${approved_orders}">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="admin" method="post">
+                                <input type="hidden" name="actionName" value="paid">
+                                <fmt:message key="admin.orders.heading.paid" var="paid_orders"/>
+                                <input type="submit" value="${paid_orders}">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="admin" method="post">
+                                <input type="hidden" name="actionName" value="rejected">
+                                <fmt:message key="admin.orders.heading.rejected" var="rejected_orders"/>
+                                <input type="submit" value="${rejected_orders}">
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="rooms-table">
+                <h4>${heading}</h4>
+                <c:choose>
+                <c:when test="${empty no_result}">
+                <br>
+                <table class="rooms">
+                    <tbody>
+                    <tr>
+                        <th>
+                            <fmt:message key="admin.order.user_id" var="user_id"/>
+                            ${user_id}
+                        </th>
+                        <th>
+                            <fmt:message key="user.orders.places" var="places"/>
+                        </th>
+                        <th>
+                            <fmt:message key="user.orders.class" var="class_comfort"/>
+                            ${class_comfort}
+                        </th>
+                        <th>
+                            <fmt:message key="user.order.date_in" var="date_in"/>
+                            ${date_in}
+                        </th>
+                        <th>
+                            <fmt:message key="user.order.date_out" var="date_out"/>
+                            ${date_out}
+                        </th>
+                        <th>
+                            <fmt:message key="admin.order.apartment_id" var="apartment_id"/>
+                            ${apartment_id}
+                        </th>
+                        <th>
+                            <fmt:message key="admin.order.addit_ino" var="add_info"/>
+                            ${add_info}
+                        </th>
+                        <th>
+                            <fmt:message key="user.order.status" var="status"/>
+                            ${status}
+                        </th>
+                        <th>
+                            <fmt:message key="user.order.cost" var="cost"/>
+                            ${cost}
+                        </th>
 
                     </tr>
                     <c:forEach items="${orders_list}" var="order">
@@ -78,10 +131,12 @@
                             <td>${order.places}</td>
                             <td><c:choose>
                                 <c:when test="${order.classOfComfort == 1}">
-                                    Lux
+                                    <fmt:message key="user.order.class.lux" var="lux"/>
+                                    ${lux}
                                 </c:when>
                                 <c:otherwise>
-                                    Economy
+                                    <fmt:message key="user.order.class.economy" var="economy"/>
+                                    ${economy}
                                 </c:otherwise>
                             </c:choose>
                             </td>
@@ -89,12 +144,13 @@
                             <td>${order.dateOut}</td>
                             <td>${order.orderedAptId}</td>
                             <td>${order.additionalInfo}</td>
-                            <td>${order.status}</td>
+                            <td><tags:status order_status="${order.status}" curr_lang="${locale}"/></td>
                             <td>${order.cost}</td>
                             <td>
                                 <form action="admin_order" method="get">
                                     <input type="hidden" name="order_id" value="${order.orderId}">
-                                    <input type="submit" value="Order Page">
+                                    <fmt:message key="user.order.details" var="details"/>
+                                    <input type="submit" value="${details}">
                                 </form>
                             </td>
 
@@ -103,59 +159,70 @@
                                     <form action="remove_warning" method="post">
                                             <%--<input type="hidden" name="order_id" value="${order.orderId}">--%>
                                         <input type="submit" value="Remove order">
-                                        <input type="hidden" name="actionName" value="removeOrder">
+                                                <fmt:message key="user.order.remove" var="remove"/>
+                                        <input type="hidden" name="actionName" value="${remove}">
                                     </form>
                                 </td>
                             </c:if>
 
                         </tr>
                     </c:forEach>
+                    </tbody>
                 </table>
 
+                <div class="paging">
+                    <c:if test="${currentPage != 1}">
+                        <fmt:message key="page.previous" var="previous"/>
+                        <td><a href="admin?page=${currentPage - 1}">${previous}</a></td>
+                    </c:if>
 
-                <c:if test="${currentPage != 1}">
-                    <td><a href="admin?page=${currentPage - 1}">Previous</a></td>
-                </c:if>
+                        <%--For displaying Page numbers.
+                        The when condition does not display a link for the current page--%>
+                    <table border="1" cellpadding="3" cellspacing="5">
+                        <tbody>
+                        <tr>
+                            <c:forEach begin="1" end="${noOfPages}" var="i">
+                                <c:choose>
+                                    <c:when test="${currentPage eq i}">
+                                        <td>${i}</td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td><a href="admin?page=${i}">${i}</a></td>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                <%--For displaying Page numbers.
-                The when condition does not display a link for the current page--%>
-                <table border="1" cellpadding="3" cellspacing="5">
-                    <tr>
-                        <c:forEach begin="1" end="${noOfPages}" var="i">
-                            <c:choose>
-                                <c:when test="${currentPage eq i}">
-                                    <td>${i}</td>
-                                </c:when>
-                                <c:otherwise>
-                                    <td><a href="admin?page=${i}">${i}</a></td>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                    </tr>
-                </table>
+                        <%--For displaying Next link --%>
+                    <c:if test="${currentPage lt noOfPages}">
+                        <fmt:message key="page.next" var="next"/>
+                        <td><a href="admin?page=${currentPage + 1}">${next}</a></td>
+                    </c:if>
 
-                <%--For displaying Next link --%>
-                <c:if test="${currentPage lt noOfPages}">
-                    <td><a href="admin?page=${currentPage + 1}">Next</a></td>
-                </c:if>
+                    </c:when>
+                    <c:otherwise>
+                        <fmt:message key="admin.orders.no_orders" var="no_orders"/>
+                    </c:otherwise>
+                    </c:choose>
+                    <c:if test="${not empty error}">
+                        <fmt:message key="admin.orders.orders_search_error" var="orders_search_error"/>
+                        ${orders_search_error}
+                    </c:if>
+                    <fmt:message key="ref.my_user_page" var="my_user_page"/>
+                    <h4><a href=<c:url value="/user"/>>${my_user_page}</a></h4>
 
-            </c:when>
-            <c:otherwise>
-                ${no_result}
-            </c:otherwise>
-        </c:choose>
-        <h4><a href=<c:url value="/user"/>>My page as user</a></h4>
-        <c:if test="${not empty error}">${error}</c:if>
-        <form action="<c:url value="authentication"/>" method="POST">
-            <br>
-            <input type="submit" value="Log out">
-            <input type="hidden" name="actionName" value="logout">
-        </form>
+                </div>
+            </div>
+        </div>
     </c:when>
 
     <c:otherwise>
-        Sorry, you can not visit this page.
-        <h4><a href=<c:url value="/user"/>>My page</a></h4>
+        <fmt:message key="auth.user_admin.error" var="auth_error"/>
+        ${auth_error}
+        <fmt:message key="ref.my_page" var="my_page"/>
+        <h4><a class="paging" href=<c:url value="/user"/>>${my_page}</a></h4>
     </c:otherwise>
 </c:choose>
 </body>

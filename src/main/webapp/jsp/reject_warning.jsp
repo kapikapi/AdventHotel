@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: kapikapi
@@ -19,5 +20,6 @@
   <%--<input type="hidden" name="order_id" value="${order_id}">--%>
   <h4><a href=<c:url value="/user"/>>Back</a></h4>
 </form>
+<tags:logout userLogin="${user.login}"/>
 </body>
 </html>

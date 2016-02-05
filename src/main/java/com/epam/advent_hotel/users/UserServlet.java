@@ -39,6 +39,9 @@ public class UserServlet extends HttpServlet {
             if (act.equals("newOrder")) {
                 LOG.debug("new order");
                 response.sendRedirect(ORDER_JSP);
+            } else {
+                LOG.debug("not new order action");
+                response.sendRedirect("/user");
             }
         } else {
             try {
@@ -77,9 +80,9 @@ public class UserServlet extends HttpServlet {
                 }
                 LOG.debug("Got orders list");
                 if (resList.isEmpty()) {
-                    String noOrders = "No rooms have been ordered yet";
+                    //String noOrders = "No rooms have been ordered yet";
                     LOG.debug("No orders");
-                    request.setAttribute("no_result", noOrders);
+                    request.setAttribute("no_result", true);
                 }
                 fwd(request, response);
             } catch (SQLException e) {

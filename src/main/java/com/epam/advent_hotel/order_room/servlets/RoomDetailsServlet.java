@@ -47,6 +47,8 @@ public class RoomDetailsServlet extends HttpServlet {
             request.setAttribute("room", apartment);
             request.setAttribute("description", description.getText());
             request.setAttribute("order_id", orderId);
+            String referer = request.getHeader("Referer");
+            response.sendRedirect(referer);
         } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
             LOG.debug(e.getMessage());
