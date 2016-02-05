@@ -10,6 +10,8 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Created by Elizaveta Kapitonova on 04.02.16.
@@ -18,6 +20,7 @@ public class UsernameTagHandler extends TagSupport {
     private static final Logger LOG = Logger.getLogger(UsernameTagHandler.class);
 
     private int userId;
+    private Locale lang;
 
     @Override
     public int doStartTag() throws JspException {
@@ -27,8 +30,9 @@ public class UsernameTagHandler extends TagSupport {
 
             if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
                 String userName = user.getName();
-                String admin = "Administrator ";
-                out.print(admin + userName);
+                ResourceBundle resourceBundle = ResourceBundle.getBundle("local", lang);
+                String admin = resourceBundle.getString("admin.order_page.admin_name");
+                out.print(admin+ " " + userName);
             } else {
                 String userLogin = user.getLogin();
                 out.print(userLogin);
@@ -47,4 +51,13 @@ public class UsernameTagHandler extends TagSupport {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    public Locale getLang() {
+        return lang;
+    }
+
+    public void setLang(Locale lang) {
+        this.lang = lang;
+    }
+
 }

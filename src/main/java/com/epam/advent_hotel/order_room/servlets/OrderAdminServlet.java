@@ -35,13 +35,11 @@ public class OrderAdminServlet extends HttpServlet {
         LOG.debug("in doPost");
         if (null != request.getParameter("actionName")) {
             String act = request.getParameter("actionName");
+            int orderId = (int) request.getSession().getAttribute("order_id");
             LOG.debug(act);
-            if (act.equals("find_room")) {
-                //request.getRequestDispatcher(SEARCH_ROOM_PAGE).forward(request, response);
-                fwd(request, response);
-            } else if (act.equals("send_comment")) {
+            if (act.equals("send_comment")) {
                 try {
-                    int orderId = (int) request.getSession().getAttribute("order_id");
+
                     User user = (User) request.getSession().getAttribute("user");
                     DBHandler.getInstance().setOrderComment(orderId, request.getParameter("comment"), user.getUserId());
                 } catch (SQLException e) {
@@ -51,8 +49,24 @@ public class OrderAdminServlet extends HttpServlet {
                     LOG.debug(e.getMessage());
                 }
                 //fwd(request, response);
-                response.sendRedirect(ORDER_ADMIN_PAGE);
+                //response.sendRedirect(ORDER_ADMIN_PAGE);
+            } else if (act.equals("add_info")) {
+
+                //int orderId = (int) request.getSession().getAttribute("order_id");
+                String addInfo = request.getParameter("additional_info");
+                try {
+                    DBHandler.getInstance().setAddInfo(orderId, addInfo);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    LOG.debug(e.getMessage());
+                    request.setAttribute("error", true);
+                }
+                //response.sendRedirect(ORDER_ADMIN_PAGE);
             }
+
+                // changed lang
+                response.sendRedirect(ORDER_ADMIN_PAGE);
+
         } else {
 
             fwd(request, response);
@@ -72,7 +86,7 @@ public class OrderAdminServlet extends HttpServlet {
                 int aptId = Integer.parseInt(request.getParameter("room_id"));
                 DBHandler.getInstance().setOrdersApt(orderId, aptId);
                 DBHandler.getInstance().setOrderStatus(orderId, OrderStatus.IN_DISCUSSION);
-            } else if (null == request.getSession().getAttribute("order_id")){
+            } else if (null == request.getSession().getAttribute("order_id") || null != request.getParameter("order_id")){
                 LOG.debug("don't have order_id in session");
                 orderId = Integer.parseInt(request.getParameter("order_id"));
                 request.getSession().setAttribute("order_id", orderId);
@@ -80,6 +94,7 @@ public class OrderAdminServlet extends HttpServlet {
                 LOG.debug("have order_id but don't have  room_id");
                 orderId = (int) request.getSession().getAttribute("order_id");
             }
+
             order = DBHandler.getInstance().getOrder(orderId);
             request.setAttribute("order", order);
             int page = 1;
@@ -97,8 +112,9 @@ public class OrderAdminServlet extends HttpServlet {
                 request.setAttribute("no_comments", true);
             }
         } catch (SQLException e) {
-            request.setAttribute("error", e.getMessage());
+            request.setAttribute("error", true);
             e.printStackTrace();
+            LOG.debug(e.getMessage());
         }
         fwd(request, response);
     }

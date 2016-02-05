@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
     public static final String USER_JSP = "/user";
     public static final String ADMIN_JSP = "/admin";
 
-    private static final String PROPERTY = "locale";
+    private static final String PROPERTY = "local";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

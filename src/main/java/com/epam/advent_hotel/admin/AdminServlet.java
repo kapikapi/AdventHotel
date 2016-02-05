@@ -25,7 +25,7 @@ public class AdminServlet extends HttpServlet {
     public static final String ADMIN_JSP = "/jsp/admin.jsp";
 
     private static final int PER_PAGE = 10;
-    private static final String PROPERTY = "locale";
+    private static final String PROPERTY = "local";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

@@ -22,6 +22,7 @@ public class RoomDetailsServlet extends HttpServlet {
     public static final Logger LOG = Logger.getLogger(RoomDetailsServlet.class);
 
     public static final String ROOM_DETAILS_JSP = "/jsp/room.jsp";
+    public static final String ROOM_DETAILS = "/room";
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.getRequestDispatcher(ROOM_DETAILS_JSP).forward(req, resp);
@@ -29,29 +30,29 @@ public class RoomDetailsServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("in doPost");
-        fwd(request, response);
+        int roomId = Integer.parseInt(request.getPathInfo().substring(1));
+        response.sendRedirect(ROOM_DETAILS + "/" + String.valueOf(roomId));
+        //fwd(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LOG.debug("in doGet");
         try {
             int orderId = (int) request.getSession().getAttribute("order_id");
             int roomId = Integer.parseInt(request.getPathInfo().substring(1));
             LOG.debug(roomId);
             Apartment apartment = DBHandler.getInstance().getApt(roomId);
-            // TODO: locale!!!!
-            // TEMP
-            Locale locale = new Locale("ru");
+            Locale locale = (Locale) request.getSession().getAttribute("locale");
             LocalAptDescription description = DBHandler.getInstance().getDescription(apartment.getDescription(), locale);
             //int orderId = Integer.parseInt(request.getParameter("order_id"));
             LOG.debug(apartment.getAptId());
             request.setAttribute("room", apartment);
             request.setAttribute("description", description.getText());
             request.setAttribute("order_id", orderId);
-            String referer = request.getHeader("Referer");
-            response.sendRedirect(referer);
         } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
             LOG.debug(e.getMessage());
+            request.setAttribute("error", true);
         }
 
         fwd(request, response);

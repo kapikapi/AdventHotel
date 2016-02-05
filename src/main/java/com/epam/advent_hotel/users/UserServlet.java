@@ -52,11 +52,14 @@ public class UserServlet extends HttpServlet {
                 int page = 1;
                 if (null != request.getParameter("page")) {
                     page = Integer.parseInt(request.getParameter("page"));
+                    LOG.debug(page);
                 }
                 int offset = (page - 1) * PER_PAGE;
-
+                LOG.debug(offset);
                 List<Order> resList = DBHandler.getInstance().getUsersOrders(currentUser.getUserId(), offset, PER_PAGE);
+                LOG.debug("ok get users");
                 int numberOfOrders = DBHandler.getInstance().getUsersNumberOfOrders(currentUser.getUserId());
+                LOG.debug("ok get numbers");
                 LOG.debug(numberOfOrders);
                 int noOfPages = (int) Math.ceil(numberOfOrders*1.0/PER_PAGE);
                 LOG.debug(noOfPages);
@@ -86,9 +89,13 @@ public class UserServlet extends HttpServlet {
                 }
                 fwd(request, response);
             } catch (SQLException e) {
+                request.setAttribute("error", true);
+                e.printStackTrace();
                 LOG.debug("Getting users list of orders failed" + e.getMessage());
+
             } catch (NullPointerException e) {
-                LOG.debug("not authorized user");
+                e.printStackTrace();
+                LOG.debug("may be not authorized user");
                 fwd(request, response);
             }
         }
@@ -97,8 +104,8 @@ public class UserServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("in doGet");
-        if (null != request.getSession().getAttribute("order")) {
-            request.getSession().removeAttribute("order");
+        if (null != request.getSession().getAttribute("order_id")) {
+            request.getSession().removeAttribute("order_id");
         }
         doPost(request, response);
         //fwd(request, response);

@@ -37,25 +37,14 @@ public class OrderUserServlet extends HttpServlet {
             int orderId = (int) request.getSession().getAttribute("order_id");
             String act = request.getParameter("actionName");
             LOG.debug(act);
-            if (act.equals("approve")) {
-                try {
-                    DBHandler.getInstance().setOrderStatus(orderId, OrderStatus.APPROVED);
-                    DBHandler.getInstance().setOrderCost(orderId);
-                    request.setAttribute("order", DBHandler.getInstance().getOrder(orderId));
-                } catch (SQLException e) {
-                    request.setAttribute("error", e.getMessage());
-                    e.printStackTrace();
-                }
-
-                fwd(request, response);
-            } else if (act.equals("send_comment")) {
+            if (act.equals("send_comment")) {
                 try {
                     User user = (User) request.getSession().getAttribute("user");
                     DBHandler.getInstance().setOrderComment(orderId, request.getParameter("comment"), user.getUserId());
                 } catch (SQLException e) {
                     e.printStackTrace();
                     LOG.debug(e.getMessage());
-                    request.setAttribute("error", e.getMessage());
+                    request.setAttribute("error", true);
                 }
                 response.sendRedirect(ORDER_USER_PAGE);
             } else if (act.equals("change_lang")){
@@ -82,7 +71,23 @@ public class OrderUserServlet extends HttpServlet {
             orderId = (int) request.getSession().getAttribute("order_id");
         }
 
-        try {
+        if (null != request.getParameter("actionName")) {
+            String act = request.getParameter("actionName");
+            LOG.debug(act);
+            if (act.equals("approve")) {
+                try {
+                    DBHandler.getInstance().setOrderStatus(orderId, OrderStatus.APPROVED);
+                    DBHandler.getInstance().setOrderCost(orderId);
+                    request.setAttribute("order", DBHandler.getInstance().getOrder(orderId));
+                } catch (SQLException e) {
+                    request.setAttribute("error", e.getMessage());
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+            try {
             Order order = DBHandler.getInstance().getOrder(orderId);
             if (!order.getStatus().equals(OrderStatus.REQUESTED) || !(order.getStatus().equals(OrderStatus.REJECTED))) {
                 Apartment apartment = DBHandler.getInstance().getApt(order.getOrderedAptId());
@@ -111,5 +116,6 @@ public class OrderUserServlet extends HttpServlet {
             LOG.debug(e.getMessage());
         }
         fwd(request, response);
+        //doPost(request, response);
     }
 }

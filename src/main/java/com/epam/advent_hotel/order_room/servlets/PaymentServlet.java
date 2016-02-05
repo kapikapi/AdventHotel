@@ -42,7 +42,7 @@ public class PaymentServlet extends HttpServlet {
                 } catch (SQLException e) {
                     e.printStackTrace();
                     LOG.debug(e.getMessage());
-                    request.setAttribute("error", e.getMessage());
+                    request.setAttribute("error", true);
                     fwd(request, response);
                 }
             } else {
@@ -68,7 +68,7 @@ public class PaymentServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             LOG.debug(e.getMessage());
-            request.setAttribute("error", "Error occurred. Please, try again.");
+            request.setAttribute("error", true);
         }
 
         fwd(request, response);

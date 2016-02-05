@@ -18,7 +18,7 @@ div.head-content form {
   margin: 0;
 }
 
-.logout {  
+.logout {
   float:right
 }
 
@@ -38,6 +38,27 @@ div.comment-author {
 div.error {
   color: red;
   font-weight: bold
+}
+div.form {
+  padding: 15px;
+  margin-left: 100px;
+  margin-right: auto;
+}
+div.warning {
+  padding: 15px;
+  margin-left: 90px;
+  margin-right: auto;
+}
+div.form-left {
+  float: left;
+  width: 50%
+}
+div.form-center {
+   text-align: center;
+}
+div.form-right {
+  float: right;
+  width: 50%
 }
 td {
   text-align:center

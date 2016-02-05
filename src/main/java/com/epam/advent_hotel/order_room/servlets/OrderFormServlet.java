@@ -32,31 +32,36 @@ public class OrderFormServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = (User) request.getSession().getAttribute("user");
-        int userId = user.getUserId();
-        int places = Integer.parseInt(request.getParameter("places"));
-        int classOfComfort = Integer.parseInt(request.getParameter("class"));
-        String comment = request.getParameter("comment");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FORMATTER_PATTERN);
-        String date_in = request.getParameter("date_in");
-        String date_out = request.getParameter("date_out");
-        LocalDate dateIn = LocalDate.parse(date_in, formatter);
-        LocalDate dateOut = LocalDate.parse(date_out, formatter);
-        if (dateIn.isAfter(LocalDate.now()) && dateIn.isBefore(dateOut)) {
-            LOG.debug("Dates correct");
-            LOG.debug(date_in);
-            LOG.debug(LocalDate.now());
-            try {
-                DBHandler.getInstance().setNewOrder(userId, places, classOfComfort, dateIn, dateOut, comment);
-                response.sendRedirect(USER_PAGE);
-            } catch (SQLException e) {
-                LOG.debug(e.getMessage());
-                request.setAttribute("order_error", e.getMessage());
+        String act=request.getParameter("actionName");
+        if (act.equals("order")) {
+            User user = (User) request.getSession().getAttribute("user");
+            int userId = user.getUserId();
+            int places = Integer.parseInt(request.getParameter("places"));
+            int classOfComfort = Integer.parseInt(request.getParameter("class"));
+            String comment = request.getParameter("comment");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FORMATTER_PATTERN);
+            String date_in = request.getParameter("date_in");
+            String date_out = request.getParameter("date_out");
+            LocalDate dateIn = LocalDate.parse(date_in, formatter);
+            LocalDate dateOut = LocalDate.parse(date_out, formatter);
+            if (dateIn.isAfter(LocalDate.now()) && dateIn.isBefore(dateOut)) {
+                LOG.debug("Dates correct");
+                LOG.debug(date_in);
+                LOG.debug(LocalDate.now());
+                try {
+                    DBHandler.getInstance().setNewOrder(userId, places, classOfComfort, dateIn, dateOut, comment);
+                    response.sendRedirect(USER_PAGE);
+                } catch (SQLException e) {
+                    LOG.debug(e.getMessage());
+                    request.setAttribute("error", true);
+                    fwd(request, response);
+                }
+            } else {
+                request.setAttribute("order_error", true);
                 fwd(request, response);
             }
         } else {
-            request.setAttribute("order_error",
-                    "Dates are not correct. Closest date of possible checking in is tomorrow.");
+            LOG.debug("no action");
             fwd(request, response);
         }
     }

@@ -22,7 +22,7 @@ public class RegistrationServlet extends HttpServlet {
     public static final String LOGIN_JSP = "/authentication";
     public static final String START_PAGE = "/index.jsp";
 
-    private static final String PROPERTY = "locale";
+    private static final String PROPERTY = "local";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

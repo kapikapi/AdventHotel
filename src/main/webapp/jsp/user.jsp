@@ -29,7 +29,7 @@
 <div class="main-content">
     <div class="head-content">
         <tags:language curr_lang="${locale}" curr_uri="${pageContext.request.requestURI}"/>
-        <tags:logout userLogin="${user.login}" userName="${user.name}"/>
+        <tags:logout userLogin="${user.login}" userName="${user.name}" curr_lang="${locale}"/>
         <fmt:message key="user.new_order" var="new_order"/>
         <form action="user" method="post">
             <fmt:message key="user.new_order.button" var="new_order_button"/>
@@ -126,10 +126,10 @@
                     </td>
                     <td>
                         <form action="remove_warning" method="post">
-                                <%--<input type="hidden" name="order_id" value="${order.orderId}">--%>
+                                <input type="hidden" name="order_id" value="${order.orderId}">
                             <fmt:message key="user.order.remove" var="remove"/>
                             <input type="submit" value="${remove}">
-                            <input type="hidden" name="actionName" value="removeOrder">
+                            <input type="hidden" name="actionName" value="remove_order">
                         </form>
                     </td>
                 </tr>
@@ -182,6 +182,10 @@
             </c:if>
         </div>
     </div>
+    <c:if test="${not empty error}">
+        <fmt:message key="orders.error" var="orders_list_error"/>
+        ${orders_list_error}
+    </c:if>
 </div>
 
 </body>

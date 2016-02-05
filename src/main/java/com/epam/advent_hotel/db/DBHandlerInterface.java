@@ -49,4 +49,5 @@ public interface DBHandlerInterface {
     LocalAptDescription getDescription(int textNumber, Locale locale) throws SQLException;
     int setOrderCost(int orderId) throws SQLException;
     int setNullCost(int orderId) throws SQLException;
+    int setAddInfo(int orderId, String addInfo) throws SQLException;
 }

@@ -37,11 +37,11 @@ public class SearchRoomServlet extends HttpServlet {
             //int orderId = Integer.parseInt(request.getParameter("order_id"));
             //LOG.debug(orderId);
             //Order order = DBHandler.getInstance().getOrder(orderId);
-            if (null != request.getParameter("actionName")) {
+            //if (null != request.getParameter("actionName")) {
 
-                String act = request.getParameter("actionName");
-                LOG.debug(act);
-                if (act.equals("find_room")) {
+               // String act = request.getParameter("actionName");
+               // LOG.debug(act);
+             //   if (act.equals("find_room")) {
                     int page = 1;
                     if (null != request.getParameter("page")) {
                         page = Integer.parseInt(request.getParameter("page"));
@@ -60,7 +60,7 @@ public class SearchRoomServlet extends HttpServlet {
                     request.setAttribute("result_list", res);
 
                     if (res.isEmpty()) {
-                        request.setAttribute("no_result", "No results for such search parameters. Please, try again.");
+                        request.setAttribute("no_result", true);
                         LOG.debug("No result");
 
                     }
@@ -68,12 +68,14 @@ public class SearchRoomServlet extends HttpServlet {
                     // request.setAttribute("order", order);
                     fwd(request, response);
 
-                }
-            }
+                //}
+//            } else {
+//                fwd(request, response);
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
             LOG.debug(e.getMessage());
-            request.setAttribute("error", e.getMessage());
+            request.setAttribute("error", true);
             fwd(request, response);
         }
 

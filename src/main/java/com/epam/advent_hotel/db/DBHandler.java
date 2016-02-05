@@ -77,7 +77,7 @@ public class DBHandler implements DBHandlerInterface {
                     "date_out DATE NOT NULL ," +
                     "order_apt_id INT," +
                     "order_additional_info TEXT, " +
-                    "status ENUM('REQUESTED', 'IN_DISCUSSION', 'APPROVED', 'PAID', 'REJECTED'), " +
+                    "status ENUM('REQUESTED', 'IN_DISCUSSION', 'APPROVED', 'PAID', 'REJECTED') NOT NULL, " +
                     "cost INT, " +
                     "FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE, " +
                     "FOREIGN KEY (order_apt_id) REFERENCES apartments(apt_id) ON DELETE CASCADE ON UPDATE CASCADE);";
@@ -203,6 +203,8 @@ public class DBHandler implements DBHandlerInterface {
                     "WHERE order_id=? ORDER BY comment_id DESC LIMIT ? OFFSET ?";
     private static final String GET_COMMENTS_NUMBER =
             "SELECT COUNT(*) AS comments_number FROM comments WHERE order_id=?";
+    private static final String SET_ADD_INFO =
+            "UPDATE orders SET order_additional_info=? WHERE id=?";
 
 
     private static Connection connection;
@@ -610,6 +612,17 @@ public class DBHandler implements DBHandlerInterface {
         int res;
         try (PreparedStatement pstmt = connection.prepareStatement(SET_NULL_COST)) {
             pstmt.setInt(1, orderId);
+            res = pstmt.executeUpdate();
+        }
+        return res;
+    }
+
+    @Override
+    public int setAddInfo(int orderId, String addInfo) throws SQLException {
+        int res;
+        try (PreparedStatement pstmt = connection.prepareStatement(SET_ADD_INFO)) {
+            pstmt.setString(1, addInfo);
+            pstmt.setInt(2, orderId);
             res = pstmt.executeUpdate();
         }
         return res;

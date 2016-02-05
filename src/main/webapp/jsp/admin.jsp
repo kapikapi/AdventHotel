@@ -30,9 +30,9 @@
     <c:when test="${not empty isAdmin}">
         <div class="main-content">
             <div class="head-content">
+                    ${admin_header}
                 <tags:language curr_lang="${locale}" curr_uri="${pageContext.request.requestURI}"/>
-                ${admin_header}
-                <tags:logout userLogin="${user.login}" userName="${user.name}"/>
+                <tags:logout userLogin="${user.login}" userName="${user.name}" curr_lang="${locale}"/>
                 <table>
                     <tr>
                         <td>
@@ -90,38 +90,38 @@
                     <tr>
                         <th>
                             <fmt:message key="admin.order.user_id" var="user_id"/>
-                            ${user_id}
+                                ${user_id}
                         </th>
                         <th>
                             <fmt:message key="user.orders.places" var="places"/>
                         </th>
                         <th>
                             <fmt:message key="user.orders.class" var="class_comfort"/>
-                            ${class_comfort}
+                                ${class_comfort}
                         </th>
                         <th>
                             <fmt:message key="user.order.date_in" var="date_in"/>
-                            ${date_in}
+                                ${date_in}
                         </th>
                         <th>
                             <fmt:message key="user.order.date_out" var="date_out"/>
-                            ${date_out}
+                                ${date_out}
                         </th>
                         <th>
                             <fmt:message key="admin.order.apartment_id" var="apartment_id"/>
-                            ${apartment_id}
+                                ${apartment_id}
                         </th>
                         <th>
                             <fmt:message key="admin.order.addit_ino" var="add_info"/>
-                            ${add_info}
+                                ${add_info}
                         </th>
                         <th>
                             <fmt:message key="user.order.status" var="status"/>
-                            ${status}
+                                ${status}
                         </th>
                         <th>
                             <fmt:message key="user.order.cost" var="cost"/>
-                            ${cost}
+                                ${cost}
                         </th>
 
                     </tr>
@@ -157,10 +157,10 @@
                             <c:if test="${order.status=='REJECTED'}">
                                 <td>
                                     <form action="remove_warning" method="post">
-                                            <%--<input type="hidden" name="order_id" value="${order.orderId}">--%>
-                                        <input type="submit" value="Remove order">
-                                                <fmt:message key="user.order.remove" var="remove"/>
-                                        <input type="hidden" name="actionName" value="${remove}">
+                                        <input type="hidden" name="order_id" value="${order.orderId}">
+                                        <fmt:message key="user.order.remove" var="remove"/>
+                                        <input type="submit" value="${remove}">
+                                        <input type="hidden" name="actionName" value="remove_order">
                                     </form>
                                 </td>
                             </c:if>
@@ -207,11 +207,11 @@
                     </c:otherwise>
                     </c:choose>
                     <c:if test="${not empty error}">
-                        <fmt:message key="admin.orders.orders_search_error" var="orders_search_error"/>
+                        <fmt:message key="orders.error" var="orders_search_error"/>
                         ${orders_search_error}
                     </c:if>
-                    <fmt:message key="ref.my_user_page" var="my_user_page"/>
-                    <h4><a href=<c:url value="/user"/>>${my_user_page}</a></h4>
+                        <%--<fmt:message key="ref.my_user_page" var="my_user_page"/>--%>
+                        <%--<h4><a href=<c:url value="/user"/>>${my_user_page}</a></h4>--%>
 
                 </div>
             </div>

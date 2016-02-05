@@ -21,7 +21,7 @@
         <fmt:setLocale value="en"/>
         <fmt:setBundle basename="local"/>
         <form class="logout" action="" method="post">
-            <fmt:message key="local.local_button.name.ru" var="ru_button"/>
+            <fmt:message key="local.local_button.russian" var="ru_button"/>
             <input type="hidden" name="actionName" value="change_lang">
             <input type="hidden" name="from" value="${curr_uri}">
             <input type="hidden" name="locale" value="ru"/>

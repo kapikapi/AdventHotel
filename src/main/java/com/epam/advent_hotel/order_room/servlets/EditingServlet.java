@@ -62,8 +62,7 @@ public class EditingServlet extends HttpServlet {
                         fwd(request, response);
                     }
                 } else {
-                    request.setAttribute("order_error",
-                            "Dates are not correct. Closest date of possible checking in is tomorrow.");
+                    request.setAttribute("order_error", true);
                     fwd(request, response);
                 }
             } else {
@@ -73,7 +72,7 @@ public class EditingServlet extends HttpServlet {
                 } catch (SQLException e) {
                     LOG.debug(e.getMessage());
                     e.printStackTrace();
-                    request.setAttribute("order_error", e.getMessage());
+                    request.setAttribute("error", true);
                 }
 
                 fwd(request, response);
@@ -81,6 +80,7 @@ public class EditingServlet extends HttpServlet {
 
         } else {
             LOG.debug("NO ACTION");
+            fwd(request, response);
         }
 
 

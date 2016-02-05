@@ -30,9 +30,13 @@ public class RemoveOrderServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int orderId = (int) request.getSession().getAttribute("order_id");
+        //int orderId = (int) request.getSession().getAttribute("order_id");
+        LOG.debug("in doPost");
+        int orderId;
         String act = request.getParameter("actionName");
+        LOG.debug(act);
         if (act.equals("confirmed")) {
+            orderId = (int) request.getSession().getAttribute("order_id");
             try {
                 DBHandler.getInstance().removeOrder(orderId);
                 User user = (User) request.getSession().getAttribute("user");
@@ -45,10 +49,17 @@ public class RemoveOrderServlet extends HttpServlet {
             }
             catch (SQLException e) {
                 LOG.debug(e.getMessage());
+                request.setAttribute("error", true);
+                fwd(request, response);
             }
         }
-        // TODO: set error
-        else {
+        else if (act.equals("remove_order")){
+            orderId = Integer.parseInt(request.getParameter("order_id"));
+            LOG.debug("from admin");
+            LOG.debug(orderId);
+            request.getSession().setAttribute("order_id", orderId);
+            fwd(request, response);
+        } else {
             fwd(request, response);
         }
     }
