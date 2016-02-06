@@ -57,7 +57,7 @@ public class LoginServlet extends HttpServlet {
                     LOG.debug("Auth failed");
                     String error = getLocMsg(req, PROPERTY).getString("login.login_error");
                     req.setAttribute("auth_error", error);
-
+                    LOG.info(error);
                     fwd(req, resp);
 
                 }

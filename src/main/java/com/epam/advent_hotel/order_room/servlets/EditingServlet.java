@@ -57,8 +57,9 @@ public class EditingServlet extends HttpServlet {
                         DBHandler.getInstance().editOrder(orderId, userId, places, classOfComfort, dateIn, dateOut, comment);
                         response.sendRedirect(USER_JSP);
                     } catch (SQLException e) {
-                        LOG.debug(e.getMessage());
+                        e.printStackTrace();
                         request.setAttribute("order_error", e.getMessage());
+                        LOG.error(e.getMessage());
                         fwd(request, response);
                     }
                 } else {
@@ -70,9 +71,9 @@ public class EditingServlet extends HttpServlet {
                     Order order = DBHandler.getInstance().getOrder(orderId);
                     request.setAttribute("order", order);
                 } catch (SQLException e) {
-                    LOG.debug(e.getMessage());
                     e.printStackTrace();
                     request.setAttribute("error", true);
+                    LOG.error(e.getMessage());
                 }
 
                 fwd(request, response);

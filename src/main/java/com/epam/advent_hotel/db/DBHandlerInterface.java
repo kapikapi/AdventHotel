@@ -21,8 +21,8 @@ public interface DBHandlerInterface {
     boolean register(String name, String login, String password, String email);
     User logIn(String login, String password) throws LoginException;
     List<Order> getUsersOrders(int userId, int offset, int limit) throws SQLException;
-    int getUsersNumberOfOrders(int userId);
-    User getUser(int userId) throws SQLException;
+    int getUsersNumberOfOrders(int userId) throws SQLException;
+    User getUser(int userId) throws SQLException, LoginException;
 
     int setNewOrder(int userId, int places, int classOfComfort, LocalDate dateIn, LocalDate dateOut, String comment)
             throws SQLException;

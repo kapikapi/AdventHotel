@@ -49,17 +49,7 @@ div.warning {
   margin-left: 90px;
   margin-right: auto;
 }
-div.form-left {
-  float: left;
-  width: 50%
-}
-div.form-center {
-   text-align: center;
-}
-div.form-right {
-  float: right;
-  width: 50%
-}
+
 td {
   text-align:center
 }

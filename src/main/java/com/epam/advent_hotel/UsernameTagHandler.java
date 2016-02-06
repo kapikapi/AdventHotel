@@ -5,6 +5,7 @@ import com.epam.advent_hotel.users.AccessLevel;
 import com.epam.advent_hotel.users.User;
 import org.apache.log4j.Logger;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -37,8 +38,9 @@ public class UsernameTagHandler extends TagSupport {
                 String userLogin = user.getLogin();
                 out.print(userLogin);
             }
-        } catch (SQLException | IOException e) {
+        } catch (SQLException | LoginException | IOException  e) {
             e.printStackTrace();
+            LOG.error(e.getMessage());
         }
 
         return SKIP_BODY;

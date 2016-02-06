@@ -48,8 +48,8 @@ public class RemoveOrderServlet extends HttpServlet {
 
             }
             catch (SQLException e) {
-                LOG.debug(e.getMessage());
                 request.setAttribute("error", true);
+                LOG.error(e.getMessage());
                 fwd(request, response);
             }
         }

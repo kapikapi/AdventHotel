@@ -91,11 +91,10 @@ public class UserServlet extends HttpServlet {
             } catch (SQLException e) {
                 request.setAttribute("error", true);
                 e.printStackTrace();
-                LOG.debug("Getting users list of orders failed" + e.getMessage());
+                LOG.error(e.getMessage());
 
             } catch (NullPointerException e) {
                 e.printStackTrace();
-                LOG.debug("may be not authorized user");
                 fwd(request, response);
             }
         }

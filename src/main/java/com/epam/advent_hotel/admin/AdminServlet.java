@@ -92,8 +92,8 @@ public class AdminServlet extends HttpServlet {
         } catch (SQLException e) {
             request.setAttribute("no_result", true);
             request.setAttribute("error", true);
-            LOG.debug(e.getMessage());
             e.printStackTrace();
+            LOG.error(e.getMessage());
         }
         fwd(request, response);
 

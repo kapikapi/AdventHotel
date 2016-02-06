@@ -47,13 +47,13 @@ public class RegistrationServlet extends HttpServlet {
 
             } catch (LoginException e) {
                 String errorMsg;
-                LOG.debug("Reg failed");
                 if (e.getMessage().equals("1")) {
                     errorMsg = resourceBundle.getString("registration.registration_error.already_exists");
                 } else {
                     errorMsg = resourceBundle.getString("registration.registration_error.wrong_email");
                 }
                 request.setAttribute("reg_error", errorMsg);
+                LOG.info(errorMsg);
                 fwd(request, response);
             }
 

@@ -252,6 +252,7 @@ public class DBHandler implements DBHandlerInterface {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.error(e.getMessage());
             throw new LoginException();
         }
         return user;
@@ -269,7 +270,7 @@ public class DBHandler implements DBHandlerInterface {
             pstmt.executeUpdate();
             res = true;
         } catch (SQLException e) {
-            LOG.debug("SQL Failed");
+            LOG.error(e.getMessage());
             e.printStackTrace();
         }
         return res;
@@ -290,7 +291,7 @@ public class DBHandler implements DBHandlerInterface {
     }
 
     @Override
-    public int getUsersNumberOfOrders(int userId) {
+    public int getUsersNumberOfOrders(int userId) throws SQLException{
         int res = 0;
         try (PreparedStatement pstmt = connection.prepareStatement(USERS_NUMBER_OF_ORDERS,
                 ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
@@ -300,14 +301,12 @@ public class DBHandler implements DBHandlerInterface {
                     res = resultSet.getInt("orders_number");
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return res;
     }
 
     @Override
-    public User getUser(int userId) throws SQLException {
+    public User getUser(int userId) throws SQLException, LoginException {
         User user = null;
         try (PreparedStatement pstmt = connection.prepareStatement(GET_USER_BY_ID)) {
             pstmt.setInt(1, userId);
@@ -322,8 +321,6 @@ public class DBHandler implements DBHandlerInterface {
                     user.setName(resultSet.getString("name"));
                 }
             }
-        } catch (LoginException e) {
-            LOG.debug(e.getMessage());
         }
         return user;
     }
@@ -723,7 +720,7 @@ public class DBHandler implements DBHandlerInterface {
                 room.setAdditionalInfo(resultSet.getString("order_additional_info"));
                 room.setCost(resultSet.getInt("cost"));
             } catch (NullPointerException e) {
-                LOG.debug(e.getMessage());
+                LOG.info("Apartments, cost and additional info have not been set yet.");
             }
 
             res.add(room);

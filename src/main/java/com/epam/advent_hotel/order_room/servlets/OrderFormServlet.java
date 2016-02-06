@@ -52,8 +52,8 @@ public class OrderFormServlet extends HttpServlet {
                     DBHandler.getInstance().setNewOrder(userId, places, classOfComfort, dateIn, dateOut, comment);
                     response.sendRedirect(USER_PAGE);
                 } catch (SQLException e) {
-                    LOG.debug(e.getMessage());
                     request.setAttribute("error", true);
+                    LOG.error(e.getMessage());
                     fwd(request, response);
                 }
             } else {

@@ -90,13 +90,14 @@
                 ${bill_info}
             </c:when>
             <c:when test="${order.status == 'PAID'}">
+                <fmt:message key="order.admin.paid.add_info" var="add_order_info"/>
                 <fmt:message key="admin.order_page.paid_info" var="paid_info"/>
                 ${paid_info}
                 <form action="admin_order" method="post">
                     <textarea name="additional_info"></textarea>
                     <br>
                     <input type="hidden" name="actionName" value="add_info">
-                    <input type="submit" value="Add order information">
+                    <input type="submit" value="${add_order_info}">
                 </form>
             </c:when>
             <c:when test="${order.status == 'REJECTED'}">
@@ -172,8 +173,9 @@
             <fmt:message key="page.next" var="next"/>
             <td><a href="admin_order?page=${currentPage + 1}">${next}</a></td>
         </c:if>
+        <h4><a href=<c:url value="/admin"/>>${my_page}</a></h4>
     </div>
-    <h4><a class="paging" href=<c:url value="/admin"/>>${my_page}</a></h4>
+
     </c:otherwise>
     </c:choose>
     </c:when>
@@ -181,7 +183,7 @@
         <fmt:message key="ref.my_page" var="my_page1"/>
         <fmt:message key="auth.user_admin.error" var="auth_admin_err"/>
         ${auth_admin_err}
-    <h4><a href=<c:url value="/user"/>>${my_page1}</a></h4>
+    <h4><a class="paging" href=<c:url value="/user"/>>${my_page1}</a></h4>
     </c:otherwise>
     </c:choose>
 </body>

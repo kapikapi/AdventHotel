@@ -28,15 +28,23 @@ public class AuthenticationFilter implements Filter {
     public void destroy() {
     }
 
+    @SuppressWarnings("rawtypes")
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpSession session = request.getSession(false);
         String URI = request.getRequestURI();
         LOG.debug(URI);
-
-        if (!noRegNeeded.contains(URI) && (session == null || session.getAttribute("user") == null)) {
-            //request.getRequestDispatcher(AUTH_PAGE).forward(request, response);
+        if (URI.indexOf("/css") > 0){
+            chain.doFilter(request, response);
+        }
+        else if(URI.indexOf("/images") > 0){
+            chain.doFilter(request, response);
+        }
+        else if(URI.indexOf("/js") > 0){
+            chain.doFilter(request, response);
+        }
+        else if (!noRegNeeded.contains(URI) && (session == null || session.getAttribute("user") == null)) {
             response.sendRedirect(AUTH_PAGE); // No logged-in user found
         } else {
             chain.doFilter(req, resp); // Logged-in user found

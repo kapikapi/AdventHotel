@@ -51,8 +51,8 @@ public class RoomDetailsServlet extends HttpServlet {
             request.setAttribute("order_id", orderId);
         } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
-            LOG.debug(e.getMessage());
             request.setAttribute("error", true);
+            LOG.error(e.getMessage());
         }
 
         fwd(request, response);

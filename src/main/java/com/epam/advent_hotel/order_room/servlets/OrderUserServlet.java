@@ -31,6 +31,7 @@ public class OrderUserServlet extends HttpServlet {
             throws ServletException, IOException {
         req.getRequestDispatcher(ORDER_USER_JSP).forward(req, resp);
     }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("in doPost");
         if (null != request.getParameter("actionName")) {
@@ -43,19 +44,18 @@ public class OrderUserServlet extends HttpServlet {
                     DBHandler.getInstance().setOrderComment(orderId, request.getParameter("comment"), user.getUserId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    LOG.debug(e.getMessage());
                     request.setAttribute("error", true);
+                    LOG.error(e.getMessage());
                 }
                 response.sendRedirect(ORDER_USER_PAGE);
-            } else if (act.equals("change_lang")){
+            } else if (act.equals("change_lang")) {
 
                 LOG.debug("CHANGING LANG");
                 //fwd(request, response);
                 response.sendRedirect(ORDER_USER_PAGE);
-            }
-            else {
+            } else {
+                LOG.info("I'm here");
                 fwd(request, response);
-                LOG.debug("Error. Some wrong action.");
             }
         } else {
             fwd(request, response);
@@ -81,13 +81,14 @@ public class OrderUserServlet extends HttpServlet {
                     request.setAttribute("order", DBHandler.getInstance().getOrder(orderId));
                 } catch (SQLException e) {
                     request.setAttribute("error", e.getMessage());
+                    LOG.error(e.getMessage());
                     e.printStackTrace();
                 }
 
             }
         }
 
-            try {
+        try {
             Order order = DBHandler.getInstance().getOrder(orderId);
             if (!order.getStatus().equals(OrderStatus.REQUESTED) || !(order.getStatus().equals(OrderStatus.REJECTED))) {
                 Apartment apartment = DBHandler.getInstance().getApt(order.getOrderedAptId());
@@ -113,7 +114,7 @@ public class OrderUserServlet extends HttpServlet {
         } catch (SQLException e) {
             request.setAttribute("error", true);
             e.printStackTrace();
-            LOG.debug(e.getMessage());
+            LOG.error(e.getMessage());
         }
         fwd(request, response);
         //doPost(request, response);

@@ -5,7 +5,6 @@
 <%@ attribute name="userName" type="java.lang.String" %>
 <%@ attribute name="curr_lang" type="java.util.Locale" required="true" %>
 
-
 <c:choose>
     <c:when test="${curr_lang == 'ru'}">
         <fmt:setLocale value="ru"/>

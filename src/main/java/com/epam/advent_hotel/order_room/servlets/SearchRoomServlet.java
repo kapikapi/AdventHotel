@@ -64,22 +64,15 @@ public class SearchRoomServlet extends HttpServlet {
                         LOG.debug("No result");
 
                     }
-                    //request.setAttribute("order_id", orderId);
-                    // request.setAttribute("order", order);
                     fwd(request, response);
 
-                //}
-//            } else {
-//                fwd(request, response);
-//            }
         } catch (SQLException e) {
             e.printStackTrace();
-            LOG.debug(e.getMessage());
             request.setAttribute("error", true);
+            LOG.error(e.getMessage());
             fwd(request, response);
         }
 
-        //List<RoomOrder> res = DatabaseHandler.getRoomsByParams(number, classOfComfort, dateIn, dateOut);
 
     }
 

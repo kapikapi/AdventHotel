@@ -49,7 +49,7 @@ public class RejectingServlet extends HttpServlet {
 
             } catch (SQLException e) {
                 request.setAttribute("error", true);
-                LOG.debug(e.getMessage());
+                LOG.error(e.getMessage());
             }
         }
         else {

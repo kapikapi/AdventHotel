@@ -1,5 +1,7 @@
 package com.epam.advent_hotel.db.connection_pool;
 
+import org.apache.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,7 +15,7 @@ import java.util.Properties;
  * Created by Elizaveta Kapitonova on 13.01.16.
  */
 public class Pool {
-
+    public static final Logger LOG = Logger.getLogger(Pool.class);
     public static final int GET_CONNECTION_MILLIS = 1000;
     //public static final String PROPERTIES_PATH = "/pool-config.properties";
     public static final String PROPERTIES_PATH = "/pool-conf.properties";
@@ -39,7 +41,7 @@ public class Pool {
         Properties properties = new Properties();
         try {
             properties.load(getClass().getResourceAsStream(PROPERTIES_PATH));
-           // properties.load(new FileInputStream(PROPERTIES_PATH));
+            // properties.load(new FileInputStream(PROPERTIES_PATH));
             Class.forName(properties.getProperty("db.driver"));
 
             URL = properties.getProperty("db.url");
@@ -62,6 +64,7 @@ public class Pool {
         return new PoolConnection(DriverManager.getConnection(URL, USER, PASSWORD), this);
     }
 
+    @SuppressWarnings("finally")
     public Connection getConnection() {
         Connection result = null;
         for (Map.Entry<Connection, Boolean> entry : connections.entrySet()) {
@@ -76,15 +79,28 @@ public class Pool {
             }
         }
 
-        try {
-            Thread.sleep(GET_CONNECTION_MILLIS);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+//        try {
+//            Thread.sleep(GET_CONNECTION_MILLIS);
+//        } catch (InterruptedException e) {
+//            //throw new RuntimeException(e);
+//            LOG.error(e.getMessage());
+//            LOG.info("Retrying to get connection.");
+//            return getConnection();
+//        }
+
+        if (result == null) {
+            try {
+                Thread.sleep(GET_CONNECTION_MILLIS);
+            } catch (InterruptedException e) {
+                LOG.error(e.getMessage());
+                LOG.info("Retrying to get connection.");
+            } finally {
+                return getConnection();
+            }
+        } else {
+            return result;
         }
-
-        return result == null ? getConnection() : result;
     }
-
 
 
     public void free(PoolConnection poolConnection) {

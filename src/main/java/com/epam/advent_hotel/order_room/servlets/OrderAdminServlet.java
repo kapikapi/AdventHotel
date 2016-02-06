@@ -46,7 +46,7 @@ public class OrderAdminServlet extends HttpServlet {
                     e.printStackTrace();
                     LOG.debug(e.getMessage());
                     request.setAttribute("error", true);
-                    LOG.debug(e.getMessage());
+                    LOG.error(e.getMessage());
                 }
                 //fwd(request, response);
                 //response.sendRedirect(ORDER_ADMIN_PAGE);
@@ -58,10 +58,9 @@ public class OrderAdminServlet extends HttpServlet {
                     DBHandler.getInstance().setAddInfo(orderId, addInfo);
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    LOG.debug(e.getMessage());
                     request.setAttribute("error", true);
+                    LOG.error(e.getMessage());
                 }
-                //response.sendRedirect(ORDER_ADMIN_PAGE);
             }
 
                 // changed lang
@@ -114,7 +113,7 @@ public class OrderAdminServlet extends HttpServlet {
         } catch (SQLException e) {
             request.setAttribute("error", true);
             e.printStackTrace();
-            LOG.debug(e.getMessage());
+            LOG.error(e.getMessage());
         }
         fwd(request, response);
     }
