@@ -31,7 +31,6 @@ public class SearchRoomServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Order order = (Order) request.getAttribute("order");
-        LOG.debug("in doPost");
         try {
             int orderId = (int) request.getSession().getAttribute("order_id");
             //int orderId = Integer.parseInt(request.getParameter("order_id"));
@@ -54,15 +53,10 @@ public class SearchRoomServlet extends HttpServlet {
                     int noOfPages = (int) Math.ceil(numberOfOrders * 1.0 / PER_PAGE);
                     request.setAttribute("noOfPages", noOfPages);
                     request.setAttribute("currentPage", page);
-                    for (Apartment apt : res) {
-                        LOG.debug(apt.getNumber());
-                    }
                     request.setAttribute("result_list", res);
 
                     if (res.isEmpty()) {
                         request.setAttribute("no_result", true);
-                        LOG.debug("No result");
-
                     }
                     fwd(request, response);
 
@@ -71,13 +65,16 @@ public class SearchRoomServlet extends HttpServlet {
             request.setAttribute("error", true);
             LOG.error(e.getMessage());
             fwd(request, response);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            LOG.error("Not allowed action. Searching room without choosing order.");
+            fwd(request, response);
         }
 
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doGet");
         //fwd(request, response);
         doPost(request, response);
     }

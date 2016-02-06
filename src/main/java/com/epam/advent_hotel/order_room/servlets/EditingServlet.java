@@ -31,15 +31,12 @@ public class EditingServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doPost");
         User user = (User) request.getSession().getAttribute("user");
         int userId = user.getUserId();
 
         int orderId = (int) request.getSession().getAttribute("order_id");
         String act = request.getParameter("actionName");
         if (null != request.getParameter("actionName")) {
-            //String act = request.getParameter("actionName");
-            LOG.debug(act);
             if (act.equals("submit_edit")) {
                 int places = Integer.parseInt(request.getParameter("places"));
                 int classOfComfort = Integer.parseInt(request.getParameter("class"));
@@ -50,9 +47,6 @@ public class EditingServlet extends HttpServlet {
                 LocalDate dateIn = LocalDate.parse(date_in, formatter);
                 LocalDate dateOut = LocalDate.parse(date_out, formatter);
                 if (dateIn.isAfter(LocalDate.now()) && dateIn.isBefore(dateOut)) {
-                    LOG.debug("Dates correct");
-                    LOG.debug(date_in);
-                    LOG.debug(LocalDate.now());
                     try {
                         DBHandler.getInstance().editOrder(orderId, userId, places, classOfComfort, dateIn, dateOut, comment);
                         response.sendRedirect(USER_JSP);
@@ -80,7 +74,6 @@ public class EditingServlet extends HttpServlet {
             }
 
         } else {
-            LOG.debug("NO ACTION");
             fwd(request, response);
         }
 
@@ -88,7 +81,6 @@ public class EditingServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doGet");
         fwd(request, response);
     }
 }

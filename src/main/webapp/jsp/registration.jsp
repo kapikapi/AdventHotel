@@ -21,7 +21,7 @@
 <fmt:setBundle basename="local"/>
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
     <fmt:message key="registration.header" var="reg_header"/>
     <title>${reg_header}</title>
 </head>
@@ -65,7 +65,6 @@
             <fmt:message key="registration.registration_form.authentication.if_registered" var="if_regd"/>
             <a href=<c:url value="/authentication"/>>${log_in}</a> ${if_regd}
         </form>
-        <tags:language curr_lang="${locale}" curr_uri="${pageContext.request.requestURI}"/>
         <fmt:message key="registration.registration_form.main_page" var="main"/>
         <h4><a href=<c:url value="/"/>>${main}</a></h4>
     </div>

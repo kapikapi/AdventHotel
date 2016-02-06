@@ -14,38 +14,44 @@
 <fmt:setBundle basename="local"/>
 <html>
 <head>
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Advent Hotel</title>
-
+    <fmt:message key="main.title" var="main_title"/>
+    <title>${main_title}</title>
 </head>
 <html>
 <body>
-<fmt:message key="local.welcome" var="welcome"/>
-<h2>${welcome}</h2>
-<fmt:message key="local.log_reg" var="log_reg"/>
-${log_reg}
-<br>
-<fmt:message key="local.log_in_ref" var="log_in_ref"/>
-<h4><a href=<c:url value="/authentication"/>>${log_in_ref}</a></h4>
-<fmt:message key="local.reg_ref" var="reg_ref"/>
-<h4><a href=<c:url value="/registration"/>>${reg_ref}</a></h4>
-<br>
-<fmt:message key="local.choose_lang" var="choose_lang"/>
-${choose_lang}
-<form action="" method="post">
-    <fmt:message key="local.local_button.name.ru" var="ru_button"/>
-    <input type="hidden" name="loc" value="ru"/>
-    <input type="submit" value="${ru_button}"/><br/>
-</form>
-
-<form action="" method="post">
-    <fmt:message key="local.local_button.name.en" var="en_button"/>
-    <input type="hidden" name="loc" value="en"/>
-    <input type="submit" value="${en_button}"/>
+<div class="main-content">
+    <div class="head-main-content">
+        <fmt:message key="local.welcome" var="welcome"/>
+        <h2>${welcome}</h2>
+    </div>
+    <div class="main-page">
+    <fmt:message key="local.log_reg" var="log_reg"/>
+    ${log_reg}
     <br>
-</form>
-<fmt:message key="local.message" var="message"/>
-${message}
+    <fmt:message key="local.log_in_ref" var="log_in_ref"/>
+    <h4><a href=<c:url value="/authentication"/>>${log_in_ref}</a></h4>
+    <fmt:message key="local.reg_ref" var="reg_ref"/>
+    <h4><a href=<c:url value="/registration"/>>${reg_ref}</a></h4>
+    <br>
+    <fmt:message key="local.choose_lang" var="choose_lang"/>
+    ${choose_lang}
+    <form action="" method="post">
+        <fmt:message key="local.local_button.name.ru" var="ru_button"/>
+        <input type="hidden" name="loc" value="ru"/>
+        <input type="submit" value="${ru_button}"/><br/>
+    </form>
 
+    <form action="" method="post">
+        <fmt:message key="local.local_button.name.en" var="en_button"/>
+        <input type="hidden" name="loc" value="en"/>
+        <input type="submit" value="${en_button}"/>
+        <br>
+    </form>
+    <fmt:message key="local.message" var="message"/>
+    ${message}
+    </div>
+</div>
 </body>
 </html>

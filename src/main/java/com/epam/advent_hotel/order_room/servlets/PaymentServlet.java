@@ -30,7 +30,6 @@ public class PaymentServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doPost");
         int orderId = (int) request.getSession().getAttribute("order_id");
         if (null != request.getParameter("actionName")) {
             String act = request.getParameter("actionName");
@@ -46,11 +45,9 @@ public class PaymentServlet extends HttpServlet {
                     fwd(request, response);
                 }
             } else {
-                LOG.debug("What " + act);
                 fwd(request, response);
             }
         } else {
-            LOG.debug("No action");
             //request.setAttribute("error", "Error occurred. Please, try again.");
             fwd(request, response);
         }
@@ -59,7 +56,6 @@ public class PaymentServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int orderId = (int) request.getSession().getAttribute("order_id");
-        LOG.debug("in doGet");
         try {
             Order order = DBHandler.getInstance().getOrder(orderId);
             Apartment apartment = DBHandler.getInstance().getApt(order.getOrderedAptId());

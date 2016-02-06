@@ -33,11 +33,9 @@ public class OrderUserServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doPost");
         if (null != request.getParameter("actionName")) {
             int orderId = (int) request.getSession().getAttribute("order_id");
             String act = request.getParameter("actionName");
-            LOG.debug(act);
             if (act.equals("send_comment")) {
                 try {
                     User user = (User) request.getSession().getAttribute("user");
@@ -49,12 +47,9 @@ public class OrderUserServlet extends HttpServlet {
                 }
                 response.sendRedirect(ORDER_USER_PAGE);
             } else if (act.equals("change_lang")) {
-
-                LOG.debug("CHANGING LANG");
                 //fwd(request, response);
                 response.sendRedirect(ORDER_USER_PAGE);
             } else {
-                LOG.info("I'm here");
                 fwd(request, response);
             }
         } else {
@@ -63,7 +58,6 @@ public class OrderUserServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doGet");
         int orderId;
         if (null != request.getParameter("order_id")) {
             orderId = Integer.parseInt(request.getParameter("order_id"));
@@ -73,7 +67,6 @@ public class OrderUserServlet extends HttpServlet {
 
         if (null != request.getParameter("actionName")) {
             String act = request.getParameter("actionName");
-            LOG.debug(act);
             if (act.equals("approve")) {
                 try {
                     DBHandler.getInstance().setOrderStatus(orderId, OrderStatus.APPROVED);

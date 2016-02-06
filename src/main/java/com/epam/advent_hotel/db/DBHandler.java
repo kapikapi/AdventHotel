@@ -223,9 +223,8 @@ public class DBHandler implements DBHandlerInterface {
             connection.prepareStatement(CREATE_APARTMENTS).executeUpdate();
             connection.prepareStatement(CREATE_ORDERS).executeUpdate();
             connection.prepareStatement(CREATE_COMMENTS).executeUpdate();
-            LOG.debug("Tables created");
         } catch (SQLException e) {
-            LOG.debug(e.getMessage());
+            LOG.error(e.getMessage());
         }
     }
 
@@ -240,12 +239,10 @@ public class DBHandler implements DBHandlerInterface {
             try (ResultSet resultSet = pstmt.executeQuery()) {
                 boolean completed = resultSet.first();
                 if (completed) {
-                    LOG.debug("completed");
                     user.setUserId(resultSet.getInt("user_id"));
                     user.setEmail(resultSet.getString("email"));
                     user.setAccessLevel(AccessLevel.valueOf(resultSet.getString("access_level").toUpperCase()));
                     user.setName(resultSet.getString("name"));
-                    LOG.debug(resultSet.getString("name"));
                 } else {
                     throw new LoginException();
                 }
@@ -265,7 +262,6 @@ public class DBHandler implements DBHandlerInterface {
             pstmt.setString(1, login);
             pstmt.setString(2, password);
             pstmt.setString(3, email);
-            LOG.debug("Before set: " + name);
             pstmt.setString(4, name);
             pstmt.executeUpdate();
             res = true;
@@ -312,7 +308,6 @@ public class DBHandler implements DBHandlerInterface {
             pstmt.setInt(1, userId);
             try (ResultSet resultSet = pstmt.executeQuery()) {
                 if (resultSet.first()) {
-                    LOG.debug("completed");
                     String login = resultSet.getString("login");
                     user = new User(login);
                     user.setUserId(resultSet.getInt("user_id"));
@@ -640,7 +635,6 @@ public class DBHandler implements DBHandlerInterface {
                 apartment = resultSetToApartment(resultSet);
             }
         }
-        LOG.debug(apartment.getAptId());
         return apartment;
     }
 

@@ -45,9 +45,6 @@ public class OrderFormServlet extends HttpServlet {
             LocalDate dateIn = LocalDate.parse(date_in, formatter);
             LocalDate dateOut = LocalDate.parse(date_out, formatter);
             if (dateIn.isAfter(LocalDate.now()) && dateIn.isBefore(dateOut)) {
-                LOG.debug("Dates correct");
-                LOG.debug(date_in);
-                LOG.debug(LocalDate.now());
                 try {
                     DBHandler.getInstance().setNewOrder(userId, places, classOfComfort, dateIn, dateOut, comment);
                     response.sendRedirect(USER_PAGE);
@@ -61,7 +58,6 @@ public class OrderFormServlet extends HttpServlet {
                 fwd(request, response);
             }
         } else {
-            LOG.debug("no action");
             fwd(request, response);
         }
     }

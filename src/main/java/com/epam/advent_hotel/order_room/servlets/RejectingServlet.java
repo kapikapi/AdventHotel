@@ -34,7 +34,6 @@ public class RejectingServlet extends HttpServlet {
         //int orderId = Integer.parseInt(request.getParameter("order_id"));
         int orderId = (int) request.getSession().getAttribute("order_id");
         if (act.equals("reject")) {
-            LOG.debug(orderId);
 //            request.setAttribute("order_id", orderId);
             fwd(request, response);
         } else if (act.equals("confirmed")) {

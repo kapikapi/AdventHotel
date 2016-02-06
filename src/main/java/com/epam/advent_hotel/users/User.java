@@ -35,15 +35,11 @@ public class User {
         this.login = login;
         if (checkEmail(email)) {
             boolean completed = DBHandler.getInstance().register(name, this.login, hash(password), email);
-            LOG.debug("email is valid");
             if (!completed) {
-                LOG.debug("email is already registered");
-                // TODO: resBundle
                 throw new LoginException(String.valueOf(1));
             }
         }
         else {
-            LOG.debug("email is not valid");
             throw new LoginException(String.valueOf(0));
         }
     }

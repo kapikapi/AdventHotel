@@ -25,7 +25,7 @@
 <head>
     <fmt:message key="user.order_page.heading" var="op_heading"/>
     <title>${op_heading}</title>
-    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <div class="main-content">
@@ -98,7 +98,7 @@
                     <fmt:message key="user.order_page.pay" var="pay"/>
                     <input type="submit" value="${pay}">
                 </form>
-
+                <h4><a href=<c:url value="/room/${apt.aptId}"/>>${room_details}</a></h4>
             </c:when>
             <c:when test="${order.status == 'PAID'}">
                 <fmt:message key="user.order_page.paid_info" var="paid_info"/>
@@ -130,16 +130,16 @@
                 <input type="hidden" name="actionName" value="reject">
             </form>
         </c:if>
-        <h4><a href=<c:url value="/room/${apt.aptId}"/>>${room_details}</a></h4>
+
         <fmt:message key="user.order_page.comments_info" var="comments_info"/>
-            ${comments_info}
+            <%--${comments_info}--%>
 
         <form action="user_order" method="post">
             <fmt:message key="user.order_page.leave_comment_info" var="leave_comment_info"/>
 
 
             <br>
-            <textarea name="comment"></textarea> <br>
+            <textarea name="comment" rows="4" cols="50"></textarea> <br>
             <input type="hidden" name="actionName" value="send_comment">
             <fmt:message key="user.order_page.leave_comment" var="leave_comment"/>
             <input type="submit" value="${leave_comment}">
@@ -157,6 +157,7 @@
         <c:forEach items="${comment_list}" var="comment">
             <username:usernameTagHandler userId="${comment.userId}" lang="${locale}"/>: ${comment.text} <br>
         </c:forEach>
+        <br>
         <div class="paging">
             <c:if test="${currentPage != 1}">
                 <fmt:message key="page.previous" var="previous"/>

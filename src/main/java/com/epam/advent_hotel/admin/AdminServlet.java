@@ -33,7 +33,6 @@ public class AdminServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doPost");
         List<Order> ordersList;
         int page = 1;
         if (null != request.getParameter("page")) {
@@ -47,7 +46,6 @@ public class AdminServlet extends HttpServlet {
         String heading = resourceBundle.getString("admin.orders.heading.all");
         if (null != request.getParameter("actionName")) {
             String act = request.getParameter("actionName");
-            LOG.debug(act);
             switch (act) {
                 case "requested":
                     status = OrderStatus.REQUESTED;
@@ -79,8 +77,6 @@ public class AdminServlet extends HttpServlet {
                 ordersList = DBHandler.getInstance().getOrdersByStatus(PER_PAGE, offset, status);
                 numberOfOrders = DBHandler.getInstance().getNumberOfOrdersByStatus(status);
             }
-
-            LOG.debug(numberOfOrders);
             int noOfPages = (int) Math.ceil(numberOfOrders * 1.0 / PER_PAGE);
             request.setAttribute("noOfPages", noOfPages);
             request.setAttribute("currentPage", page);
@@ -100,10 +96,8 @@ public class AdminServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doGet");
         if (null != request.getSession().getAttribute("order_id")) {
             request.getSession().removeAttribute("order_id");
-            LOG.debug("removed orderId attribute");
         }
         doPost(request, response);
         //fwd(request, response);

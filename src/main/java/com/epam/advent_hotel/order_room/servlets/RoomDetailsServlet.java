@@ -29,23 +29,19 @@ public class RoomDetailsServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doPost");
         int roomId = Integer.parseInt(request.getPathInfo().substring(1));
         response.sendRedirect(ROOM_DETAILS + "/" + String.valueOf(roomId));
         //fwd(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doGet");
         try {
             int orderId = (int) request.getSession().getAttribute("order_id");
             int roomId = Integer.parseInt(request.getPathInfo().substring(1));
-            LOG.debug(roomId);
             Apartment apartment = DBHandler.getInstance().getApt(roomId);
             Locale locale = (Locale) request.getSession().getAttribute("locale");
             LocalAptDescription description = DBHandler.getInstance().getDescription(apartment.getDescription(), locale);
             //int orderId = Integer.parseInt(request.getParameter("order_id"));
-            LOG.debug(apartment.getAptId());
             request.setAttribute("room", apartment);
             request.setAttribute("description", description.getText());
             request.setAttribute("order_id", orderId);

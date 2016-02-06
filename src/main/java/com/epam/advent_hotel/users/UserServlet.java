@@ -23,6 +23,7 @@ import java.util.List;
 public class UserServlet extends HttpServlet {
     public static final Logger LOG = Logger.getLogger(UserServlet.class);
     public static final String USER_JSP = "/jsp/user.jsp";
+    public static final String USER_PAGE = "/user";
     public static final String ORDER_JSP = "/order";
     private static final int PER_PAGE = 10;
 
@@ -32,38 +33,27 @@ public class UserServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doPost");
 
         if (null != request.getParameter("actionName")) {
             String act = request.getParameter("actionName");
             if (act.equals("newOrder")) {
-                LOG.debug("new order");
                 response.sendRedirect(ORDER_JSP);
             } else {
-                LOG.debug("not new order action");
-                response.sendRedirect("/user");
+                response.sendRedirect(USER_PAGE);
             }
         } else {
             try {
                 User currentUser = (User) request.getSession().getAttribute("user");
-                LOG.debug(currentUser.getName());
                 request.setAttribute("user_name", currentUser.getName());
                 request.setAttribute("user_login", currentUser.getLogin());
                 int page = 1;
                 if (null != request.getParameter("page")) {
                     page = Integer.parseInt(request.getParameter("page"));
-                    LOG.debug(page);
                 }
                 int offset = (page - 1) * PER_PAGE;
-                LOG.debug(offset);
                 List<Order> resList = DBHandler.getInstance().getUsersOrders(currentUser.getUserId(), offset, PER_PAGE);
-                LOG.debug("ok get users");
                 int numberOfOrders = DBHandler.getInstance().getUsersNumberOfOrders(currentUser.getUserId());
-                LOG.debug("ok get numbers");
-                LOG.debug(numberOfOrders);
                 int noOfPages = (int) Math.ceil(numberOfOrders*1.0/PER_PAGE);
-                LOG.debug(noOfPages);
-                LOG.debug(currentUser.getUserId());
                 List<Order> newList = new ArrayList<>();
                 List<Order> oldList = new ArrayList<>();
                 for (Order r : resList) {
@@ -78,13 +68,8 @@ public class UserServlet extends HttpServlet {
                 request.setAttribute("old_orders_list", oldList);
                 request.setAttribute("noOfPages", noOfPages);
                 request.setAttribute("currentPage", page);
-                for (Order r : resList) {
-                    LOG.debug(r.getCost());
-                }
-                LOG.debug("Got orders list");
                 if (resList.isEmpty()) {
                     //String noOrders = "No rooms have been ordered yet";
-                    LOG.debug("No orders");
                     request.setAttribute("no_result", true);
                 }
                 fwd(request, response);
@@ -102,7 +87,6 @@ public class UserServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doGet");
         if (null != request.getSession().getAttribute("order_id")) {
             request.getSession().removeAttribute("order_id");
         }

@@ -31,10 +31,8 @@ public class RemoveOrderServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //int orderId = (int) request.getSession().getAttribute("order_id");
-        LOG.debug("in doPost");
         int orderId;
         String act = request.getParameter("actionName");
-        LOG.debug(act);
         if (act.equals("confirmed")) {
             orderId = (int) request.getSession().getAttribute("order_id");
             try {
@@ -55,8 +53,6 @@ public class RemoveOrderServlet extends HttpServlet {
         }
         else if (act.equals("remove_order")){
             orderId = Integer.parseInt(request.getParameter("order_id"));
-            LOG.debug("from admin");
-            LOG.debug(orderId);
             request.getSession().setAttribute("order_id", orderId);
             fwd(request, response);
         } else {

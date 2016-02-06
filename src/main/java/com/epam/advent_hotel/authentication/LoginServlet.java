@@ -45,7 +45,6 @@ public class LoginServlet extends HttpServlet {
                     if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
                         req.getSession().setAttribute("isAdmin", true);
                     }
-                    LOG.debug("Auth correct");
                     if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
                         resp.sendRedirect(ADMIN_JSP);
                     } else {
@@ -54,7 +53,6 @@ public class LoginServlet extends HttpServlet {
 
 
                 } catch (LoginException e) {
-                    LOG.debug("Auth failed");
                     String error = getLocMsg(req, PROPERTY).getString("login.login_error");
                     req.setAttribute("auth_error", error);
                     LOG.info(error);

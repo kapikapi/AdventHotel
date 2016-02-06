@@ -23,7 +23,7 @@
 <head>
     <fmt:message key="admin.heading_admin" var="admin_header"/>
     <title>${admin_header}</title>
-    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <c:choose>
@@ -145,7 +145,15 @@
                             <td>${order.orderedAptId}</td>
                             <td>${order.additionalInfo}</td>
                             <td><tags:status order_status="${order.status}" curr_lang="${locale}"/></td>
-                            <td>${order.cost}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${order.cost != 0}">
+                                        ${order.cost}$
+                                    </c:when>
+                                    <c:otherwise>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
                             <td>
                                 <form action="admin_order" method="get">
                                     <input type="hidden" name="order_id" value="${order.orderId}">

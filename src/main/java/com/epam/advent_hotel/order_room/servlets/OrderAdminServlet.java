@@ -32,11 +32,9 @@ public class OrderAdminServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doPost");
         if (null != request.getParameter("actionName")) {
             String act = request.getParameter("actionName");
             int orderId = (int) request.getSession().getAttribute("order_id");
-            LOG.debug(act);
             if (act.equals("send_comment")) {
                 try {
 
@@ -44,7 +42,6 @@ public class OrderAdminServlet extends HttpServlet {
                     DBHandler.getInstance().setOrderComment(orderId, request.getParameter("comment"), user.getUserId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    LOG.debug(e.getMessage());
                     request.setAttribute("error", true);
                     LOG.error(e.getMessage());
                 }
@@ -73,24 +70,18 @@ public class OrderAdminServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("in doGet");
         int orderId;
-        LOG.debug(request.getParameter("order_id"));
-
         try {
             Order order;
             if (null != request.getParameter("room_id")) {
-                LOG.debug("have room_id");
                 orderId = (int) request.getSession().getAttribute("order_id");
                 int aptId = Integer.parseInt(request.getParameter("room_id"));
                 DBHandler.getInstance().setOrdersApt(orderId, aptId);
                 DBHandler.getInstance().setOrderStatus(orderId, OrderStatus.IN_DISCUSSION);
             } else if (null == request.getSession().getAttribute("order_id") || null != request.getParameter("order_id")){
-                LOG.debug("don't have order_id in session");
                 orderId = Integer.parseInt(request.getParameter("order_id"));
                 request.getSession().setAttribute("order_id", orderId);
             } else {
-                LOG.debug("have order_id but don't have  room_id");
                 orderId = (int) request.getSession().getAttribute("order_id");
             }
 

@@ -23,7 +23,7 @@
 <head>
     <fmt:message key="order.warning_header" var="remove_header"/>
     <title>${remove_header}</title>
-    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <div class="main-content">
@@ -32,20 +32,37 @@
         <tags:language curr_lang="${locale}" curr_uri="${pageContext.request.requestURI}"/>
         <tags:logout userLogin="${user.login}" userName="${user.name}" curr_lang="${locale}"/>
     </div>
+
     <div class="warning">
-    <form action="remove_warning" method="post">
-        <fmt:message key="order.remove.confirm_info" var="confirm_info"/>
-        <fmt:message key="order.remove.confirm" var="confirm_submit"/>
-        ${confirm_info}:
-        <input type="submit" value="${confirm_submit}">
-        <input type="hidden" name="actionName" value="confirmed">
+        <c:choose>
+            <c:when test="${not empty order_id}">
+                <form action="remove_warning" method="post">
+                    <fmt:message key="order.remove.confirm_info" var="confirm_info"/>
+                    <fmt:message key="order.remove.confirm" var="confirm_submit"/>
+                        ${confirm_info}:
+                    <input type="submit" value="${confirm_submit}">
+                    <input type="hidden" name="actionName" value="confirmed">
+
+                </form>
+                <c:if test="${not empty error}">
+                    <fmt:message key="order.remove.error_msg" var="remove_error"/>
+                    ${remove_error}
+                </c:if>
+            </c:when>
+            <c:otherwise>
+                <fmt:message key="auth.user_admin.error" var="auth_error"/>
+                ${auth_error}
+            </c:otherwise>
+        </c:choose>
         <fmt:message key="order.remove.back" var="back"/>
-    </form>
-    <c:if test="${not empty error}">
-        <fmt:message key="order.remove.error_msg" var="remove_error"/>
-        ${remove_error}
-    </c:if>
-    <h4><a href=<c:url value="/user"/>>${back}</a></h4>
+        <c:choose>
+            <c:when test="${not empty isAdmin}">
+                <h4><a href=<c:url value="/admin"/>>${back}</a></h4>
+            </c:when>
+            <c:otherwise>
+                <h4><a href=<c:url value="/user"/>>${back}</a></h4>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 </body>

@@ -22,7 +22,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
     <fmt:message key="admin.order_page.heading" var="order_page_admin_head"/>
     <title>${order_page_admin_head}</title>
 </head>
@@ -89,12 +89,17 @@
                 ${apt_id}: ${order.orderedAptId}
                 ${bill_info}
             </c:when>
+
             <c:when test="${order.status == 'PAID'}">
+                Additional information: ${order.additionalInfo}
+                <br>
                 <fmt:message key="order.admin.paid.add_info" var="add_order_info"/>
                 <fmt:message key="admin.order_page.paid_info" var="paid_info"/>
                 ${paid_info}
+                <br>
+                <br>
                 <form action="admin_order" method="post">
-                    <textarea name="additional_info"></textarea>
+                    <textarea name="additional_info" rows="4" cols="50"></textarea>
                     <br>
                     <input type="hidden" name="actionName" value="add_info">
                     <input type="submit" value="${add_order_info}">
@@ -117,6 +122,7 @@
                 <input type="submit" value="${reject_order}">
                 <input type="hidden" name="actionName" value="reject">
             </form>
+            <br>
         </c:if>
         <fmt:message key="ref.my_page" var="my_page"/>
 
@@ -124,8 +130,8 @@
         <form action="admin_order" method="post">
             <fmt:message key="user.order_page.leave_comment_info" var="comment_leave"/>
             <fmt:message key="user.order_page.leave_comment" var="comment_submit"/>
-                ${comment_leave}: <br>
-            <textarea name="comment"></textarea>
+                <%--${comment_leave}: <br>--%>
+            <textarea name="comment" rows="4" cols="50"></textarea>
             <input type="hidden" name="actionName" value="send_comment">
             <br>
             <input type="submit" value="${comment_submit}">
@@ -133,8 +139,9 @@
         <br>
 
         <fmt:message key="user.order_page.comments" var="comments"/>
+                <div class="comments">
             ${comments}:
-        <br>
+                </div>
         <c:choose>
         <c:when test="${not empty no_comments}">
             <fmt:message key="user.order_page.no_comments" var="no_comm"/>
@@ -173,11 +180,13 @@
             <fmt:message key="page.next" var="next"/>
             <td><a href="admin_order?page=${currentPage + 1}">${next}</a></td>
         </c:if>
-        <h4><a href=<c:url value="/admin"/>>${my_page}</a></h4>
     </div>
 
     </c:otherwise>
     </c:choose>
+    <div class="paging">
+        <h4><a href=<c:url value="/admin"/>>${my_page}</a></h4>
+    </div>
     </c:when>
     <c:otherwise>
         <fmt:message key="ref.my_page" var="my_page1"/>

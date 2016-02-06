@@ -23,7 +23,7 @@
 <head>
     <fmt:message key="order.warning_header" var="reject_header"/>
     <title>${reject_header}</title>
-    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <div class="main-content">
@@ -33,20 +33,37 @@
         <tags:logout userLogin="${user.login}" userName="${user.name}" curr_lang="${locale}"/>
     </div>
     <div class="warning">
-        <form action="reject_warning" method="post">
-            <fmt:message key="order.reject.confirm_info" var="confirm_info"/>
-            <fmt:message key="order.remove.confirm" var="confirm_reject"/>
-            ${confirm_info}:
-            <input type="submit" value="${confirm_reject}">
-            <input type="hidden" name="actionName" value="confirmed">
-            <%--<input type="hidden" name="order_id" value="${order_id}">--%>
-            <fmt:message key="order.remove.back" var="back"/>
-        </form>
-        <c:if test="${not empty error}">
-            <fmt:message key="order.reject.error_msg" var="reject_error"/>
-            ${reject_error}
-        </c:if>
-        <h4><a href=<c:url value="/user"/>>${back}</a></h4>
+        <c:choose>
+            <c:when test="${not empty order_id}">
+                <form action="reject_warning" method="post">
+                    <fmt:message key="order.reject.confirm_info" var="confirm_info"/>
+                    <fmt:message key="order.remove.confirm" var="confirm_reject"/>
+                        ${confirm_info}:
+                    <input type="submit" value="${confirm_reject}">
+                    <input type="hidden" name="actionName" value="confirmed">
+                        <%--<input type="hidden" name="order_id" value="${order_id}">--%>
+
+                </form>
+                <c:if test="${not empty error}">
+                    <fmt:message key="order.reject.error_msg" var="reject_error"/>
+                    ${reject_error}
+                </c:if>
+            </c:when>
+            <c:otherwise>
+                <fmt:message key="auth.user_admin.error" var="auth_error"/>
+                ${auth_error}
+            </c:otherwise>
+        </c:choose>
+        <fmt:message key="order.remove.back" var="back"/>
+        <c:choose>
+            <c:when test="${not empty isAdmin}">
+                <h4><a href=<c:url value="/admin"/>>${back}</a></h4>
+            </c:when>
+            <c:otherwise>
+                <h4><a href=<c:url value="/user"/>>${back}</a></h4>
+            </c:otherwise>
+        </c:choose>
+
     </div>
 </div>
 </body>

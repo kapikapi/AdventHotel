@@ -37,11 +37,8 @@ public class RegistrationServlet extends HttpServlet {
         String name = request.getParameter("name");
         String act = request.getParameter("actionName");
         if (act.equals("registration")) {
-            LOG.debug("Registration");
             try {
-                LOG.debug(name);
                 User user = new User(name, login, password, email);
-                LOG.debug("Reg must be completed");
                 request.getSession().setAttribute("user", user.logIn(login, password));
                 response.sendRedirect(LOGIN_JSP);
 

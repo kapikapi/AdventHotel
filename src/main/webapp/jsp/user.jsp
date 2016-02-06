@@ -23,7 +23,7 @@
 <head>
     <fmt:message key="user.header" var="user_header"/>
     <title>${user_header}</title>
-    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <div class="main-content">
@@ -82,7 +82,14 @@
 
                     <td><tags:status order_status="${order.status}" curr_lang="${locale}"/>
                     </td>
-                    <td>${order.cost}</td>
+                    <td><c:choose>
+                        <c:when test="${order.cost != 0}">
+                            ${order.cost}$
+                        </c:when>
+                        <c:otherwise>
+                        </c:otherwise>
+                    </c:choose>
+                    </td>
                     <td>
                         <form action="user_order" method="get">
                             <fmt:message key="user.order.details" var="details"/>
@@ -94,6 +101,7 @@
             </c:forEach>
             <c:if test="${not empty old_orders_list}">
                 <tr>
+                    <br>
                     <fmt:message key="user.old_orders" var="old_orders"/>
                     <td>${old_orders}</td>
                 </tr>
@@ -115,8 +123,16 @@
                     <td>${order.dateIn}</td>
                     <td>${order.dateOut}</td>
 
-                    <td><tags:status order_status="${order.status}" curr_lang="${locale}"/> </td>
-                    <td>${order.cost}</td>
+                    <td><tags:status order_status="${order.status}" curr_lang="${locale}"/></td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${order.cost != 0}">
+                                ${order.cost}$
+                            </c:when>
+                            <c:otherwise>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                     <td>
                         <form action="user_order" method="get">
                             <fmt:message key="user.order.details" var="detail"/>
@@ -126,7 +142,7 @@
                     </td>
                     <td>
                         <form action="remove_warning" method="post">
-                                <input type="hidden" name="order_id" value="${order.orderId}">
+                            <input type="hidden" name="order_id" value="${order.orderId}">
                             <fmt:message key="user.order.remove" var="remove"/>
                             <input type="submit" value="${remove}">
                             <input type="hidden" name="actionName" value="remove_order">

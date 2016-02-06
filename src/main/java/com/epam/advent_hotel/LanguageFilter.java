@@ -1,5 +1,7 @@
 package com.epam.advent_hotel;
 
+import org.apache.log4j.Logger;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +15,8 @@ import java.util.Locale;
  */
 @WebFilter(filterName = "LanguageFilter")
 public class LanguageFilter implements Filter {
+
+    public static final Logger LOG= Logger.getLogger(LanguageFilter.class);
 
     public void destroy() {
     }
@@ -28,8 +32,6 @@ public class LanguageFilter implements Filter {
             if (act != null && act.equals("change_lang")) {
                 Locale newLocale = new Locale(request.getParameter("locale"));
                 session.setAttribute("locale", newLocale);
-                String back = request.getParameter("curr_uri");
-                //response.sendRedirect(back);
                 chain.doFilter(req, resp);
             } else if (loc != null) {
                 // came from start page because of changing language

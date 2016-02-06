@@ -21,7 +21,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
     <fmt:message key="login.header" var="log_header"/>
     <title>${log_header}</title>
 </head>

@@ -34,20 +34,19 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpSession session = request.getSession(false);
         String URI = request.getRequestURI();
-        LOG.debug(URI);
-        if (URI.indexOf("/css") > 0){
-            chain.doFilter(request, response);
+        if (URI.indexOf("css") > 0){
+            chain.doFilter(req, resp);
         }
         else if(URI.indexOf("/images") > 0){
-            chain.doFilter(request, response);
+            chain.doFilter(req, resp);
         }
         else if(URI.indexOf("/js") > 0){
-            chain.doFilter(request, response);
+            chain.doFilter(req, resp);
         }
         else if (!noRegNeeded.contains(URI) && (session == null || session.getAttribute("user") == null)) {
             response.sendRedirect(AUTH_PAGE); // No logged-in user found
         } else {
-            chain.doFilter(req, resp); // Logged-in user found
+            chain.doFilter(req, resp); // Logged-in user found or no reg needed
         }
     }
 
