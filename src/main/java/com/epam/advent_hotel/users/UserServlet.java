@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Elizaveta Kapitonova on 25.01.16.
+ * Servlet displays list of all users orders.
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebServlet(name = "UserServlet")
 public class UserServlet extends HttpServlet {
@@ -32,8 +34,14 @@ public class UserServlet extends HttpServlet {
         req.getRequestDispatcher(USER_JSP).forward(req, resp);
     }
 
+    /**
+     * Gets list of all orders of user by pages to display.
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         if (null != request.getParameter("actionName")) {
             String act = request.getParameter("actionName");
             if (act.equals("newOrder")) {

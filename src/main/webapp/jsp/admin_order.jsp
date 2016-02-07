@@ -91,7 +91,8 @@
             </c:when>
 
             <c:when test="${order.status == 'PAID'}">
-                Additional information: ${order.additionalInfo}
+                <fmt:message key="admin.order.addit_ino" var="add_info"/>
+                ${add_info}: ${order.additionalInfo}
                 <br>
                 <fmt:message key="order.admin.paid.add_info" var="add_order_info"/>
                 <fmt:message key="admin.order_page.paid_info" var="paid_info"/>

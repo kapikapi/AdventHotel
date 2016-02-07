@@ -14,51 +14,55 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
- * Created by Elizaveta Kapitonova on 02.02.16.
+ * Servlet gets all rooms suitable to users requirements.
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebServlet(name = "SearchRoomServlet")
 public class SearchRoomServlet extends HttpServlet {
     public static final Logger LOG = Logger.getLogger(SearchRoomServlet.class);
     public static final String SEARCH_ROOM_JSP = "/jsp/search_room.jsp";
     private static final int PER_PAGE = 10;
+    private static final String PROPERTY = "local";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.getRequestDispatcher(SEARCH_ROOM_JSP).forward(req, resp);
     }
 
+    /**
+     * Gets suitable rooms list (with paging parameters)
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Order order = (Order) request.getAttribute("order");
         try {
             int orderId = (int) request.getSession().getAttribute("order_id");
-            //int orderId = Integer.parseInt(request.getParameter("order_id"));
-            //LOG.debug(orderId);
-            //Order order = DBHandler.getInstance().getOrder(orderId);
-            //if (null != request.getParameter("actionName")) {
+            int page = 1;
+            if (null != request.getParameter("page")) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            int offset = (page - 1) * PER_PAGE;
 
-               // String act = request.getParameter("actionName");
-               // LOG.debug(act);
-             //   if (act.equals("find_room")) {
-                    int page = 1;
-                    if (null != request.getParameter("page")) {
-                        page = Integer.parseInt(request.getParameter("page"));
-                    }
-                    int offset = (page - 1) * PER_PAGE;
+            List<Apartment> res = DBHandler.getInstance().getSuitableApts(orderId,
+                    PER_PAGE, offset);
+            int numberOfOrders = DBHandler.getInstance().getAptNumbers(orderId);
+            int noOfPages = (int) Math.ceil(numberOfOrders * 1.0 / PER_PAGE);
+            request.setAttribute("noOfPages", noOfPages);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("result_list", res);
 
-                    List<Apartment> res = DBHandler.getInstance().getSuitableApts(orderId,
-                            PER_PAGE, offset);
-                    int numberOfOrders = DBHandler.getInstance().getAptNumbers(orderId);
-                    int noOfPages = (int) Math.ceil(numberOfOrders * 1.0 / PER_PAGE);
-                    request.setAttribute("noOfPages", noOfPages);
-                    request.setAttribute("currentPage", page);
-                    request.setAttribute("result_list", res);
-
-                    if (res.isEmpty()) {
-                        request.setAttribute("no_result", true);
-                    }
-                    fwd(request, response);
+            if (res.isEmpty()) {
+                request.setAttribute("no_result", true);
+            }
+            fwd(request, response);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,7 +71,9 @@ public class SearchRoomServlet extends HttpServlet {
             fwd(request, response);
         } catch (NullPointerException e) {
             e.printStackTrace();
-            LOG.error("Not allowed action. Searching room without choosing order.");
+            Locale locale = (Locale) request.getSession().getAttribute("locale");
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
+            LOG.error(resourceBundle.getString("search_room.error.log"));
             fwd(request, response);
         }
 

@@ -1,7 +1,9 @@
 package com.epam.advent_hotel.apartments;
 
 /**
- * Created by Elizaveta Kapitonova on 01.02.16.
+ * Simple Apartment entity with getters and setters.
+ *
+ * @author Elizaveta Kapitonova
  */
 public class Apartment {
     private int aptId;

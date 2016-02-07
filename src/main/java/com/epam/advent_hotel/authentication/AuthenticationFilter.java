@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Elizaveta Kapitonova on 31.01.16.
+ * Filter checks if user is logged in.
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebFilter(filterName = "AuthenticationFilter")
 public class AuthenticationFilter implements Filter {
@@ -28,6 +30,15 @@ public class AuthenticationFilter implements Filter {
     public void destroy() {
     }
 
+    /**
+     * Redirects not authorised users from all pages, except of login, register, start and
+     * page with authentication error message to this page.
+     * @param req
+     * @param resp
+     * @param chain
+     * @throws ServletException
+     * @throws IOException
+     */
     @SuppressWarnings("rawtypes")
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest request = (HttpServletRequest) req;
@@ -50,6 +61,11 @@ public class AuthenticationFilter implements Filter {
         }
     }
 
+    /**
+     * Sets up list of ignored by filter pages
+     * @param config
+     * @throws ServletException
+     */
     public void init(FilterConfig config) throws ServletException {
         noRegNeeded = new ArrayList<>(5);
         noRegNeeded.add(START_PAGE);

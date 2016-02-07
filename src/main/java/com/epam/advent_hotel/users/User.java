@@ -12,7 +12,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Elizaveta Kapitonova on 01.02.16.
+ * Simple User entity with getters and setters.
+ *
+ * @author Elizaveta Kapitonova
  */
 public class User {
     public static final Logger LOG= Logger.getLogger(User.class);

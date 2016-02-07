@@ -15,15 +15,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
- * Created by Elizaveta Kapitonova on 02.02.16.
+ * Servlet for order page for admin.
+ * Gets list of all comments to order.
+ * Sends comments.
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebServlet(name = "OrderAdminServlet")
 public class OrderAdminServlet extends HttpServlet {
     public static final Logger LOG = Logger.getLogger(OrderAdminServlet.class);
     public static final String ORDER_ADMIN_JSP = "/jsp/admin_order.jsp";
     public static final String ORDER_ADMIN_PAGE = "/admin_order";
+    private static final String PROPERTY = "local";
 
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
@@ -31,6 +38,14 @@ public class OrderAdminServlet extends HttpServlet {
         req.getRequestDispatcher(ORDER_ADMIN_JSP).forward(req, resp);
     }
 
+    /**
+     * Sending comment or additional information about order.
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (null != request.getParameter("actionName")) {
             String act = request.getParameter("actionName");
@@ -39,7 +54,13 @@ public class OrderAdminServlet extends HttpServlet {
                 try {
 
                     User user = (User) request.getSession().getAttribute("user");
-                    DBHandler.getInstance().setOrderComment(orderId, request.getParameter("comment"), user.getUserId());
+                    int affectedRows = DBHandler.getInstance().setOrderComment(orderId, request.getParameter("comment"),
+                            user.getUserId());
+                    boolean setCommentErr = checkResult(request, "order.send_comment.result_error.log",
+                            affectedRows);
+                    if (setCommentErr) {
+                        request.setAttribute("error", true);
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                     request.setAttribute("error", true);
@@ -59,9 +80,7 @@ public class OrderAdminServlet extends HttpServlet {
                     LOG.error(e.getMessage());
                 }
             }
-
-                // changed lang
-                response.sendRedirect(ORDER_ADMIN_PAGE);
+            response.sendRedirect(ORDER_ADMIN_PAGE);
 
         } else {
 
@@ -69,6 +88,16 @@ public class OrderAdminServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Displays list of all orders (by page).
+     * Sets apartment to order and changes its status.
+     * Sets order's id as session attribute (is will remain the same while we are working with this order).
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int orderId;
         try {
@@ -76,9 +105,17 @@ public class OrderAdminServlet extends HttpServlet {
             if (null != request.getParameter("room_id")) {
                 orderId = (int) request.getSession().getAttribute("order_id");
                 int aptId = Integer.parseInt(request.getParameter("room_id"));
-                DBHandler.getInstance().setOrdersApt(orderId, aptId);
-                DBHandler.getInstance().setOrderStatus(orderId, OrderStatus.IN_DISCUSSION);
-            } else if (null == request.getSession().getAttribute("order_id") || null != request.getParameter("order_id")){
+                int setAptRows = DBHandler.getInstance().setOrdersApt(orderId, aptId);
+                int setStatusRows = DBHandler.getInstance().setOrderStatus(orderId, OrderStatus.IN_DISCUSSION);
+                boolean errSetApt = checkResult(request, "order.set_apt_id.error.log", setAptRows);
+                boolean errSetStatus = checkResult(request, "order.set_status.result_error.log", setStatusRows);
+                if (errSetApt) {
+                    request.setAttribute("error", true);
+                }
+                if (errSetStatus) {
+                    request.setAttribute("error", true);
+                }
+            } else if (null == request.getSession().getAttribute("order_id") || null != request.getParameter("order_id")) {
                 orderId = Integer.parseInt(request.getParameter("order_id"));
                 request.getSession().setAttribute("order_id", orderId);
             } else {
@@ -107,5 +144,25 @@ public class OrderAdminServlet extends HttpServlet {
             LOG.error(e.getMessage());
         }
         fwd(request, response);
+    }
+
+    /**
+     * Checks if setting parameter to database was correct.
+     * Number of affected rows must not be equal 0
+     *
+     * @param request
+     * @param logKeyName - message to set in log
+     * @param checkValue - checked result (must not be 0 if correct)
+     * @return true if error occurred
+     */
+    private boolean checkResult(HttpServletRequest request, String logKeyName, int checkValue) {
+        if (checkValue == 0) {
+            Locale locale = (Locale) request.getSession().getAttribute("locale");
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
+            //String displayErr = resourceBundle.getString(keyName);
+            String logErr = resourceBundle.getString(logKeyName);
+            LOG.error(logErr + " " + String.valueOf(checkValue));
+        }
+        return (checkValue == 0);
     }
 }

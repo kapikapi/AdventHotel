@@ -17,7 +17,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Created by Elizaveta Kapitonova on 01.02.16.
+ * Servlet displays list of all orders and orders by their status on admin's page.
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebServlet(name = "AdminServlet")
 public class AdminServlet extends HttpServlet {
@@ -27,11 +29,27 @@ public class AdminServlet extends HttpServlet {
     private static final int PER_PAGE = 10;
     private static final String PROPERTY = "local";
 
+    /**
+     * Forwards to current jsp page
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.getRequestDispatcher(ADMIN_JSP).forward(req, resp);
     }
 
+    /**
+     * Gets list of all orders and of orders by status.
+     * Sets them partly as attribute
+     * @see DBHandler
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Order> ordersList;
         int page = 1;
@@ -95,6 +113,13 @@ public class AdminServlet extends HttpServlet {
 
     }
 
+    /**
+     * Removes attribute order_id when is called from any page connected with specified order
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (null != request.getSession().getAttribute("order_id")) {
             request.getSession().removeAttribute("order_id");

@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Elizaveta Kapitonova on 01.02.16.
+ * Class connects to database and implements all methods that use it
+ *
+ * @author Elizaveta Kapitonova
  */
 public class DBHandler implements DBHandlerInterface {
     private static final Logger LOG = Logger.getLogger(DBHandler.class);
@@ -36,11 +38,12 @@ public class DBHandler implements DBHandlerInterface {
         return INSTANCE;
     }
 
+
     private static final String CREATE_DB =
             "CREATE DATABASE IF NOT EXISTS advent_hotel " +
                     "CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
     private static final String USE = "USE advent_hotel;";
-
+/*
     private static final String CREATE_USERS =
             "CREATE TABLE IF NOT EXISTS users (" +
                     "user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
@@ -90,7 +93,7 @@ public class DBHandler implements DBHandlerInterface {
                     "FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE, " +
                     "FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE" +
                     ");";
-
+                    */
 
     private static final String LOGIN_ATTEMPT =
             "SELECT user_id, access_level, users.name, email FROM users WHERE login=? AND passhash=?";
@@ -213,8 +216,16 @@ public class DBHandler implements DBHandlerInterface {
         init();
     }
 
+
     private void init() {
         connection = getConnection();
+        try {
+            connection.prepareStatement(USE).execute();
+        } catch (SQLException e) {
+            LOG.error(e.getMessage());
+            e.printStackTrace();
+        }
+        /*
         try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate(CREATE_DB);
             connection.prepareStatement(USE).execute();
@@ -225,9 +236,12 @@ public class DBHandler implements DBHandlerInterface {
             connection.prepareStatement(CREATE_COMMENTS).executeUpdate();
         } catch (SQLException e) {
             LOG.error(e.getMessage());
-        }
+        } */
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User logIn(String login, String password) throws LoginException {
         User user = new User(login);
@@ -255,6 +269,9 @@ public class DBHandler implements DBHandlerInterface {
         return user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean register(String name, String login, String password, String email) {
         boolean res = false;
@@ -272,6 +289,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Order> getUsersOrders(int userId, int offset, int limit) throws SQLException {
         List<Order> res;
@@ -286,8 +306,11 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public int getUsersNumberOfOrders(int userId) throws SQLException{
+    public int getUsersNumberOfOrders(int userId) throws SQLException {
         int res = 0;
         try (PreparedStatement pstmt = connection.prepareStatement(USERS_NUMBER_OF_ORDERS,
                 ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
@@ -301,6 +324,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getUser(int userId) throws SQLException, LoginException {
         User user = null;
@@ -320,7 +346,9 @@ public class DBHandler implements DBHandlerInterface {
         return user;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int setNewOrder(int userId, int places, int classOfComfort, LocalDate dateIn, LocalDate dateOut,
                            String comment) throws SQLException {
@@ -351,6 +379,9 @@ public class DBHandler implements DBHandlerInterface {
         return newRowId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int setOrderComment(int orderId, String comment, int userId) throws SQLException {
         int res;
@@ -363,6 +394,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int editOrder(int orderId, int userId, int places, int classOfComfort, LocalDate dateIn, LocalDate dateOut,
                          String comment)
@@ -387,6 +421,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int removeOrder(int orderId) throws SQLException {
         int res;
@@ -397,6 +434,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Order getOrder(int orderId) throws SQLException {
         Order order;
@@ -410,6 +450,9 @@ public class DBHandler implements DBHandlerInterface {
         return order;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Comment> getOrdersComments(int orderId, int limit, int offset) throws SQLException {
         List<Comment> commentList = new ArrayList<>();
@@ -420,12 +463,12 @@ public class DBHandler implements DBHandlerInterface {
             try (ResultSet resultSet = pstmt.executeQuery()) {
                 while (resultSet.next()) {
                     if (!(resultSet.getString("comment")).equals("")) {
-                    Comment comment = new Comment();
-                    comment.setCommentId(resultSet.getInt("comment_id"));
-                    comment.setOrderId(resultSet.getInt("order_id"));
-                    comment.setText(resultSet.getString("comment"));
-                    comment.setUserId(resultSet.getInt("user_id"));
-                    commentList.add(comment);
+                        Comment comment = new Comment();
+                        comment.setCommentId(resultSet.getInt("comment_id"));
+                        comment.setOrderId(resultSet.getInt("order_id"));
+                        comment.setText(resultSet.getString("comment"));
+                        comment.setUserId(resultSet.getInt("user_id"));
+                        commentList.add(comment);
                     }
                 }
             }
@@ -433,6 +476,9 @@ public class DBHandler implements DBHandlerInterface {
         return commentList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getNumberOfComments(int orderId) throws SQLException {
         int res = 0;
@@ -448,11 +494,15 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    //TODO:
     @Override
     public List<User> getAllUsers() {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Order> getAllOrders(int limit, int offset) throws SQLException {
         List<Order> ordersList;
@@ -466,6 +516,9 @@ public class DBHandler implements DBHandlerInterface {
         return ordersList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getNumberOfAllOrders() throws SQLException {
         int res = 0;
@@ -481,6 +534,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Order> getOrdersByStatus(int limit, int offset, OrderStatus status) throws SQLException {
         List<Order> ordersList;
@@ -495,7 +551,9 @@ public class DBHandler implements DBHandlerInterface {
         return ordersList;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getNumberOfOrdersByStatus(OrderStatus status) throws SQLException {
         int res = 0;
@@ -514,11 +572,15 @@ public class DBHandler implements DBHandlerInterface {
     }
 
 
+    // TODO:
     @Override
     public int setUserAdmin(int userId) {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int setOrderStatus(int orderId, OrderStatus status) throws SQLException {
         int res;
@@ -530,6 +592,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Apartment> getSuitableApts(int orderId, int limit, int offset) throws SQLException {
         List<Apartment> res;
@@ -556,6 +621,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getAptNumbers(int orderId) throws SQLException {
         int res = 0;
@@ -584,6 +652,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int setOrdersApt(int orderId, int aptId) throws SQLException {
         int res;
@@ -599,6 +670,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int setNullCost(int orderId) throws SQLException {
         int res;
@@ -609,6 +683,9 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int setAddInfo(int orderId, String addInfo) throws SQLException {
         int res;
@@ -620,11 +697,15 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    // TODO:
     @Override
     public boolean isAptAvailable(int aptId, LocalDate dateIn, LocalDate dateOut) {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Apartment getApt(int aptId) throws SQLException {
         Apartment apartment;
@@ -638,6 +719,9 @@ public class DBHandler implements DBHandlerInterface {
         return apartment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public LocalAptDescription getDescription(int textNumber, Locale locale) throws SQLException {
         LocalAptDescription localAptDescription = new LocalAptDescription();
@@ -656,6 +740,9 @@ public class DBHandler implements DBHandlerInterface {
         return localAptDescription;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int setOrderCost(int orderId) throws SQLException {
         int res;
@@ -667,6 +754,14 @@ public class DBHandler implements DBHandlerInterface {
     }
 
 
+    /**
+     * Returns Order object from ResultSet (consuming there is one row in it)
+     *
+     * @param resultSet
+     * @return Order object
+     * @throws SQLException
+     * @see Order
+     */
     private static Order resultSetToOrder(ResultSet resultSet) throws SQLException {
         Order order = new Order();
         if (resultSet.first()) {
@@ -684,6 +779,14 @@ public class DBHandler implements DBHandlerInterface {
         return order;
     }
 
+    /**
+     * Returns Apartment object from ResultSet (consuming there is one row in it)
+     *
+     * @param resultSet
+     * @return Apartment
+     * @throws SQLException
+     * @see Apartment
+     */
     private static Apartment resultSetToApartment(ResultSet resultSet) throws SQLException {
         Apartment apartment = new Apartment();
         if (resultSet.first()) {
@@ -697,6 +800,14 @@ public class DBHandler implements DBHandlerInterface {
         return apartment;
     }
 
+    /**
+     * Gets list of orders from ResultSet
+     *
+     * @param resultSet
+     * @return ArrayList of Order objects
+     * @throws SQLException
+     * @see Order
+     */
     private static List<Order> resultSetToOrdersList(ResultSet resultSet)
             throws SQLException {
         List<Order> res = new ArrayList<>();
@@ -722,6 +833,14 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
+    /**
+     * Gets list of apartments from ResultSet
+     *
+     * @param resultSet
+     * @return ArrayList of Apartment objects
+     * @throws SQLException
+     * @see Apartment
+     */
     private static List<Apartment> resultSetToApartmentsList(ResultSet resultSet)
             throws SQLException {
         List<Apartment> res = new ArrayList<>();
@@ -739,6 +858,11 @@ public class DBHandler implements DBHandlerInterface {
     }
 
 
+    /**
+     * gets connection with pool connection
+     *
+     * @return
+     */
     private static Connection getConnection() {
         return Pool.getInstance().getConnection();
     }

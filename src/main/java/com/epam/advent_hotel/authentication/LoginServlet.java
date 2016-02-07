@@ -30,6 +30,15 @@ public class LoginServlet extends HttpServlet {
         req.getRequestDispatcher(LOGIN_JSP).forward(req, resp);
     }
 
+    /**
+     * Gets User object and sets it as session attribute.
+     * Redirects to user or admin home page if authentication was successful.
+     * Removes session's user attribute if user logs out
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -53,7 +62,9 @@ public class LoginServlet extends HttpServlet {
 
 
                 } catch (LoginException e) {
-                    String error = getLocMsg(req, PROPERTY).getString("login.login_error");
+                    Locale locale = (Locale) req.getSession().getAttribute("locale");
+                    ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
+                    String error = resourceBundle.getString("login.login_error");
                     req.setAttribute("auth_error", error);
                     LOG.info(error);
                     fwd(req, resp);
@@ -72,13 +83,16 @@ public class LoginServlet extends HttpServlet {
 
     }
 
+    /**
+     * Redirects from authentication page to user's or admin's page if user is logged in
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        Locale locale = (Locale) req.getSession().getAttribute("locale");
-        if (locale == null) {
-            req.getSession().setAttribute("locale", new Locale("en"));
-        }
         User user = (User) req.getSession().getAttribute("user");
         if (user != null) {
             if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
@@ -91,10 +105,5 @@ public class LoginServlet extends HttpServlet {
         }
 
     }
-    private ResourceBundle getLocMsg(HttpServletRequest request, String propertyName) {
-        Locale locale = (Locale) request.getSession().getAttribute("locale");
-        return ResourceBundle.getBundle(propertyName, locale);
-    }
-
 
 }

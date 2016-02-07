@@ -1,7 +1,9 @@
 package com.epam.advent_hotel.users;
 
 /**
- * Created by Elizaveta Kapitonova on 01.02.16.
+ * Enum with possible user's access levels
+ *
+ * @author Elizaveta Kapitonova
  */
 public enum AccessLevel {
     USER, ADMIN

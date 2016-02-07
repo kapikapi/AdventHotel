@@ -1,7 +1,9 @@
 package com.epam.advent_hotel.order_room;
 
 /**
- * Created by Elizaveta Kapitonova on 01.02.16.
+ * Simple Comment entity with getters and setters.
+ *
+ * @author Elizaveta Kapitonova
  */
 public class Comment {
     private int commentId;

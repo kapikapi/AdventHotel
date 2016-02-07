@@ -13,9 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
- * Created by Elizaveta Kapitonova on 03.02.16.
+ * Servlet removes order after user confirms removing.
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebServlet(name = "RemoveOrderServlet")
 public class RemoveOrderServlet extends HttpServlet {
@@ -23,12 +27,21 @@ public class RemoveOrderServlet extends HttpServlet {
     public static final String REMOVING_JSP = "/jsp/remove_warning.jsp";
     public static final String USER_JSP = "/user";
     public static final String ADMIN_JSP = "/admin";
+    private static final String PROPERTY = "local";
+
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.getRequestDispatcher(REMOVING_JSP).forward(req, resp);
     }
 
+    /**
+     * Removes order.
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //int orderId = (int) request.getSession().getAttribute("order_id");
         int orderId;
@@ -36,12 +49,23 @@ public class RemoveOrderServlet extends HttpServlet {
         if (act.equals("confirmed")) {
             orderId = (int) request.getSession().getAttribute("order_id");
             try {
-                DBHandler.getInstance().removeOrder(orderId);
+                int removedRows = DBHandler.getInstance().removeOrder(orderId);
                 User user = (User) request.getSession().getAttribute("user");
-                if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
-                    response.sendRedirect(ADMIN_JSP);
+                //boolean correct = rejectOrder(orderId, request);
+                if (removedRows == 0) {
+                    if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
+                        response.sendRedirect(ADMIN_JSP);
+                    } else {
+                        response.sendRedirect(USER_JSP);
+                    }
                 } else {
-                    response.sendRedirect(USER_JSP);
+                    Locale locale = (Locale) request.getSession().getAttribute("locale");
+                    ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
+                    //String displayErr = resourceBundle.getString(keyName);
+                    String logErr = resourceBundle.getString("order.remove.error.log");
+                    LOG.error(logErr + " " + String.valueOf(removedRows));
+                    request.setAttribute("error", true);
+                    fwd(request, response);
                 }
 
             }

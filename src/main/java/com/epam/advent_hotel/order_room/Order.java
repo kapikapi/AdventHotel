@@ -3,7 +3,9 @@ package com.epam.advent_hotel.order_room;
 import java.time.LocalDate;
 
 /**
- * Created by Elizaveta Kapitonova on 01.02.16.
+ * Simple Order entity with getters and setters.
+ *
+ * @author Elizaveta Kapitonova
  */
 public class Order {
     private int orderId;

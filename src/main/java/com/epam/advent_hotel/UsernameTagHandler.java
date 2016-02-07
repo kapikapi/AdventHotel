@@ -15,7 +15,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Created by Elizaveta Kapitonova on 04.02.16.
+ * Tag gets user's or admin's id and writes "Administator" + name if user is admin and login otherwise.
+ *
+ * @author Elizaveta Kapitonova
  */
 public class UsernameTagHandler extends TagSupport {
     private static final Logger LOG = Logger.getLogger(UsernameTagHandler.class);

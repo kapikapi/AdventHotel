@@ -6,7 +6,8 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
- * Created by Elizaveta Kapitonova on 13.01.16.
+ * Connection Pool implementation
+ * @author Elizaveta Kapitonova
  */
 public class PoolConnection implements Connection {
 
@@ -18,13 +19,24 @@ public class PoolConnection implements Connection {
         this.pool = pool;
     }
 
+    /**
+     * Method puts connection in storage instead of closing
+     * @see Pool
+     * @throws SQLException
+     */
     @Override
     public void close() throws SQLException {
         pool.free(this);
     }
 
+
+    /**
+     * Method really closes connection, as close() was overridden
+     * @throws SQLException
+     */
     public void realClose() throws SQLException {
         connection.close();
+        //TODO
     }
 
     @Override

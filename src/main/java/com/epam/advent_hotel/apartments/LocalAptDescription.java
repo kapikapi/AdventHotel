@@ -3,7 +3,9 @@ package com.epam.advent_hotel.apartments;
 import java.util.Locale;
 
 /**
- * Created by Elizaveta Kapitonova on 01.02.16.
+ * Simple Localized Apartment's Description entity with getters and setters.
+ *
+ * @author Elizaveta Kapitonova
  */
 public class LocalAptDescription {
     private int textNumber;

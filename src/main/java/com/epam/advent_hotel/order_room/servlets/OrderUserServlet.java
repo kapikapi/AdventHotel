@@ -16,9 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
- * Created by Elizaveta Kapitonova on 02.02.16.
+ * Servlet for order page for user.
+ * Gets list of all comments to order.
+ * Sends comments.
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebServlet(name = "OrderUserServlet")
 public class OrderUserServlet extends HttpServlet {
@@ -26,12 +32,20 @@ public class OrderUserServlet extends HttpServlet {
     public static final String ORDER_USER_JSP = "/jsp/user_order.jsp";
     public static final String ORDER_USER_PAGE = "/user_order";
     public static final int PER_PAGE = 10;
+    private static final String PROPERTY = "local";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.getRequestDispatcher(ORDER_USER_JSP).forward(req, resp);
     }
 
+    /**
+     * Sends comments
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (null != request.getParameter("actionName")) {
             int orderId = (int) request.getSession().getAttribute("order_id");
@@ -39,13 +53,23 @@ public class OrderUserServlet extends HttpServlet {
             if (act.equals("send_comment")) {
                 try {
                     User user = (User) request.getSession().getAttribute("user");
-                    DBHandler.getInstance().setOrderComment(orderId, request.getParameter("comment"), user.getUserId());
+                    int affectedRows = DBHandler.getInstance().setOrderComment(orderId, request.getParameter("comment"),
+                            user.getUserId());
+                    boolean errorRes = checkResult(request, "order.send_comment.result_error.log", affectedRows);
+                    if (errorRes) {
+                        request.setAttribute("error", true);
+                        fwd(request, response);
+                    } else {
+                        response.sendRedirect(ORDER_USER_PAGE);
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                     request.setAttribute("error", true);
                     LOG.error(e.getMessage());
+                    fwd(request, response);
                 }
-                response.sendRedirect(ORDER_USER_PAGE);
+
+
             } else if (act.equals("change_lang")) {
                 //fwd(request, response);
                 response.sendRedirect(ORDER_USER_PAGE);
@@ -57,6 +81,14 @@ public class OrderUserServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Gets comments, approves order and changes its status when user approves order.
+     * Sets order's id as session attribute (is will remain the same while we are working with this order).
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int orderId;
         if (null != request.getParameter("order_id")) {
@@ -69,9 +101,14 @@ public class OrderUserServlet extends HttpServlet {
             String act = request.getParameter("actionName");
             if (act.equals("approve")) {
                 try {
-                    DBHandler.getInstance().setOrderStatus(orderId, OrderStatus.APPROVED);
-                    DBHandler.getInstance().setOrderCost(orderId);
+                    int setStatusRows = DBHandler.getInstance().setOrderStatus(orderId, OrderStatus.APPROVED);
+                    int setCostRows = DBHandler.getInstance().setOrderCost(orderId);
                     request.setAttribute("order", DBHandler.getInstance().getOrder(orderId));
+                    boolean statusErr = checkResult(request, "order.set_status.result_error.log", setStatusRows);
+                    boolean costErr = checkResult(request, "order.set_cost.error.log", setCostRows);
+                    if (statusErr || costErr) {
+                        request.setAttribute("error", true);
+                    }
                 } catch (SQLException e) {
                     request.setAttribute("error", e.getMessage());
                     LOG.error(e.getMessage());
@@ -111,5 +148,25 @@ public class OrderUserServlet extends HttpServlet {
         }
         fwd(request, response);
         //doPost(request, response);
+    }
+
+    /**
+     * Checks if setting parameter to database was correct.
+     * Number of affected rows must not be equal to 0
+     *
+     * @param request
+     * @param keyLogName - message to set in log
+     * @param checkedValue - checked result (must not be 0 if correct)
+     * @return true if error occurred
+     */
+    private boolean checkResult(HttpServletRequest request, String keyLogName, int checkedValue) {
+        if (checkedValue == 0) {
+            Locale locale = (Locale) request.getSession().getAttribute("locale");
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
+            //String displayErr = resourceBundle.getString("order.send_comment.result_error");
+            String logErr = resourceBundle.getString(keyLogName);
+            LOG.error(logErr + " " + String.valueOf(checkedValue));
+        }
+        return (checkedValue == 0);
     }
 }

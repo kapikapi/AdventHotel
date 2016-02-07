@@ -1,5 +1,6 @@
 package com.epam.advent_hotel.authentication;
 
+import com.epam.advent_hotel.users.AccessLevel;
 import com.epam.advent_hotel.users.User;
 import org.apache.log4j.Logger;
 
@@ -13,14 +14,17 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Created by Elizaveta Kapitonova on 14.01.16.
+ * Servlet registers users if possible and redirects to user's page
+ *
+ * @author Elizaveta Kapitonova
  */
 public class RegistrationServlet extends HttpServlet {
-    public static final Logger LOG= Logger.getLogger(RegistrationServlet.class);
+    public static final Logger LOG = Logger.getLogger(RegistrationServlet.class);
 
     public static final String REGISTRATION_JSP = "/jsp/registration.jsp";
     public static final String LOGIN_JSP = "/authentication";
-    public static final String START_PAGE = "/index.jsp";
+    public static final String USER_JSP = "/user";
+    public static final String ADMIN_JSP = "/admin";
 
     private static final String PROPERTY = "local";
 
@@ -29,8 +33,17 @@ public class RegistrationServlet extends HttpServlet {
         req.getRequestDispatcher(REGISTRATION_JSP).forward(req, resp);
     }
 
+    /**
+     * Creates new user if input data is correct
+     * Logs user in
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ResourceBundle resourceBundle = getLocMsgs(request, PROPERTY);
+        Locale locale = (Locale) request.getSession().getAttribute("locale");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
@@ -54,29 +67,29 @@ public class RegistrationServlet extends HttpServlet {
                 fwd(request, response);
             }
 
-        }
-        else {
+        } else {
             fwd(request, response);
         }
     }
 
+    /**
+     * Redirects from registration page to user's or admin's page if user is logged in
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Locale locale = (Locale) request.getSession().getAttribute("locale");
-//        if (locale == null) {
-//            request.getSession().setAttribute("locale", new Locale("en"));
-//        }
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {
-            response.sendRedirect(START_PAGE);
-            return;
+            if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
+                response.sendRedirect(ADMIN_JSP);
+            } else {
+                response.sendRedirect(USER_JSP);
+            }
+        } else {
+            fwd(request, response);
         }
-
-        fwd(request, response);
-    }
-
-    private ResourceBundle getLocMsgs(HttpServletRequest request, String propertyName) {
-        Locale locale = (Locale) request.getSession().getAttribute("locale");
-        return ResourceBundle.getBundle(propertyName, locale);
     }
 
 }

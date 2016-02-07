@@ -15,7 +15,9 @@ import java.sql.SQLException;
 import java.util.Locale;
 
 /**
- * Created by Elizaveta Kapitonova on 02.02.16.
+ * Servlet shows information about the room
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebServlet(name = "RoomDetailsServlet")
 public class RoomDetailsServlet extends HttpServlet {
@@ -34,6 +36,13 @@ public class RoomDetailsServlet extends HttpServlet {
         //fwd(request, response);
     }
 
+    /**
+     * Gets room id from URI and sets Apartment object and its description text as attribute.
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int orderId = (int) request.getSession().getAttribute("order_id");

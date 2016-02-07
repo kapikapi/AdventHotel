@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.util.Locale;
 
 /**
- * Created by Elizaveta Kapitonova on 04.02.16.
+ * Filter checks if language was not changed or set.
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebFilter(filterName = "LanguageFilter")
 public class LanguageFilter implements Filter {
@@ -21,6 +23,15 @@ public class LanguageFilter implements Filter {
     public void destroy() {
     }
 
+    /**
+     * Checks if language was not changed.
+     * If Locale object is not set as session attribute, sets it as english Locale
+     * @param req
+     * @param resp
+     * @param chain
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;

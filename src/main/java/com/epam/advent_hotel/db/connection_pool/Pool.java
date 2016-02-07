@@ -12,7 +12,9 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Created by Elizaveta Kapitonova on 13.01.16.
+ * Pool singleton
+ *
+ * @author Elizaveta Kapitonova
  */
 public class Pool {
     public static final Logger LOG = Logger.getLogger(Pool.class);
@@ -37,13 +39,14 @@ public class Pool {
     private final String USER;
     private final String PASSWORD;
 
+    /**
+     * Creates pool: HashMap with connections as keys
+     */
     private Pool() {
         Properties properties = new Properties();
         try {
             properties.load(getClass().getResourceAsStream(PROPERTIES_PATH));
-            // properties.load(new FileInputStream(PROPERTIES_PATH));
             Class.forName(properties.getProperty("db.driver"));
-
             URL = properties.getProperty("db.url");
             USER = properties.getProperty("db.user");
             PASSWORD = properties.getProperty("db.password");
@@ -64,6 +67,7 @@ public class Pool {
         return new PoolConnection(DriverManager.getConnection(URL, USER, PASSWORD), this);
     }
 
+    //TODO: javadoc
     @SuppressWarnings("finally")
     public Connection getConnection() {
         Connection result = null;
@@ -78,15 +82,6 @@ public class Pool {
                 }
             }
         }
-
-//        try {
-//            Thread.sleep(GET_CONNECTION_MILLIS);
-//        } catch (InterruptedException e) {
-//            //throw new RuntimeException(e);
-//            LOG.error(e.getMessage());
-//            LOG.info("Retrying to get connection.");
-//            return getConnection();
-//        }
 
         if (result == null) {
             try {

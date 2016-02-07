@@ -15,21 +15,33 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
- * Created by Elizaveta Kapitonova on 03.02.16.
+ * Editing order servlet
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebServlet(name = "EditingServlet")
 public class EditingServlet extends HttpServlet {
     public static final Logger LOG = Logger.getLogger(EditingServlet.class);
     public static final String EDITING_JSP = "/jsp/edit_order.jsp";
     public static final String USER_JSP = "/user";
+    private static final String PROPERTY = "local";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.getRequestDispatcher(EDITING_JSP).forward(req, resp);
     }
 
+    /**
+     * Gets new order parameters and rewrites it with new ones
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
         int userId = user.getUserId();
@@ -48,8 +60,18 @@ public class EditingServlet extends HttpServlet {
                 LocalDate dateOut = LocalDate.parse(date_out, formatter);
                 if (dateIn.isAfter(LocalDate.now()) && dateIn.isBefore(dateOut)) {
                     try {
-                        DBHandler.getInstance().editOrder(orderId, userId, places, classOfComfort, dateIn, dateOut, comment);
-                        response.sendRedirect(USER_JSP);
+                        int affectedRows = DBHandler.getInstance().editOrder(orderId, userId, places, classOfComfort, dateIn, dateOut, comment);
+                        if (affectedRows != 0) {
+                            response.sendRedirect(USER_JSP);
+                        } else {
+                            Locale locale = (Locale) request.getSession().getAttribute("locale");
+                            ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
+                            String logErr = resourceBundle.getString("order.edit.result_error.log");
+                            request.setAttribute("error", true);
+                            LOG.error(logErr + " " + String.valueOf(affectedRows));
+                            fwd(request, response);
+                        }
+
                     } catch (SQLException e) {
                         e.printStackTrace();
                         request.setAttribute("order_error", e.getMessage());

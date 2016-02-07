@@ -7,7 +7,9 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
 /**
- * Created by Elizaveta Kapitonova on 30.01.16.
+ * Filter sets character encoding to UTF-8.
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebFilter(filterName = "EncodingFilter")
 public class EncodingFilter implements Filter {

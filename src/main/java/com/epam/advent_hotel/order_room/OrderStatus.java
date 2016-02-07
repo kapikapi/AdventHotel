@@ -1,7 +1,9 @@
 package com.epam.advent_hotel.order_room;
 
 /**
- * Created by Elizaveta Kapitonova on 01.02.16.
+ * Enum with possible orders statuses
+ *
+ * @author Elizaveta Kapitonova
  */
 public enum OrderStatus {
     REQUESTED {
