@@ -14,14 +14,16 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Created by Elizaveta Kapitonova on 13.01.16.
+ * Servlet logs user in if login and password are correct
+ *
+ * @author Elizaveta Kapitonova
  */
 public class LoginServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(LoginServlet.class);
+    private static final Logger LOG = Logger.getLogger(LoginServlet.class);
 
-    public static final String LOGIN_JSP = "/jsp/login.jsp";
-    public static final String USER_JSP = "/user";
-    public static final String ADMIN_JSP = "/admin";
+    private static final String LOGIN_JSP = "/jsp/login.jsp";
+    private static final String USER_JSP = "/user";
+    private static final String ADMIN_JSP = "/admin";
 
     private static final String PROPERTY = "local";
 

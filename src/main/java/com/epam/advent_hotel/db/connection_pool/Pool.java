@@ -2,7 +2,6 @@ package com.epam.advent_hotel.db.connection_pool;
 
 import org.apache.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,10 +16,10 @@ import java.util.Properties;
  * @author Elizaveta Kapitonova
  */
 public class Pool {
-    public static final Logger LOG = Logger.getLogger(Pool.class);
-    public static final int GET_CONNECTION_MILLIS = 1000;
+    private static final Logger LOG = Logger.getLogger(Pool.class);
+    private static final int GET_CONNECTION_MILLIS = 1000;
     //public static final String PROPERTIES_PATH = "/pool-config.properties";
-    public static final String PROPERTIES_PATH = "/pool-conf.properties";
+    private static final String PROPERTIES_PATH = "/pool-conf.properties";
     private static Pool INSTANCE;
 
     public static Pool getInstance() {

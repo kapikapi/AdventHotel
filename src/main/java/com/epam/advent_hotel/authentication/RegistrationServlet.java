@@ -19,12 +19,12 @@ import java.util.ResourceBundle;
  * @author Elizaveta Kapitonova
  */
 public class RegistrationServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(RegistrationServlet.class);
+    private static final Logger LOG = Logger.getLogger(RegistrationServlet.class);
 
-    public static final String REGISTRATION_JSP = "/jsp/registration.jsp";
-    public static final String LOGIN_JSP = "/authentication";
-    public static final String USER_JSP = "/user";
-    public static final String ADMIN_JSP = "/admin";
+    private static final String REGISTRATION_JSP = "/jsp/registration.jsp";
+    private static final String LOGIN_JSP = "/authentication";
+    private static final String USER_JSP = "/user";
+    private static final String ADMIN_JSP = "/admin";
 
     private static final String PROPERTY = "local";
 

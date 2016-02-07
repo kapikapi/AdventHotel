@@ -6,7 +6,7 @@ import com.epam.advent_hotel.order_room.Order;
 import com.epam.advent_hotel.order_room.OrderStatus;
 import org.apache.log4j.Logger;
 
-import javax.security.auth.login.LoginException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,9 +25,9 @@ import java.util.ResourceBundle;
  */
 @WebServlet(name = "PaymentServlet")
 public class PaymentServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(PaymentServlet.class);
-    public static final String PAYMENT_BILL_JSP = "/jsp/bill.jsp";
-    public static final String ORDER_USER_PAGE = "/user_order";
+    private static final Logger LOG = Logger.getLogger(PaymentServlet.class);
+    private static final String PAYMENT_BILL_JSP = "/jsp/bill.jsp";
+    private static final String ORDER_USER_PAGE = "/user_order";
     private static final String PROPERTY = "local";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)

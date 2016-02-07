@@ -15,7 +15,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Tag gets user's or admin's id and writes "Administator" + name if user is admin and login otherwise.
+ * Tag gets user's or admin's id and writes "Administrator" + name if user is admin and login otherwise.
  *
  * @author Elizaveta Kapitonova
  */

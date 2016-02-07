@@ -4,7 +4,6 @@ import com.epam.advent_hotel.db.DBHandler;
 import com.epam.advent_hotel.users.User;
 import org.apache.log4j.Logger;
 
-import javax.security.auth.login.LoginException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,9 +23,9 @@ import java.util.ResourceBundle;
  */
 @WebServlet(name = "OrderFormServlet")
 public class OrderFormServlet extends HttpServlet {
-    public static final Logger LOG= Logger.getLogger(OrderFormServlet.class);
-    public static final String ORDER_JSP = "/jsp/order.jsp";
-    public static final String USER_PAGE = "/user";
+    private static final Logger LOG= Logger.getLogger(OrderFormServlet.class);
+    private static final String ORDER_JSP = "/jsp/order.jsp";
+    private static final String USER_PAGE = "/user";
     private static final String PROPERTY = "local";
 
     public static final String FORMATTER_PATTERN = "yyyy-MM-dd";

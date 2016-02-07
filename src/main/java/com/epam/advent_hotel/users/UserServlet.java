@@ -23,10 +23,10 @@ import java.util.List;
  */
 @WebServlet(name = "UserServlet")
 public class UserServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(UserServlet.class);
-    public static final String USER_JSP = "/jsp/user.jsp";
-    public static final String USER_PAGE = "/user";
-    public static final String ORDER_JSP = "/order";
+    private static final Logger LOG = Logger.getLogger(UserServlet.class);
+    private static final String USER_JSP = "/jsp/user.jsp";
+    private static final String USER_PAGE = "/user";
+    private static final String ORDER_JSP = "/order";
     private static final int PER_PAGE = 10;
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)

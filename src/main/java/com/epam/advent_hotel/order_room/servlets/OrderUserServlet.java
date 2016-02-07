@@ -28,10 +28,10 @@ import java.util.ResourceBundle;
  */
 @WebServlet(name = "OrderUserServlet")
 public class OrderUserServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(OrderUserServlet.class);
-    public static final String ORDER_USER_JSP = "/jsp/user_order.jsp";
-    public static final String ORDER_USER_PAGE = "/user_order";
-    public static final int PER_PAGE = 10;
+    private static final Logger LOG = Logger.getLogger(OrderUserServlet.class);
+    private static final String ORDER_USER_JSP = "/jsp/user_order.jsp";
+    private static final String ORDER_USER_PAGE = "/user_order";
+    private static final int PER_PAGE = 10;
     private static final String PROPERTY = "local";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)

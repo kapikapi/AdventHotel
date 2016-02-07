@@ -17,13 +17,15 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Created by Elizaveta Kapitonova on 07.02.16.
+ * Servlet gets list of all users (by page) and can set a user as admin.
+ *
+ * @author Elizaveta Kapitonova
  */
 @WebServlet(name = "UsersListServlet")
 public class UsersListServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(UsersListServlet.class);
-    public static final String USER_LIST_JSP = "/jsp/users_list.jsp";
-    public static final String USER_LIST_PAGE = "users_list";
+    private static final Logger LOG = Logger.getLogger(UsersListServlet.class);
+    private static final String USER_LIST_JSP = "/jsp/users_list.jsp";
+    private static final String USER_LIST_PAGE = "users_list";
     private static final int PER_PAGE = 10;
     private static final String PROPERTY = "local";
 
@@ -32,6 +34,13 @@ public class UsersListServlet extends HttpServlet {
         req.getRequestDispatcher(USER_LIST_JSP).forward(req, resp);
     }
 
+    /**
+     * Gets users list and if administrator sets some user as new administrator, changes user's access level.
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.info("in doPost");
         try {

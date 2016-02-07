@@ -38,9 +38,6 @@ div.small-table, div.small-paging {
 div.paging {
   text-align: center;
 }
-div.comment-author {
-  font-weight: bold
-}
 div.error {
   color: red;
   font-weight: bold

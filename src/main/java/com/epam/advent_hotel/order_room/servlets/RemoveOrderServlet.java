@@ -1,7 +1,6 @@
 package com.epam.advent_hotel.order_room.servlets;
 
 import com.epam.advent_hotel.db.DBHandler;
-import com.epam.advent_hotel.order_room.Order;
 import com.epam.advent_hotel.users.AccessLevel;
 import com.epam.advent_hotel.users.User;
 import org.apache.log4j.Logger;
@@ -23,10 +22,10 @@ import java.util.ResourceBundle;
  */
 @WebServlet(name = "RemoveOrderServlet")
 public class RemoveOrderServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(RemoveOrderServlet.class);
-    public static final String REMOVING_JSP = "/jsp/remove_warning.jsp";
-    public static final String USER_JSP = "/user";
-    public static final String ADMIN_JSP = "/admin";
+    private static final Logger LOG = Logger.getLogger(RemoveOrderServlet.class);
+    private static final String REMOVING_JSP = "/jsp/remove_warning.jsp";
+    private static final String USER_JSP = "/user";
+    private static final String ADMIN_JSP = "/admin";
     private static final String PROPERTY = "local";
 
 

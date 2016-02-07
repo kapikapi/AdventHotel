@@ -2,7 +2,6 @@ package com.epam.advent_hotel.order_room.servlets;
 
 import com.epam.advent_hotel.db.DBHandler;
 import com.epam.advent_hotel.order_room.Order;
-import com.epam.advent_hotel.order_room.OrderStatus;
 import com.epam.advent_hotel.users.User;
 import org.apache.log4j.Logger;
 
@@ -25,9 +24,9 @@ import java.util.ResourceBundle;
  */
 @WebServlet(name = "EditingServlet")
 public class EditingServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(EditingServlet.class);
-    public static final String EDITING_JSP = "/jsp/edit_order.jsp";
-    public static final String USER_JSP = "/user";
+    private static final Logger LOG = Logger.getLogger(EditingServlet.class);
+    private static final String EDITING_JSP = "/jsp/edit_order.jsp";
+    private static final String USER_JSP = "/user";
     private static final String PROPERTY = "local";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)

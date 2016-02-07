@@ -10,7 +10,6 @@ import com.epam.advent_hotel.users.AccessLevel;
 import com.epam.advent_hotel.users.User;
 import org.apache.log4j.Logger;
 
-import javax.jws.soap.SOAPBinding;
 import javax.security.auth.login.LoginException;
 import java.sql.*;
 import java.time.LocalDate;
@@ -736,11 +735,6 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
-    // TODO:
-    @Override
-    public boolean isAptAvailable(int aptId, LocalDate dateIn, LocalDate dateOut) {
-        return false;
-    }
 
     /**
      * {@inheritDoc}

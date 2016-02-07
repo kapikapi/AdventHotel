@@ -2,8 +2,6 @@ package com.epam.advent_hotel.order_room.servlets;
 
 import com.epam.advent_hotel.apartments.Apartment;
 import com.epam.advent_hotel.db.DBHandler;
-import com.epam.advent_hotel.order_room.Order;
-import com.epam.advent_hotel.order_room.OrderStatus;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -24,8 +22,8 @@ import java.util.ResourceBundle;
  */
 @WebServlet(name = "SearchRoomServlet")
 public class SearchRoomServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(SearchRoomServlet.class);
-    public static final String SEARCH_ROOM_JSP = "/jsp/search_room.jsp";
+    private static final Logger LOG = Logger.getLogger(SearchRoomServlet.class);
+    private static final String SEARCH_ROOM_JSP = "/jsp/search_room.jsp";
     private static final int PER_PAGE = 10;
     private static final String PROPERTY = "local";
 

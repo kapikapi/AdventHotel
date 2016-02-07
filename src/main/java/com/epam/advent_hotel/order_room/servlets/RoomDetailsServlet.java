@@ -21,10 +21,10 @@ import java.util.Locale;
  */
 @WebServlet(name = "RoomDetailsServlet")
 public class RoomDetailsServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(RoomDetailsServlet.class);
+    private static final Logger LOG = Logger.getLogger(RoomDetailsServlet.class);
 
-    public static final String ROOM_DETAILS_JSP = "/jsp/room.jsp";
-    public static final String ROOM_DETAILS = "/room";
+    private static final String ROOM_DETAILS_JSP = "/jsp/room.jsp";
+    private static final String ROOM_DETAILS = "/room";
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.getRequestDispatcher(ROOM_DETAILS_JSP).forward(req, resp);

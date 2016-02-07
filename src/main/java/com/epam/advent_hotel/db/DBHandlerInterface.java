@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Elizaveta Kapitonova on 01.02.16.
+ * Interface for working with database.
+ *
+ * @author Elizaveta Kapitonova
  */
 public interface DBHandlerInterface {
 
@@ -261,7 +263,6 @@ public interface DBHandlerInterface {
      */
     int setOrdersApt(int orderId, int aptId) throws SQLException;
 
-    boolean isAptAvailable(int aptId, LocalDate dateIn, LocalDate dateOut);
 
     /**
      * Gets Apartment object by apartment's id

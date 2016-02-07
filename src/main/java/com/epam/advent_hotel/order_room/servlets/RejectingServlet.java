@@ -23,10 +23,10 @@ import java.util.ResourceBundle;
  */
 @WebServlet(name = "RejectingServlet")
 public class RejectingServlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(RejectingServlet.class);
-    public static final String REJECTING_JSP = "/jsp/reject_warning.jsp";
-    public static final String USER_JSP = "/user";
-    public static final String ADMIN_JSP = "/admin";
+    private static final Logger LOG = Logger.getLogger(RejectingServlet.class);
+    private static final String REJECTING_JSP = "/jsp/reject_warning.jsp";
+    private static final String USER_JSP = "/user";
+    private static final String ADMIN_JSP = "/admin";
     private static final String PROPERTY = "local";
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
