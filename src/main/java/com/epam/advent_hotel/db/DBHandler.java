@@ -10,6 +10,7 @@ import com.epam.advent_hotel.users.AccessLevel;
 import com.epam.advent_hotel.users.User;
 import org.apache.log4j.Logger;
 
+import javax.jws.soap.SOAPBinding;
 import javax.security.auth.login.LoginException;
 import java.sql.*;
 import java.time.LocalDate;
@@ -208,6 +209,11 @@ public class DBHandler implements DBHandlerInterface {
             "SELECT COUNT(*) AS comments_number FROM comments WHERE order_id=?";
     private static final String SET_ADD_INFO =
             "UPDATE orders SET order_additional_info=? WHERE id=?";
+    private static final String GET_ALL_USERS =
+            "SELECT user_id, email, login, access_level, name FROM users " +
+                    "ORDER BY access_level LIMIT ? OFFSET ?";
+    private static final String GET_NUMBER_OF_USERS =
+            "SELECT COUNT(*) as users_number FROM users";
 
 
     private static Connection connection;
@@ -494,10 +500,37 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
-    //TODO:
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<User> getAllUsers() {
-        return null;
+    public List<User> getAllUsers(int limit, int offset) throws SQLException, LoginException {
+        List<User> usersList;
+        try (PreparedStatement pstmt = connection.prepareStatement(GET_ALL_USERS)) {
+            pstmt.setInt(1, limit);
+            pstmt.setInt(2, offset);
+            try (ResultSet resultSet = pstmt.executeQuery()) {
+                usersList = resultSetToUsersList(resultSet);
+            }
+        }
+        return usersList;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getUsersNumber() throws SQLException {
+        int res = 0;
+        try (PreparedStatement pstmt = connection.prepareStatement(GET_NUMBER_OF_USERS,
+                ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+            try (ResultSet resultSet = pstmt.executeQuery()) {
+                if (resultSet.first()) {
+                    res = resultSet.getInt("users_number");
+                }
+            }
+        }
+        return res;
     }
 
     /**
@@ -571,11 +604,17 @@ public class DBHandler implements DBHandlerInterface {
         return res;
     }
 
-
-    // TODO:
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public int setUserAdmin(int userId) {
-        return 0;
+    public int setUserAdmin(int userId) throws SQLException{
+        int res;
+        try (PreparedStatement pstmt = connection.prepareStatement(SET_USER_AS_ADMIN)) {
+            pstmt.setInt(1, userId);
+            res = pstmt.executeUpdate();
+        }
+        return res;
     }
 
     /**
@@ -762,7 +801,7 @@ public class DBHandler implements DBHandlerInterface {
      * @throws SQLException
      * @see Order
      */
-    private static Order resultSetToOrder(ResultSet resultSet) throws SQLException {
+    private Order resultSetToOrder(ResultSet resultSet) throws SQLException {
         Order order = new Order();
         if (resultSet.first()) {
             order.setOrderId(resultSet.getInt("id"));
@@ -787,7 +826,7 @@ public class DBHandler implements DBHandlerInterface {
      * @throws SQLException
      * @see Apartment
      */
-    private static Apartment resultSetToApartment(ResultSet resultSet) throws SQLException {
+    private Apartment resultSetToApartment(ResultSet resultSet) throws SQLException {
         Apartment apartment = new Apartment();
         if (resultSet.first()) {
             apartment.setAptId(resultSet.getInt("apt_id"));
@@ -808,7 +847,7 @@ public class DBHandler implements DBHandlerInterface {
      * @throws SQLException
      * @see Order
      */
-    private static List<Order> resultSetToOrdersList(ResultSet resultSet)
+    private List<Order> resultSetToOrdersList(ResultSet resultSet)
             throws SQLException {
         List<Order> res = new ArrayList<>();
         while (resultSet.next()) {
@@ -841,7 +880,7 @@ public class DBHandler implements DBHandlerInterface {
      * @throws SQLException
      * @see Apartment
      */
-    private static List<Apartment> resultSetToApartmentsList(ResultSet resultSet)
+    private List<Apartment> resultSetToApartmentsList(ResultSet resultSet)
             throws SQLException {
         List<Apartment> res = new ArrayList<>();
         while (resultSet.next()) {
@@ -853,6 +892,30 @@ public class DBHandler implements DBHandlerInterface {
             apartment.setCost(resultSet.getInt("cost"));
             apartment.setDescription(resultSet.getInt("description"));
             res.add(apartment);
+        }
+        return res;
+    }
+
+    /**
+     * Gets list of users from ResultSet
+     *
+     * @param resultSet
+     * @return ArrayList of User objects
+     * @throws SQLException
+     * @see User
+     * @see AccessLevel
+     */
+    private List<User> resultSetToUsersList(ResultSet resultSet) throws SQLException, LoginException {
+        List<User> res = new ArrayList<>();
+        while (resultSet.next()) {
+            String login = resultSet.getString("login");
+            User user = new User(login);
+            user.setUserId(resultSet.getInt("user_id"));
+            user.setLogin(login);
+            user.setName(resultSet.getString("name"));
+            user.setEmail(resultSet.getString("email"));
+            user.setAccessLevel(AccessLevel.valueOf(resultSet.getString("access_level").toUpperCase()));
+            res.add(user);
         }
         return res;
     }

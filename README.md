@@ -6,3 +6,7 @@
 <br>
 Для работы с базой данных скачайте файл advent_hotel.sql и введите в командной строке:<br>
 mysqldump -u username -ppassword < /somepath/advent_hotel.sql
+<br>
+Аккаунт администратора: <br>
+Логин: admin <br>
+Пароль: admin

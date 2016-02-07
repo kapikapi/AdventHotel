@@ -62,6 +62,10 @@
         <servlet-name>PaymentServlet</servlet-name>
         <servlet-class>com.epam.advent_hotel.order_room.servlets.PaymentServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserListServlet</servlet-name>
+        <servlet-class>com.epam.advent_hotel.admin.UsersListServlet</servlet-class>
+    </servlet>
 
 
     <servlet-mapping>
@@ -116,6 +120,11 @@
         <servlet-name>PaymentServlet</servlet-name>
         <url-pattern>/bill</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserListServlet</servlet-name>
+        <url-pattern>/users_list</url-pattern>
+    </servlet-mapping>
+
 
     <filter>
         <filter-name>EncodingFilter</filter-name>

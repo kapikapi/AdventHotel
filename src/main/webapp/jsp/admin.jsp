@@ -30,7 +30,12 @@
     <c:when test="${not empty isAdmin}">
         <div class="main-content">
             <div class="head-content">
-                    ${admin_header}
+                <form action="users_list" method="post">
+                        ${admin_header}
+                    <input type="hidden" name="actionName" value="getUsers">
+                    <fmt:message key="admin.users" var="users_list"/>
+                    <input type="submit" value="${users_list}">
+                </form>
                 <tags:language curr_lang="${locale}" curr_uri="${pageContext.request.requestURI}"/>
                 <tags:logout userLogin="${user.login}" userName="${user.name}" curr_lang="${locale}"/>
                 <table>
@@ -76,6 +81,9 @@
                                 <fmt:message key="admin.orders.heading.rejected" var="rejected_orders"/>
                                 <input type="submit" value="${rejected_orders}">
                             </form>
+                        </td>
+                        <td>
+
                         </td>
                     </tr>
                 </table>
@@ -218,8 +226,8 @@
                         <fmt:message key="orders.error" var="orders_search_error"/>
                         ${orders_search_error}
                     </c:if>
-                        <%--<fmt:message key="ref.my_user_page" var="my_user_page"/>--%>
-                        <%--<h4><a href=<c:url value="/user"/>>${my_user_page}</a></h4>--%>
+                    <fmt:message key="ref.my_user_page" var="my_user_page"/>
+                    <h4><a href=<c:url value="/user"/>>${my_user_page}</a></h4>
 
                 </div>
             </div>

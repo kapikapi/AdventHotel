@@ -153,7 +153,21 @@ public interface DBHandlerInterface {
      */
     int getNumberOfComments(int orderId) throws SQLException;
 
-    List<User> getAllUsers();
+    /**
+     * Gets list of all users. By parts for paging
+     * @param limit
+     * @param offset
+     * @return ArrayList of User objects
+     * @throws SQLException
+     */
+    List<User> getAllUsers(int limit, int offset) throws SQLException, LoginException;
+
+    /**
+     * Gets number of all users in 'users' table
+     * @return total number of users
+     * @throws SQLException
+     */
+    int getUsersNumber() throws SQLException;
 
     /**
      * Gets list of all orders. By parts for paging
@@ -196,7 +210,14 @@ public interface DBHandlerInterface {
      */
     int getNumberOfOrdersByStatus(OrderStatus status) throws SQLException;
 
-    int setUserAdmin(int userId);
+    /**
+     * Sets ADMIN access level to user
+     * @see com.epam.advent_hotel.users.AccessLevel
+     * @param userId
+     * @return row count
+     * @throws SQLException
+     */
+    int setUserAdmin(int userId) throws SQLException;
 
     /**
      * Changes status of order in 'orders' table
