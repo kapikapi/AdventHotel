@@ -96,7 +96,6 @@ public class UsersListServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.info("in do Get");
-        //fwd(request, response);
         doPost(request, response);
     }
 

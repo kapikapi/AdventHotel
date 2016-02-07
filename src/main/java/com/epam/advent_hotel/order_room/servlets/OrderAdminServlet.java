@@ -31,6 +31,7 @@ public class OrderAdminServlet extends HttpServlet {
     private static final String ORDER_ADMIN_JSP = "/jsp/admin_order.jsp";
     private static final String ORDER_ADMIN_PAGE = "/admin_order";
     private static final String PROPERTY = "local";
+    private static final int PER_PAGE = 10;
 
 
     private static void fwd(HttpServletRequest req, HttpServletResponse resp)
@@ -128,10 +129,10 @@ public class OrderAdminServlet extends HttpServlet {
             if (null != request.getParameter("page")) {
                 page = Integer.parseInt(request.getParameter("page"));
             }
-            int offset = (page - 1) * OrderUserServlet.PER_PAGE;
-            List<Comment> commentList = DBHandler.getInstance().getOrdersComments(orderId, OrderUserServlet.PER_PAGE, offset);
+            int offset = (page - 1) * PER_PAGE;
+            List<Comment> commentList = DBHandler.getInstance().getOrdersComments(orderId, PER_PAGE, offset);
             int numberOfComments = DBHandler.getInstance().getNumberOfComments(orderId);
-            int noOfPages = (int) Math.ceil(numberOfComments * 1.0 / OrderUserServlet.PER_PAGE);
+            int noOfPages = (int) Math.ceil(numberOfComments * 1.0 / PER_PAGE);
             request.setAttribute("noOfPages", noOfPages);
             request.setAttribute("currentPage", page);
             request.setAttribute("comment_list", commentList);
