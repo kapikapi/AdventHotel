@@ -14,7 +14,7 @@ div.head-content {
 }
 
 div.head-content form {
-  padding:5px;
+  padding:0;
   margin: 0;
 }
 
@@ -62,7 +62,7 @@ div.head-main-content {
 }
 
 div.head-main-content form {
-  padding:5px;
+  padding: 5px;
   margin: 0;
 }
 div.main-page {

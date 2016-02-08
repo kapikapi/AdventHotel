@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 @WebServlet(name = "UsersListServlet")
 public class UsersListServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(UsersListServlet.class);
-    private static final String USER_LIST_JSP = "/jsp/users_list.jsp";
+    private static final String USER_LIST_JSP = "/jsp/admin/users_list.jsp";
     private static final String USER_LIST_PAGE = "users_list";
     private static final int PER_PAGE = 10;
     private static final String PROPERTY = "local";

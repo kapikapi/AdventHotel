@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 @WebServlet(name = "SearchRoomServlet")
 public class SearchRoomServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(SearchRoomServlet.class);
-    private static final String SEARCH_ROOM_JSP = "/jsp/search_room.jsp";
+    private static final String SEARCH_ROOM_JSP = "/jsp/admin/search_room.jsp";
     private static final int PER_PAGE = 10;
     private static final String PROPERTY = "local";
 

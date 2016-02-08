@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 @WebServlet(name = "AdminServlet")
 public class AdminServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(AdminServlet.class);
-    private static final String ADMIN_JSP = "/jsp/admin.jsp";
+    private static final String ADMIN_JSP = "/jsp/admin/admin.jsp";
 
     private static final int PER_PAGE = 10;
     private static final String PROPERTY = "local";

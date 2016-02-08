@@ -30,53 +30,54 @@
     <c:when test="${not empty isAdmin}">
         <div class="main-content">
             <div class="head-content">
+                <tags:language curr_lang="${locale}" curr_uri="${pageContext.request.requestURI}"/>
+                <tags:logout userLogin="${user.login}" userName="${user.name}" curr_lang="${locale}"/>
                 <form action="users_list" method="post">
                         ${admin_header}
                     <input type="hidden" name="actionName" value="getUsers">
                     <fmt:message key="admin.users" var="users_list"/>
                     <input type="submit" value="${users_list}">
                 </form>
-                <tags:language curr_lang="${locale}" curr_uri="${pageContext.request.requestURI}"/>
-                <tags:logout userLogin="${user.login}" userName="${user.name}" curr_lang="${locale}"/>
+                <br>
                 <table>
                     <tr>
                         <td>
-                            <form action="admin" method="post">
+                            <form action="" method="post">
                                 <input type="hidden" name="actionName" value="all">
                                 <fmt:message key="admin.orders.heading.all" var="all_orders"/>
                                 <input type="submit" value="${all_orders}">
                             </form>
                         </td>
                         <td>
-                            <form action="admin" method="post">
+                            <form action="" method="post">
                                 <input type="hidden" name="actionName" value="requested">
                                 <fmt:message key="admin.orders.heading.requested" var="requested_orders"/>
                                 <input type="submit" value="${requested_orders}">
                             </form>
                         </td>
                         <td>
-                            <form action="admin" method="post">
+                            <form action="" method="post">
                                 <input type="hidden" name="actionName" value="in_discussion">
                                 <fmt:message key="admin.orders.heading.in_discussion" var="in_discussion_orders"/>
                                 <input type="submit" value="${in_discussion_orders}">
                             </form>
                         </td>
                         <td>
-                            <form action="admin" method="post">
+                            <form action="" method="post">
                                 <input type="hidden" name="actionName" value="approved">
                                 <fmt:message key="admin.orders.heading.approved" var="approved_orders"/>
                                 <input type="submit" value="${approved_orders}">
                             </form>
                         </td>
                         <td>
-                            <form action="admin" method="post">
+                            <form action="" method="post">
                                 <input type="hidden" name="actionName" value="paid">
                                 <fmt:message key="admin.orders.heading.paid" var="paid_orders"/>
                                 <input type="submit" value="${paid_orders}">
                             </form>
                         </td>
                         <td>
-                            <form action="admin" method="post">
+                            <form action="" method="post">
                                 <input type="hidden" name="actionName" value="rejected">
                                 <fmt:message key="admin.orders.heading.rejected" var="rejected_orders"/>
                                 <input type="submit" value="${rejected_orders}">
@@ -189,7 +190,7 @@
                 <div class="paging">
                     <c:if test="${currentPage != 1}">
                         <fmt:message key="page.previous" var="previous"/>
-                        <td><a href="admin?page=${currentPage - 1}">${previous}</a></td>
+                        <td><a href="?page=${currentPage - 1}">${previous}</a></td>
                     </c:if>
 
                         <%--For displaying Page numbers.
@@ -203,7 +204,7 @@
                                         <td>${i}</td>
                                     </c:when>
                                     <c:otherwise>
-                                        <td><a href="admin?page=${i}">${i}</a></td>
+                                        <td><a href="?page=${i}">${i}</a></td>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
@@ -214,7 +215,7 @@
                         <%--For displaying Next link --%>
                     <c:if test="${currentPage lt noOfPages}">
                         <fmt:message key="page.next" var="next"/>
-                        <td><a href="admin?page=${currentPage + 1}">${next}</a></td>
+                        <td><a href="?page=${currentPage + 1}">${next}</a></td>
                     </c:if>
 
                     </c:when>

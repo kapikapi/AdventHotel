@@ -24,7 +24,7 @@ import java.util.List;
 @WebServlet(name = "UserServlet")
 public class UserServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(UserServlet.class);
-    private static final String USER_JSP = "/jsp/user.jsp";
+    private static final String USER_JSP = "/jsp/user/user.jsp";
     private static final String USER_PAGE = "/user";
     private static final String ORDER_JSP = "/order";
     private static final int PER_PAGE = 10;

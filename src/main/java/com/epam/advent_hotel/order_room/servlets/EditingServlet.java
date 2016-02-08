@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 @WebServlet(name = "EditingServlet")
 public class EditingServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(EditingServlet.class);
-    private static final String EDITING_JSP = "/jsp/edit_order.jsp";
+    private static final String EDITING_JSP = "/jsp/user/edit_order.jsp";
     private static final String USER_JSP = "/user";
     private static final String PROPERTY = "local";
 

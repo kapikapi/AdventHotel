@@ -31,7 +31,7 @@
         <tags:language curr_lang="${locale}" curr_uri="${pageContext.request.requestURI}"/>
         <tags:logout userLogin="${user.login}" userName="${user.name}" curr_lang="${locale}"/>
         <fmt:message key="user.new_order" var="new_order"/>
-        <form action="user" method="post">
+        <form action="" method="post">
             <fmt:message key="user.new_order.button" var="new_order_button"/>
             <input type="hidden" name="actionName" value="newOrder">
             <input type="submit" value="${new_order_button}">
@@ -156,7 +156,7 @@
 
             <c:if test="${currentPage != 1}">
                 <fmt:message key="page.previous" var="previous"/>
-                <td><a href="user?page=${currentPage - 1}">${previous}</a></td>
+                <td><a href="?page=${currentPage - 1}">${previous}</a></td>
             </c:if>
 
                 <%--For displaying Page numbers.
@@ -170,7 +170,7 @@
                                 <td>${i}</td>
                             </c:when>
                             <c:otherwise>
-                                <td><a href="user?page=${i}">${i}</a></td>
+                                <td><a href="?page=${i}">${i}</a></td>
                             </c:otherwise>
                         </c:choose>
                     </c:forEach>
@@ -181,7 +181,7 @@
                 <%--For displaying Next link --%>
             <c:if test="${currentPage lt noOfPages}">
                 <fmt:message key="page.next" var="next"/>
-                <td><a href="user?page=${currentPage + 1}">${next}</a></td>
+                <td><a href="?page=${currentPage + 1}">${next}</a></td>
             </c:if>
 
             </c:when>

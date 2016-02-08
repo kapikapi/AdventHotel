@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 @WebServlet(name = "PaymentServlet")
 public class PaymentServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(PaymentServlet.class);
-    private static final String PAYMENT_BILL_JSP = "/jsp/bill.jsp";
+    private static final String PAYMENT_BILL_JSP = "/jsp/user/bill.jsp";
     private static final String ORDER_USER_PAGE = "/user_order";
     private static final String PROPERTY = "local";
 

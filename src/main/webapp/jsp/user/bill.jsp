@@ -84,7 +84,7 @@
         <br>
         <br>
         <fmt:message key="ref.my_page" var="my_page"/>
-        <a href=<c:url value="user"/>>${my_page}</a>
+        <a href=<c:url value=""/>>${my_page}</a>
     </div>
 </div>
 </body>

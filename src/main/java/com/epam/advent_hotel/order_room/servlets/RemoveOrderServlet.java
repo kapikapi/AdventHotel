@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 @WebServlet(name = "RemoveOrderServlet")
 public class RemoveOrderServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(RemoveOrderServlet.class);
-    private static final String REMOVING_JSP = "/jsp/remove_warning.jsp";
+    private static final String REMOVING_JSP = "/jsp/warnings/remove_warning.jsp";
     private static final String USER_JSP = "/user";
     private static final String ADMIN_JSP = "/admin";
     private static final String PROPERTY = "local";

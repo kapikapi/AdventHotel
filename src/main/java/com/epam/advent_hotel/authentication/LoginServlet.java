@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 public class LoginServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(LoginServlet.class);
 
-    private static final String LOGIN_JSP = "/jsp/login.jsp";
+    private static final String LOGIN_JSP = "/jsp/authentication/login.jsp";
     private static final String USER_JSP = "/user";
     private static final String ADMIN_JSP = "/admin";
 

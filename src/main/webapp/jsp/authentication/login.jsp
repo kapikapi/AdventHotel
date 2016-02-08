@@ -32,7 +32,7 @@
         ${log_header}
     </div>
     <div class="form">
-        <form action="authentication" method="post">
+        <form action="" method="post">
             <input type="hidden" name="actionName" value="authentication"/>
             <fmt:message key="login.login_form.login" var="login"/>
             ${login}:

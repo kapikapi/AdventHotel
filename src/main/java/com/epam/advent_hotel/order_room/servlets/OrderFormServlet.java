@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 @WebServlet(name = "OrderFormServlet")
 public class OrderFormServlet extends HttpServlet {
     private static final Logger LOG= Logger.getLogger(OrderFormServlet.class);
-    private static final String ORDER_JSP = "/jsp/order.jsp";
+    private static final String ORDER_JSP = "/jsp/user/order.jsp";
     private static final String USER_PAGE = "/user";
     private static final String PROPERTY = "local";
 
