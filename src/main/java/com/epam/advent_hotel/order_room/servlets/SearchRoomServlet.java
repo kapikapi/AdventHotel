@@ -40,7 +40,6 @@ public class SearchRoomServlet extends HttpServlet {
      * @throws IOException
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Order order = (Order) request.getAttribute("order");
         try {
             int orderId = (int) request.getSession().getAttribute("order_id");
             int page = 1;
@@ -79,7 +78,6 @@ public class SearchRoomServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //fwd(request, response);
         doPost(request, response);
     }
 }

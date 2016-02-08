@@ -71,7 +71,6 @@ public class OrderUserServlet extends HttpServlet {
 
 
             } else if (act.equals("change_lang")) {
-                //fwd(request, response);
                 response.sendRedirect(ORDER_USER_PAGE);
             } else {
                 fwd(request, response);
@@ -147,7 +146,6 @@ public class OrderUserServlet extends HttpServlet {
             LOG.error(e.getMessage());
         }
         fwd(request, response);
-        //doPost(request, response);
     }
 
     /**
@@ -163,7 +161,6 @@ public class OrderUserServlet extends HttpServlet {
         if (checkedValue == 0) {
             Locale locale = (Locale) request.getSession().getAttribute("locale");
             ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
-            //String displayErr = resourceBundle.getString("order.send_comment.result_error");
             String logErr = resourceBundle.getString(keyLogName);
             LOG.error(logErr + " " + String.valueOf(checkedValue));
         }

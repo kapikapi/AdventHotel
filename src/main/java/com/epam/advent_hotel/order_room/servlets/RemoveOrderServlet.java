@@ -42,7 +42,6 @@ public class RemoveOrderServlet extends HttpServlet {
      * @throws IOException
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //int orderId = (int) request.getSession().getAttribute("order_id");
         int orderId;
         String act = request.getParameter("actionName");
         if (act.equals("confirmed")) {
@@ -50,7 +49,6 @@ public class RemoveOrderServlet extends HttpServlet {
             try {
                 int removedRows = DBHandler.getInstance().removeOrder(orderId);
                 User user = (User) request.getSession().getAttribute("user");
-                //boolean correct = rejectOrder(orderId, request);
                 if (removedRows == 0) {
                     if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
                         response.sendRedirect(ADMIN_JSP);
@@ -60,7 +58,6 @@ public class RemoveOrderServlet extends HttpServlet {
                 } else {
                     Locale locale = (Locale) request.getSession().getAttribute("locale");
                     ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
-                    //String displayErr = resourceBundle.getString(keyName);
                     String logErr = resourceBundle.getString("order.remove.error.log");
                     LOG.error(logErr + " " + String.valueOf(removedRows));
                     request.setAttribute("error", true);

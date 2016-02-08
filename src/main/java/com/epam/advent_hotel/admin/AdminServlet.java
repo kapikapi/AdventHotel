@@ -125,7 +125,6 @@ public class AdminServlet extends HttpServlet {
             request.getSession().removeAttribute("order_id");
         }
         doPost(request, response);
-        //fwd(request, response);
     }
 
 }

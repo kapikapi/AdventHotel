@@ -63,7 +63,6 @@ public class OrderFormServlet extends HttpServlet {
                     if (affectedRows == 0) {
                         Locale locale = (Locale) request.getSession().getAttribute("locale");
                         ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
-                        //String displayErr = resourceBundle.getString("order.set_order.error");
                         String logErr = resourceBundle.getString("order.set_order.error.log");
                         LOG.error(logErr + " " + String.valueOf(affectedRows));
                         request.setAttribute("error", true);

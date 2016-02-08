@@ -52,7 +52,6 @@ public class PaymentServlet extends HttpServlet {
                     if (paidRows == 0) {
                         Locale locale = (Locale) request.getSession().getAttribute("locale");
                         ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
-                        //String displayErr = resourceBundle.getString(keyName);
                         String logErr = resourceBundle.getString("order.pay.error.log");
                         LOG.error(logErr + " " + String.valueOf(paidRows));
                         request.setAttribute("error", true);
@@ -70,7 +69,6 @@ public class PaymentServlet extends HttpServlet {
                 fwd(request, response);
             }
         } else {
-            //request.setAttribute("error", "Error occurred. Please, try again.");
             fwd(request, response);
         }
 
@@ -97,6 +95,5 @@ public class PaymentServlet extends HttpServlet {
         }
 
         fwd(request, response);
-        //doPost(request, response);
     }
 }

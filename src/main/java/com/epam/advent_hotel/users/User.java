@@ -24,7 +24,7 @@ public class User {
     private AccessLevel accessLevel;
     private String name;
 
-    // log in
+
     public User(String login)
              {
         this.login = login;

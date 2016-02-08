@@ -42,7 +42,6 @@ public class UsersListServlet extends HttpServlet {
      * @throws IOException
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.info("in doPost");
         try {
             int page = 1;
             if (null != request.getParameter("page")) {
@@ -63,7 +62,6 @@ public class UsersListServlet extends HttpServlet {
         }
         if (null != request.getParameter("actionName")) {
             String act = request.getParameter("actionName");
-            LOG.info(act);
             if (act.equals("set_admin")) {
                 int userId = Integer.parseInt(request.getParameter("user_id"));
                 try {
@@ -71,7 +69,6 @@ public class UsersListServlet extends HttpServlet {
                     if (res == 0) {
                         Locale locale = (Locale) request.getSession().getAttribute("locale");
                         ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
-                        //String displayErr = resourceBundle.getString(keyName);
                         String logErr = resourceBundle.getString("users.set_admin.log");
                         LOG.error(logErr + " " + String.valueOf(res));
                         request.setAttribute("error", true);
@@ -95,7 +92,6 @@ public class UsersListServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.info("in do Get");
         doPost(request, response);
     }
 

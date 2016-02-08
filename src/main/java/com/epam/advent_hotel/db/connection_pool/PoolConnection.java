@@ -36,7 +36,6 @@ public class PoolConnection implements Connection {
      */
     public void realClose() throws SQLException {
         connection.close();
-        //TODO
     }
 
     @Override

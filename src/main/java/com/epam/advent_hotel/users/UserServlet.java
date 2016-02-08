@@ -77,7 +77,6 @@ public class UserServlet extends HttpServlet {
                 request.setAttribute("noOfPages", noOfPages);
                 request.setAttribute("currentPage", page);
                 if (resList.isEmpty()) {
-                    //String noOrders = "No rooms have been ordered yet";
                     request.setAttribute("no_result", true);
                 }
                 fwd(request, response);
@@ -99,6 +98,5 @@ public class UserServlet extends HttpServlet {
             request.getSession().removeAttribute("order_id");
         }
         doPost(request, response);
-        //fwd(request, response);
     }
 }

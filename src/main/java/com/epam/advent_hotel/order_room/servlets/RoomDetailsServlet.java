@@ -33,7 +33,6 @@ public class RoomDetailsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int roomId = Integer.parseInt(request.getPathInfo().substring(1));
         response.sendRedirect(ROOM_DETAILS + "/" + String.valueOf(roomId));
-        //fwd(request, response);
     }
 
     /**
@@ -50,7 +49,6 @@ public class RoomDetailsServlet extends HttpServlet {
             Apartment apartment = DBHandler.getInstance().getApt(roomId);
             Locale locale = (Locale) request.getSession().getAttribute("locale");
             LocalAptDescription description = DBHandler.getInstance().getDescription(apartment.getDescription(), locale);
-            //int orderId = Integer.parseInt(request.getParameter("order_id"));
             request.setAttribute("room", apartment);
             request.setAttribute("description", description.getText());
             request.setAttribute("order_id", orderId);

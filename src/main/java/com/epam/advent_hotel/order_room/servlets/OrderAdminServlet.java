@@ -67,11 +67,7 @@ public class OrderAdminServlet extends HttpServlet {
                     request.setAttribute("error", true);
                     LOG.error(e.getMessage());
                 }
-                //fwd(request, response);
-                //response.sendRedirect(ORDER_ADMIN_PAGE);
             } else if (act.equals("add_info")) {
-
-                //int orderId = (int) request.getSession().getAttribute("order_id");
                 String addInfo = request.getParameter("additional_info");
                 try {
                     DBHandler.getInstance().setAddInfo(orderId, addInfo);
@@ -160,7 +156,6 @@ public class OrderAdminServlet extends HttpServlet {
         if (checkValue == 0) {
             Locale locale = (Locale) request.getSession().getAttribute("locale");
             ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
-            //String displayErr = resourceBundle.getString(keyName);
             String logErr = resourceBundle.getString(logKeyName);
             LOG.error(logErr + " " + String.valueOf(checkValue));
         }

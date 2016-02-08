@@ -43,10 +43,8 @@ public class RejectingServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String act = request.getParameter("actionName");
-        //int orderId = Integer.parseInt(request.getParameter("order_id"));
         int orderId = (int) request.getSession().getAttribute("order_id");
         if (act.equals("reject")) {
-//            request.setAttribute("order_id", orderId);
             fwd(request, response);
         } else if (act.equals("confirmed")) {
             try {
@@ -107,7 +105,6 @@ public class RejectingServlet extends HttpServlet {
         if (checkValue == 0) {
             Locale locale = (Locale) request.getSession().getAttribute("locale");
             ResourceBundle resourceBundle = ResourceBundle.getBundle(PROPERTY, locale);
-            //String displayErr = resourceBundle.getString(keyName);
             String logErr = resourceBundle.getString(logKeyName);
             LOG.error(logErr + " " + String.valueOf(checkValue));
         }

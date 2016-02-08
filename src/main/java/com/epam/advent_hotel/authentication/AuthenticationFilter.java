@@ -55,7 +55,7 @@ public class AuthenticationFilter implements Filter {
             chain.doFilter(req, resp);
         }
         else if (!noRegNeeded.contains(URI) && (session == null || session.getAttribute("user") == null)) {
-            response.sendRedirect(AUTH_PAGE); // No logged-in user found
+            response.sendRedirect(AUTH_PAGE);
         } else {
             chain.doFilter(req, resp); // Logged-in user found or no reg needed
         }

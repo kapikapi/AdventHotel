@@ -45,7 +45,6 @@ public class LanguageFilter implements Filter {
                 session.setAttribute("locale", newLocale);
                 chain.doFilter(req, resp);
             } else if (loc != null) {
-                // came from start page because of changing language
                 Locale locStartPage = new Locale(loc);
                 session.setAttribute("locale", locStartPage);
                 response.sendRedirect("/");
