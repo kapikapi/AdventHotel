@@ -65,7 +65,7 @@ public class Pool {
         return new PoolConnection(DriverManager.getConnection(URL, USER, PASSWORD), this);
     }
 
-    //TODO: javadoc
+
     @SuppressWarnings("finally")
     public Connection getConnection() {
         Connection result = null;
