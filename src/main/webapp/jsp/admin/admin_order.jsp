@@ -87,6 +87,7 @@
                 <fmt:message key="admin.order_page.apartment_id" var="apt_id"/>
                 <fmt:message key="admin.order_page.approved.bill" var="bill_info"/>
                 ${apt_id}: ${order.orderedAptId}
+                <br>
                 ${bill_info}
             </c:when>
 

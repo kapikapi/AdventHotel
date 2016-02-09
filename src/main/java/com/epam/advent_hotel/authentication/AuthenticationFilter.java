@@ -45,6 +45,12 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpSession session = request.getSession(false);
         String URI = request.getRequestURI();
+        boolean isNoRegNeeded = false;
+        for (String s : noRegNeeded) {
+            if (noRegNeeded.contains(URI) || URI.contains(s)) {
+                isNoRegNeeded = true;
+            }
+        }
         if (URI.indexOf("css") > 0){
             chain.doFilter(req, resp);
         }
@@ -54,7 +60,10 @@ public class AuthenticationFilter implements Filter {
         else if(URI.indexOf("/js") > 0){
             chain.doFilter(req, resp);
         }
-        else if (!noRegNeeded.contains(URI) && (session == null || session.getAttribute("user") == null)) {
+        else if(URI.indexOf("favicon.ico") > 0) {
+            chain.doFilter(req, resp);
+        }
+        else if (!isNoRegNeeded && (session == null || session.getAttribute("user") == null)) {
             response.sendRedirect(AUTH_PAGE);
         } else {
             chain.doFilter(req, resp); // Logged-in user found or no reg needed
