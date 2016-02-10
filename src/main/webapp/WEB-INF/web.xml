@@ -19,7 +19,7 @@
     </servlet>
     <servlet>
         <servlet-name>OrderFormServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order_room.servlets.OrderFormServlet</servlet-class>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.user_servlets.OrderFormServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -36,7 +36,7 @@
     </servlet>
     <servlet>
         <servlet-name>EditingServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order_room.servlets.EditingServlet</servlet-class>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.user_servlets.EditingServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminServlet</servlet-name>
@@ -44,11 +44,11 @@
     </servlet>
     <servlet>
         <servlet-name>OrderAdminServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order_room.servlets.OrderAdminServlet</servlet-class>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.admin_servlets.OrderAdminServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>OrderUserServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order_room.servlets.OrderUserServlet</servlet-class>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.user_servlets.OrderUserServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RejectingServlet</servlet-name>
@@ -56,11 +56,11 @@
     </servlet>
     <servlet>
         <servlet-name>SearchRoomServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order_room.servlets.SearchRoomServlet</servlet-class>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.admin_servlets.SearchRoomServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PaymentServlet</servlet-name>
-        <servlet-class>com.epam.advent_hotel.order_room.servlets.PaymentServlet</servlet-class>
+        <servlet-class>com.epam.advent_hotel.order_room.servlets.user_servlets.PaymentServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UserListServlet</servlet-name>

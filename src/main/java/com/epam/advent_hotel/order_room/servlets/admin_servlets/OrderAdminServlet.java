@@ -1,4 +1,4 @@
-package com.epam.advent_hotel.order_room.servlets;
+package com.epam.advent_hotel.order_room.servlets.admin_servlets;
 
 import com.epam.advent_hotel.db.DBHandler;
 import com.epam.advent_hotel.order_room.Comment;
