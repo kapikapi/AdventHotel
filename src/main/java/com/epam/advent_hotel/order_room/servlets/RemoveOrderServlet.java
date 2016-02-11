@@ -49,7 +49,7 @@ public class RemoveOrderServlet extends HttpServlet {
             try {
                 int removedRows = DBHandler.getInstance().removeOrder(orderId);
                 User user = (User) request.getSession().getAttribute("user");
-                if (removedRows == 0) {
+                if (removedRows != 0) {
                     if (user.getAccessLevel().equals(AccessLevel.ADMIN)) {
                         response.sendRedirect(ADMIN_JSP);
                     } else {

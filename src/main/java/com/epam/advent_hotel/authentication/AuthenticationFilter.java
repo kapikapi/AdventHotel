@@ -45,9 +45,10 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpSession session = request.getSession(false);
         String URI = request.getRequestURI();
+        LOG.info(URI);
         boolean isNoRegNeeded = false;
         for (String s : noRegNeeded) {
-            if (noRegNeeded.contains(URI) || URI.contains(s)) {
+            if (URI.contains(s) && (!s.equals("/")) || noRegNeeded.contains(URI)) {
                 isNoRegNeeded = true;
             }
         }
